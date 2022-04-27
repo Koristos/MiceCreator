@@ -37,10 +37,10 @@ public class Hotel {
 	private Location location;
 
 	@OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY)
-	List<HotelService> services;
+	private List<HotelServ> services;
 
 	@OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY)
-	List<Room> rooms;
+	private List<Room> rooms;
 
 }
 

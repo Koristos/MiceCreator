@@ -37,6 +37,6 @@ public class Location {
 	private Region region;
 
 	@OneToMany(mappedBy = "location", fetch = FetchType.LAZY)
-	List<Hotel> hotels;
+	private List<Hotel> hotels;
 
 }

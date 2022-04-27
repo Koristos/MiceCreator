@@ -2,7 +2,7 @@ package ru.geekbrains.micecreator.models.complex;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.geekbrains.micecreator.models.basic.AccomodationType;
+import ru.geekbrains.micecreator.models.basic.AccommodationType;
 import ru.geekbrains.micecreator.models.basic.Room;
 
 import javax.persistence.Column;
@@ -49,6 +49,6 @@ public class Accommodation {
 
 	@ManyToOne
 	@JoinColumn(name = "acc_type_id")
-	private AccomodationType accType;
+	private AccommodationType accType;
 
 }

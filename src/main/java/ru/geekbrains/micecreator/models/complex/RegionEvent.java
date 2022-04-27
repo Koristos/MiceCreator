@@ -2,7 +2,7 @@ package ru.geekbrains.micecreator.models.complex;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.geekbrains.micecreator.models.basic.RegionService;
+import ru.geekbrains.micecreator.models.basic.RegionServ;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,6 +41,6 @@ public class RegionEvent {
 
 	@ManyToOne
 	@JoinColumn(name = "region_service_id")
-	private RegionService service;
+	private RegionServ service;
 
 }
