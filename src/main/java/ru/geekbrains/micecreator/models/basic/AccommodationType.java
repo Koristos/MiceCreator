@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Table(name = "acc_types")
 @NoArgsConstructor
 @Data
-public class AccomodationType {
+public class AccommodationType {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

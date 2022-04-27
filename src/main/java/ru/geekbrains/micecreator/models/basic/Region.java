@@ -34,12 +34,12 @@ public class Region {
 	private Country country;
 
 	@OneToMany(mappedBy = "region", fetch = FetchType.LAZY)
-	List<Airport> airports;
+	private List<Airport> airports;
 
 	@OneToMany(mappedBy = "region", fetch = FetchType.LAZY)
-	List<Location> locations;
+	private List<Location> locations;
 
 	@OneToMany(mappedBy = "region", fetch = FetchType.LAZY)
-	List<RegionService> services;
+	private List<RegionServ> services;
 
 }

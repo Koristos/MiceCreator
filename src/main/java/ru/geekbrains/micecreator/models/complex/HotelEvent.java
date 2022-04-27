@@ -2,7 +2,7 @@ package ru.geekbrains.micecreator.models.complex;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.geekbrains.micecreator.models.basic.HotelService;
+import ru.geekbrains.micecreator.models.basic.HotelServ;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,7 +41,7 @@ public class HotelEvent {
 
 	@ManyToOne
 	@JoinColumn(name = "hotel_service_id")
-	private HotelService service;
+	private HotelServ service;
 
 }
 

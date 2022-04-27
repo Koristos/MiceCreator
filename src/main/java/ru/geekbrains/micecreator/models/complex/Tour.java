@@ -46,16 +46,16 @@ public class Tour {
 	private Country country;
 
 	@OneToMany(mappedBy = "tour", fetch = FetchType.LAZY)
-	List<Accommodation> accommodations;
+	private List<Accommodation> accommodations;
 
 	@OneToMany(mappedBy = "tour", fetch = FetchType.LAZY)
-	List<Flight> flights;
+	private List<Flight> flights;
 
 	@OneToMany(mappedBy = "tour", fetch = FetchType.LAZY)
-	List<HotelEvent> hotelEvents;
+	private List<HotelEvent> hotelEvents;
 
 	@OneToMany(mappedBy = "tour", fetch = FetchType.LAZY)
-	List<RegionEvent> regionEvents;
+	private List<RegionEvent> regionEvents;
 
 }
 

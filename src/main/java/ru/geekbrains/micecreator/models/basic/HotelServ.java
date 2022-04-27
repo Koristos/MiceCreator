@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @Table(name = "hotel_services")
 @NoArgsConstructor
 @Data
-public class HotelService {
+public class HotelServ {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

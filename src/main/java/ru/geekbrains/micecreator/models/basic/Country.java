@@ -28,6 +28,6 @@ public class Country {
 	private String name;
 
 	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
-	List<Region> regions;
+	private List<Region> regions;
 
 }
