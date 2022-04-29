@@ -1,40 +1,73 @@
 package ru.geekbrains.micecreator.service;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.geekbrains.micecreator.dto.basic.full.CountryDto;
+import ru.geekbrains.micecreator.dto.basic.list.ListItemDto;
+import ru.geekbrains.micecreator.dto.basic.list.SimpleTypes;
 import ru.geekbrains.micecreator.models.basic.Country;
 import ru.geekbrains.micecreator.repository.CountryRepo;
+import ru.geekbrains.micecreator.service.prototypes.SimpleTypeService;
 
 import java.util.List;
 
 @Service
 @AllArgsConstructor
-@Data
-public class CountryService {
+public class CountryService extends SimpleTypeService<CountryDto, Country> {
 
 	@Autowired
-	private CountryRepo countryRepo;
+	private final CountryRepo countryRepo;
+	private final SimpleTypes simpleType = SimpleTypes.COUNTRY;
 
-	public List<Country> findAll() {
+	@Override
+	protected List<Country> findAll() {
 		return countryRepo.findAll();
 	}
 
-	public Country findById(Integer id) {
-		return countryRepo.findById(id).orElse(null);
-	}
-
-	public List<Country> findByNamePart(String namePart) {
+	@Override
+	protected List<Country> findByNamePart(String namePart) {
 		return countryRepo.findByNameStartingWith(namePart);
 	}
 
-	public Country addNew(Country newCountry) {
+	@Override
+	protected Country findById(Integer id) {
+		return countryRepo.findById(id).orElse(null);
+	}
+
+	@Override
+	protected Country save(Country newCountry) {
 		return countryRepo.save(newCountry);
 	}
 
-	public boolean deleteById(Integer id) {
+	@Override
+	protected boolean deleteById(Integer id) {
 		countryRepo.deleteById(id);
 		return !countryRepo.existsById(id);
+	}
+
+	@Override
+	protected CountryDto mapToDto(Country entity) {
+		CountryDto dto = new CountryDto();
+		dto.setId(entity.getId());
+		dto.setName(entity.getName());
+		return dto;
+	}
+
+	@Override
+	protected ListItemDto mapToListItemDto(Country entity) {
+		ListItemDto dto = new ListItemDto();
+		dto.setId(entity.getId());
+		dto.setName(entity.getName());
+		dto.setItemType(simpleType);
+		return dto;
+	}
+
+	@Override
+	protected Country mapToEntity(CountryDto dto) {
+		Country entity = new Country();
+		entity.setId(dto.getId());
+		entity.setName(dto.getName());
+		return entity;
 	}
 }
