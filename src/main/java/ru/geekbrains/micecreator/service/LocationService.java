@@ -1,61 +1,99 @@
 package ru.geekbrains.micecreator.service;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.geekbrains.micecreator.dto.basic.full.LocationDto;
+import ru.geekbrains.micecreator.dto.basic.list.ListItemDto;
+import ru.geekbrains.micecreator.dto.basic.list.SimpleTypes;
 import ru.geekbrains.micecreator.models.basic.Location;
-import ru.geekbrains.micecreator.models.basic.Region;
 import ru.geekbrains.micecreator.repository.LocationRepo;
+import ru.geekbrains.micecreator.service.prototypes.SimpleTypeService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-@Data
-public class LocationService {
+public class LocationService extends SimpleTypeService<LocationDto, Location> {
 
 	@Autowired
-	private LocationRepo locationRepo;
+	private final LocationRepo locationRepo;
+	@Autowired
+	private final RegionService regionService;
+	private final SimpleTypes simpleType = SimpleTypes.LOCATION;
 
-	public List<Location> findAll() {
-		return locationRepo.findAll();
+	public List<ListItemDto> findLocationByRegionId(Integer regionId) {
+		checkInputId(regionId);
+		return findByRegion(regionId).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
-	public Location findById(Integer id) {
-		return locationRepo.findById(id).orElse(null);
+	public List<ListItemDto> findLocationByRegionIdAndNamePart(Integer regionId, String namePart) {
+		checkInputId(regionId);
+		return findByRegionAndNamePart(regionId, namePart).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
-	public List<Location> findByNamePart(String namePart) {
-		return locationRepo.findByNameStartingWith(namePart);
-	}
-
-	public List<Location> findByRegion(Region region) {
-		return locationRepo.findByRegion(region);
-	}
-
-	public List<Location> findByRegion(Integer regionId) {
+	protected List<Location> findByRegion(Integer regionId) {
 		return locationRepo.findByRegionId(regionId);
 	}
 
-	public List<Location> findByRegionAndNamePart(Region region, String namePart) {
-		return locationRepo.findByRegionAndNameStartingWith(region, namePart);
+	protected List<Location> findByRegionAndNamePart(Integer regionId, String namePart) {
+		return locationRepo.findByRegionIdAndNameStartsWith(regionId, nameToStandard(namePart));
 	}
 
-	public List<Location> findByRegionAndNamePart(Integer regionId, String namePart) {
-		return locationRepo.findByRegionIdAndNameStartsWith(regionId, namePart);
+	@Override
+	protected List<Location> findAll() {
+		return locationRepo.findAll();
 	}
 
-	public Location addNew(Location newLocation) {
-		return locationRepo.save(newLocation);
+	@Override
+	protected List<Location> findByNamePart(String namePart) {
+		return locationRepo.findByNameStartingWith(namePart);
 	}
 
-	public Location edit(Location location) {
+	@Override
+	protected Location findById(Integer id) {
+		return locationRepo.findById(id).orElse(null);
+	}
+
+	@Override
+	protected Location save(Location location) {
 		return locationRepo.save(location);
 	}
 
-	public boolean deleteById(Integer id) {
+	@Override
+	protected boolean deleteById(Integer id) {
 		locationRepo.deleteById(id);
 		return !locationRepo.existsById(id);
 	}
+
+	@Override
+	protected LocationDto mapToDto(Location entity) {
+		LocationDto dto = new LocationDto();
+		dto.setId(entity.getId());
+		dto.setName(entity.getName());
+		dto.setDescription(entity.getDescription());
+		dto.setRegionId(entity.getRegion().getId());
+		return dto;
+	}
+
+	@Override
+	protected ListItemDto mapToListItemDto(Location entity) {
+		ListItemDto dto = new ListItemDto();
+		dto.setId(entity.getId());
+		dto.setName(entity.getName());
+		dto.setItemType(simpleType);
+		return dto;
+	}
+
+	@Override
+	protected Location mapToEntity(LocationDto dto) {
+		Location entity = new Location();
+		entity.setId(dto.getId());
+		entity.setName(dto.getName());
+		entity.setDescription(dto.getDescription());
+		entity.setRegion(regionService.findById(dto.getRegionId()));
+		return entity;
+	}
+
 }

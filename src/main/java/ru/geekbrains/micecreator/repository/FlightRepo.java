@@ -2,14 +2,11 @@ package ru.geekbrains.micecreator.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.geekbrains.micecreator.models.complex.Flight;
-import ru.geekbrains.micecreator.models.complex.Tour;
 
 import java.util.Date;
 import java.util.List;
 
 public interface FlightRepo extends JpaRepository<Flight, Integer> {
-
-	List<Flight> findByTour(Tour tour);
 
 	List<Flight> findByTourId(Integer tourId);
 
