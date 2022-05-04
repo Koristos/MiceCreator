@@ -3,6 +3,7 @@ package ru.geekbrains.micecreator.service;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.geekbrains.micecreator.dto.basic.SearchParams;
 import ru.geekbrains.micecreator.dto.basic.full.RoomDto;
 import ru.geekbrains.micecreator.dto.basic.list.ListItemDto;
 import ru.geekbrains.micecreator.dto.basic.list.SimpleTypes;
@@ -23,6 +24,16 @@ public class RoomService extends SimpleTypeService<RoomDto, Room> {
 	private final HotelService hotelService;
 	private final SimpleTypes simpleType = SimpleTypes.ROOM;
 
+	@Override
+	public List<ListItemDto> findBySearchParams(SearchParams params) {
+		if (params.getHotelId() != null && !params.getNamePart().isBlank()){
+			return findServiceByHotelAndNamePart(params.getHotelId(), params.getNamePart());
+		}else if (params.getHotelId() != null) {
+			return findServiceByHotel(params.getHotelId());
+		}else {
+			return super.findBySearchParams(params);
+		}
+	}
 
 	public List<ListItemDto> findServiceByHotel(Integer hotelId) {
 		return findByHotel(hotelId).stream().map(this::mapToListItemDto).collect(Collectors.toList());

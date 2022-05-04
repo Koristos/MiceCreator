@@ -3,6 +3,7 @@ package ru.geekbrains.micecreator.service;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.geekbrains.micecreator.dto.complex.ComplexParams;
 import ru.geekbrains.micecreator.dto.complex.FlightDto;
 import ru.geekbrains.micecreator.models.complex.Flight;
 import ru.geekbrains.micecreator.repository.FlightRepo;
@@ -24,6 +25,15 @@ public class FlightService extends ComplexTypeService<FlightDto, Flight> {
 	private final AirlineService airlineService;
 	@Autowired
 	private final TourService tourService;
+
+	public List<FlightDto> findByParams(ComplexParams params) {
+		if (params.getAirlineId() == null){
+			return findDtoByPointsAndDates(params.getDepartureAirportId(), params.getArrivalAirportId(), params.getFirstDate(), params.getSecondDate());
+		}else {
+			return findDtoByPointsAndAirlineAndDates(params.getDepartureAirportId(), params.getArrivalAirportId(), params.getAirlineId(),
+					params.getFirstDate(), params.getSecondDate());
+		}
+	}
 
 	public List<FlightDto> findDtoByPointsAndDates(Integer departureAirportId, Integer arrivalAirportId, Date firstDate, Date secondDate) {
 		checkInput(departureAirportId, arrivalAirportId, firstDate, secondDate);

@@ -3,6 +3,7 @@ package ru.geekbrains.micecreator.service;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.geekbrains.micecreator.dto.basic.SearchParams;
 import ru.geekbrains.micecreator.dto.basic.full.HotelDto;
 import ru.geekbrains.micecreator.dto.basic.list.ListItemDto;
 import ru.geekbrains.micecreator.dto.basic.list.SimpleTypes;
@@ -23,6 +24,25 @@ public class HotelService extends SimpleTypeService<HotelDto, Hotel> {
 	private final LocationService locationService;
 	private final SimpleTypes simpleType = SimpleTypes.HOTEL;
 
+
+	@Override
+	public List<ListItemDto> findBySearchParams(SearchParams params) {
+		if (params.getLocationId() != null && !params.getNamePart().isBlank()) {
+			return findHotelByLocationAndNamePart(params.getLocationId(), params.getNamePart());
+		} else if (params.getLocationId() != null) {
+			return findHotelByLocation(params.getLocationId());
+		} else if (params.getRegionId() != null && !params.getNamePart().isBlank()) {
+			return findHotelByRegionAndNamePart(params.getRegionId(), params.getNamePart());
+		} else if (params.getRegionId() != null) {
+			return findHotelByRegion(params.getRegionId());
+		} else if (params.getCountryId() != null && !params.getNamePart().isBlank()) {
+			return findHotelByCountryAndNamePart(params.getCountryId(), params.getNamePart());
+		} else if (params.getCountryId() != null) {
+			return findHotelByCountry(params.getCountryId());
+		} else {
+			return super.findBySearchParams(params);
+		}
+	}
 
 	public List<ListItemDto> findHotelByCountry(Integer countryId) {
 		checkInputId(countryId);

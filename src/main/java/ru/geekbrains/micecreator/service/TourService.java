@@ -3,6 +3,7 @@ package ru.geekbrains.micecreator.service;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.geekbrains.micecreator.dto.complex.ComplexParams;
 import ru.geekbrains.micecreator.dto.complex.TourDto;
 import ru.geekbrains.micecreator.models.complex.Accommodation;
 import ru.geekbrains.micecreator.models.complex.Flight;
@@ -26,6 +27,14 @@ public class TourService extends ComplexTypeService<TourDto, Tour> {
 	private final TourRepo tourRepo;
 	@Autowired
 	private final CountryService countryService;
+
+	public List<TourDto> findByParams(ComplexParams params) {
+		if (params.getCountryId() == null) {
+			return findDtoToursByDates(params.getFirstDate(), params.getSecondDate());
+		} else {
+			return findDtoToursByDatesAndCountry(params.getFirstDate(), params.getSecondDate(), params.getCountryId());
+		}
+	}
 
 	public List<TourDto> findDtoToursByDatesAndCountry(Date firstDate, Date secondDate, Integer countryId) {
 		checkInput(firstDate, secondDate, countryId);

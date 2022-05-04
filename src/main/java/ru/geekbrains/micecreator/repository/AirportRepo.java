@@ -12,4 +12,8 @@ public interface AirportRepo extends JpaRepository<Airport, Integer> {
 	List<Airport> findByCodeStartingWith(String code);
 
 	List<Airport> findByRegionId(Integer regionId);
+
+	List<Airport> findByRegionIdAndNameStartingWith(Integer regionId, String namePart);
+
+	List<Airport> findByRegionIdAndCodeStartingWith(Integer regionId, String code);
 }
