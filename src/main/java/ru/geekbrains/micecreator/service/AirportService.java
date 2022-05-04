@@ -10,6 +10,7 @@ import ru.geekbrains.micecreator.dto.basic.list.SimpleTypes;
 import ru.geekbrains.micecreator.models.basic.Airport;
 import ru.geekbrains.micecreator.repository.AirportRepo;
 import ru.geekbrains.micecreator.service.prototypes.SimpleTypeService;
+import ru.geekbrains.micecreator.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +29,13 @@ public class AirportService extends SimpleTypeService<AirportDto, Airport> {
 
 	@Override
 	public List<ListItemDto> findBySearchParams(SearchParams params) {
-		if (params.getRegionId() != null && !params.getNamePart().isBlank() && params.isUsingAlterNames()) {
+		if (params.getRegionId() != null && !StringUtils.isBlank(params.getNamePart()) && params.isUsingAlterNames()) {
 			return findAirportByNameOrCodePartAndRegionId(params.getNamePart(), params.getRegionId());
-		} else if (params.getRegionId() != null && !params.getNamePart().isBlank()) {
+		} else if (params.getRegionId() != null && !StringUtils.isBlank(params.getNamePart())) {
 			return findAirportByNamePartAndRegionId(params.getNamePart(), params.getRegionId());
 		} else if (params.getRegionId() != null) {
 			return findAirportByRegionId(params.getRegionId());
-		} else if (!params.getNamePart().isBlank() && params.isUsingAlterNames()) {
+		} else if (!StringUtils.isBlank(params.getNamePart()) && params.isUsingAlterNames()) {
 			return findAirportByNameOrCodePart(params.getNamePart());
 		} else {
 			return super.findBySearchParams(params);
