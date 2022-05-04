@@ -1,8 +1,9 @@
 package ru.geekbrains.micecreator.service.prototypes;
 
 import ru.geekbrains.micecreator.dto.complex.prototype.IdPositive;
+import ru.geekbrains.micecreator.exceptions.BadInputException;
+import ru.geekbrains.micecreator.exceptions.DataNotFoundException;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -32,34 +33,40 @@ public abstract class ComplexTypeService<D extends IdPositive, E> {
 
 	public D createEntity(D dto) {
 		if (dto == null || dto.getId() != null) {
-			throw new RuntimeException("invalid input!");
+			throw new BadInputException("Invalid input for entity creation: Dto must be not null and have no id.");
 		}
 		return mapToDto(save(mapToEntity(dto)));
 	}
 
 	public D editEntity(D dto) {
 		if (dto == null || dto.getId() == null) {
-			throw new RuntimeException("invalid input!");
+			throw new BadInputException("Invalid input for entity change: Dto must be not null and dto.id must be not null.");
+		}
+		if (findById(dto.getId()) == null) {
+			throw new DataNotFoundException(String.format("Can't make changes: no entity with id %s found.", dto.getId()));
 		}
 		return mapToDto(save(mapToEntity(dto)));
 	}
 
 	public boolean deleteEntity(Integer id) {
 		if (id == null) {
-			throw new RuntimeException("invalid input!");
+			throw new BadInputException("Invalid input for entity delete operation: id must be not null.");
+		}
+		if (findById(id) == null) {
+			throw new DataNotFoundException(String.format("Can't delete entity: no entity with id %s found.", id));
 		}
 		return deleteById(id);
 	}
 
 	protected void checkInput(Object... input) {
 		if (Arrays.stream(input).anyMatch(Objects::isNull)) {
-			throw new RuntimeException("Invalid Input!");
+			throw new BadInputException("Invalid input operation: one of necessary params is null.");
 		}
 	}
 
 	protected void checkDates(Date firstDate, Date secondDate) {
 		if (firstDate.compareTo(secondDate) > 0) {
-			throw new RuntimeException("Invalid Input!");
+			throw new BadInputException(String.format("Wrong date range: firstDate %s must be earlier than secondDate %s.", firstDate, secondDate));
 		}
 	}
 

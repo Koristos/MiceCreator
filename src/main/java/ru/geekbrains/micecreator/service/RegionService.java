@@ -10,6 +10,7 @@ import ru.geekbrains.micecreator.dto.basic.list.SimpleTypes;
 import ru.geekbrains.micecreator.models.basic.Region;
 import ru.geekbrains.micecreator.repository.RegionRepo;
 import ru.geekbrains.micecreator.service.prototypes.SimpleTypeService;
+import ru.geekbrains.micecreator.utils.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +29,7 @@ public class RegionService extends SimpleTypeService<RegionDto, Region> {
 
 	@Override
 	public List<ListItemDto> findBySearchParams(SearchParams params) {
-		if (params.getCountryId() != null && !params.getNamePart().isBlank()){
+		if (params.getCountryId() != null && !StringUtils.isBlank(params.getNamePart())){
 			return findRegionByCountryIdAndNamePart(params.getCountryId(), params.getNamePart());
 		}else if (params.getCountryId() != null) {
 			return findRegionByCountryId(params.getCountryId());

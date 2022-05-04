@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.geekbrains.micecreator.dto.complex.ComplexParams;
 import ru.geekbrains.micecreator.dto.complex.RegionEventDto;
@@ -34,7 +35,13 @@ public class RegionEventController {
 	}
 
 	@GetMapping("/by_params")
-	public List<RegionEventDto> getByParams(@NonNull @RequestBody ComplexParams params) {
+	public List<RegionEventDto> getByParams(@RequestParam(name = "region_service") Integer regionServId,
+	                                        @RequestParam(name = "first_date") String first,
+	                                        @RequestParam(name = "second_date") String second) {
+		ComplexParams params = new ComplexParams();
+		params.setRegionServId(regionServId);
+		params.setFirstDate(first);
+		params.setSecondDate(second);
 		return service.findByParams(params);
 	}
 

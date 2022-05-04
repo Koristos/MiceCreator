@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.geekbrains.micecreator.dto.complex.ComplexParams;
 import ru.geekbrains.micecreator.dto.complex.FlightDto;
@@ -33,7 +34,17 @@ public class FlightController {
 	}
 
 	@GetMapping("/by_params")
-	public List<FlightDto> getByParams(@NonNull @RequestBody ComplexParams params) {
+	public List<FlightDto> getByParams(@RequestParam(name = "airline", required = false) Integer airlineId,
+	                                   @RequestParam(name = "dep_port") Integer departureAirportId,
+	                                   @RequestParam(name = "arr_port") Integer arrivalAirportId,
+	                                   @RequestParam(name = "first_date") String first,
+	                                   @RequestParam(name = "second_date") String second) {
+		ComplexParams params = new ComplexParams();
+		params.setAirlineId(airlineId);
+		params.setDepartureAirportId(departureAirportId);
+		params.setArrivalAirportId(arrivalAirportId);
+		params.setFirstDate(first);
+		params.setSecondDate(second);
 		return service.findByParams(params);
 	}
 

@@ -6,12 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.geekbrains.micecreator.dto.basic.SearchParams;
 import ru.geekbrains.micecreator.dto.basic.list.ListItemDto;
 import ru.geekbrains.micecreator.dto.basic.list.SimpleTypes;
+import ru.geekbrains.micecreator.exceptions.BadInputException;
 import ru.geekbrains.micecreator.service.AccommodationTypeService;
 import ru.geekbrains.micecreator.service.AirlineService;
 import ru.geekbrains.micecreator.service.AirportService;
@@ -64,7 +65,14 @@ public class SimpleTypesController {
 	}
 
 	@GetMapping("/by_params/{type}")
-	public List<ListItemDto> findById(@PathVariable("type") String type, @NonNull @RequestBody SearchParams params) {
+	public List<ListItemDto> findById(@PathVariable("type") String type,
+	                                  @RequestParam(name = "name", required = false) String namePart,
+	                                  @RequestParam(name = "country", required = false) Integer countryId,
+	                                  @RequestParam(name = "region", required = false) Integer regionId,
+	                                  @RequestParam(name = "location", required = false) Integer locationId,
+	                                  @RequestParam(name = "hotel", required = false) Integer hotelId,
+	                                  @RequestParam(name = "alter_name", required = false) boolean isUsingAlterNames) {
+		SearchParams params = new SearchParams(namePart, countryId, regionId, locationId, hotelId, isUsingAlterNames);
 		return findServiceByType(type.toUpperCase()).findBySearchParams(params);
 	}
 
@@ -105,7 +113,7 @@ public class SimpleTypesController {
 					throw new IllegalStateException("Unexpected value: " + SimpleTypes.valueOf(type));
 			}
 		} catch (IllegalArgumentException e) {
-			throw new RuntimeException("Неизвестный тип");
+			throw new BadInputException(String.format("Transmitted entity type %s is not supported.", type));
 		}
 	}
 

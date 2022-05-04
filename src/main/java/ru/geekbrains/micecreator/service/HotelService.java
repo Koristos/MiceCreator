@@ -10,6 +10,7 @@ import ru.geekbrains.micecreator.dto.basic.list.SimpleTypes;
 import ru.geekbrains.micecreator.models.basic.Hotel;
 import ru.geekbrains.micecreator.repository.HotelRepo;
 import ru.geekbrains.micecreator.service.prototypes.SimpleTypeService;
+import ru.geekbrains.micecreator.utils.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,15 +28,15 @@ public class HotelService extends SimpleTypeService<HotelDto, Hotel> {
 
 	@Override
 	public List<ListItemDto> findBySearchParams(SearchParams params) {
-		if (params.getLocationId() != null && !params.getNamePart().isBlank()) {
+		if (params.getLocationId() != null && !StringUtils.isBlank(params.getNamePart())) {
 			return findHotelByLocationAndNamePart(params.getLocationId(), params.getNamePart());
 		} else if (params.getLocationId() != null) {
 			return findHotelByLocation(params.getLocationId());
-		} else if (params.getRegionId() != null && !params.getNamePart().isBlank()) {
+		} else if (params.getRegionId() != null && !StringUtils.isBlank(params.getNamePart())) {
 			return findHotelByRegionAndNamePart(params.getRegionId(), params.getNamePart());
 		} else if (params.getRegionId() != null) {
 			return findHotelByRegion(params.getRegionId());
-		} else if (params.getCountryId() != null && !params.getNamePart().isBlank()) {
+		} else if (params.getCountryId() != null && !StringUtils.isBlank(params.getNamePart())) {
 			return findHotelByCountryAndNamePart(params.getCountryId(), params.getNamePart());
 		} else if (params.getCountryId() != null) {
 			return findHotelByCountry(params.getCountryId());
