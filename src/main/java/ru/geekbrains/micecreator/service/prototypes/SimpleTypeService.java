@@ -1,5 +1,6 @@
 package ru.geekbrains.micecreator.service.prototypes;
 
+import ru.geekbrains.micecreator.dto.basic.SearchParams;
 import ru.geekbrains.micecreator.dto.basic.list.ListItemDto;
 import ru.geekbrains.micecreator.dto.basic.prototype.BasicDto;
 
@@ -59,6 +60,14 @@ public abstract class SimpleTypeService<D extends BasicDto, E> {
 		}
 		return deleteById(id);
 	}
+
+	public List<ListItemDto> findBySearchParams(SearchParams params) {
+		if (!params.getNamePart().isBlank()) {
+			return findListDtoByNamePart(params.getNamePart());
+		}
+		return findAllListDto();
+	};
+
 
 	protected String nameToStandard(String name) {
 		if (name.isBlank()) {

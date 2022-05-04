@@ -3,6 +3,7 @@ package ru.geekbrains.micecreator.service;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.geekbrains.micecreator.dto.complex.ComplexParams;
 import ru.geekbrains.micecreator.dto.complex.RegionEventDto;
 import ru.geekbrains.micecreator.models.complex.RegionEvent;
 import ru.geekbrains.micecreator.repository.RegionEventRepo;
@@ -24,10 +25,10 @@ public class RegionEventService extends ComplexTypeService<RegionEventDto, Regio
 	private final TourService tourService;
 
 
-	public List<RegionEventDto> findDtoByServiceIdInDates(Integer regionServId, Date firstDate, Date secondDate) {
-		checkInput(regionServId, firstDate, secondDate);
-		checkDates(firstDate, secondDate);
-		return findByServiceIdInDates(regionServId, firstDate, secondDate).stream()
+	public List<RegionEventDto> findByParams(ComplexParams params) {
+		checkInput(params.getRegionServId(), params.getFirstDate(), params.getSecondDate());
+		checkDates(params.getFirstDate(), params.getSecondDate());
+		return findByServiceIdInDates(params.getRegionServId(), params.getFirstDate(), params.getSecondDate()).stream()
 				.map(this::mapToDto).collect(Collectors.toList());
 	}
 

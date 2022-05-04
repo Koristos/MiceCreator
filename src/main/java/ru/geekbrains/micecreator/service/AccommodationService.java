@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.geekbrains.micecreator.dto.complex.AccommodationDto;
+import ru.geekbrains.micecreator.dto.complex.ComplexParams;
 import ru.geekbrains.micecreator.models.complex.Accommodation;
 import ru.geekbrains.micecreator.repository.AccommodationRepo;
 import ru.geekbrains.micecreator.service.prototypes.ComplexTypeService;
@@ -25,10 +26,11 @@ public class AccommodationService extends ComplexTypeService<AccommodationDto, A
 	@Autowired
 	private final TourService tourService;
 
-	public List<AccommodationDto> findByParams(Integer roomId, Integer accTypeId, Date firstDate, Date secondDate) {
-		checkInput(roomId, accTypeId, firstDate, secondDate);
-		checkDates(firstDate, secondDate);
-		return findByRoomAccTypeIdsInDates(roomId, accTypeId, firstDate, secondDate).stream().map(this::mapToDto).collect(Collectors.toList());
+	public List<AccommodationDto> findByParams(ComplexParams params) {
+		checkInput(params.getRoomId(), params.getAccTypeId(), params.getFirstDate(), params.getSecondDate());
+		checkDates(params.getFirstDate(), params.getSecondDate());
+		return findByRoomAccTypeIdsInDates(params.getRoomId(), params.getAccTypeId(), params.getFirstDate(), params.getSecondDate()).stream()
+				.map(this::mapToDto).collect(Collectors.toList());
 	}
 
 	protected List<Accommodation> findByRoomAccTypeIdsInDates(Integer roomId, Integer accTypeId, Date firstDate, Date secondDate) {

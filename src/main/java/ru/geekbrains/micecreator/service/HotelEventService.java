@@ -3,6 +3,7 @@ package ru.geekbrains.micecreator.service;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.geekbrains.micecreator.dto.complex.ComplexParams;
 import ru.geekbrains.micecreator.dto.complex.HotelEventDto;
 import ru.geekbrains.micecreator.models.complex.HotelEvent;
 import ru.geekbrains.micecreator.repository.HotelEventRepo;
@@ -24,10 +25,10 @@ public class HotelEventService extends ComplexTypeService<HotelEventDto, HotelEv
 	private final TourService tourService;
 
 
-	public List<HotelEventDto> findDtoByServiceIdInDates(Integer hotelServId, Date firstDate, Date secondDate) {
-		checkInput(hotelServId, firstDate, secondDate);
-		checkDates(firstDate, secondDate);
-		return findByServiceIdInDates(hotelServId, firstDate, secondDate).stream()
+	public List<HotelEventDto> findByParams(ComplexParams params) {
+		checkInput(params.getHotelServId(), params.getFirstDate(), params.getSecondDate());
+		checkDates(params.getFirstDate(), params.getSecondDate());
+		return findByServiceIdInDates(params.getHotelServId(), params.getFirstDate(), params.getSecondDate()).stream()
 				.map(this::mapToDto).collect(Collectors.toList());
 	}
 

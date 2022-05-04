@@ -3,6 +3,7 @@ package ru.geekbrains.micecreator.service;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.geekbrains.micecreator.dto.basic.SearchParams;
 import ru.geekbrains.micecreator.dto.basic.full.LocationDto;
 import ru.geekbrains.micecreator.dto.basic.list.ListItemDto;
 import ru.geekbrains.micecreator.dto.basic.list.SimpleTypes;
@@ -22,6 +23,17 @@ public class LocationService extends SimpleTypeService<LocationDto, Location> {
 	@Autowired
 	private final RegionService regionService;
 	private final SimpleTypes simpleType = SimpleTypes.LOCATION;
+
+	@Override
+	public List<ListItemDto> findBySearchParams(SearchParams params) {
+		if (params.getRegionId() != null && !params.getNamePart().isBlank()){
+			return findLocationByRegionIdAndNamePart(params.getRegionId(), params.getNamePart());
+		}else if (params.getRegionId() != null) {
+			return findLocationByRegionId(params.getRegionId());
+		}else {
+			return super.findBySearchParams(params);
+		}
+	}
 
 	public List<ListItemDto> findLocationByRegionId(Integer regionId) {
 		checkInputId(regionId);

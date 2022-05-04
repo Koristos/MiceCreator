@@ -3,6 +3,7 @@ package ru.geekbrains.micecreator.service;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.geekbrains.micecreator.dto.basic.SearchParams;
 import ru.geekbrains.micecreator.dto.basic.full.AirportDto;
 import ru.geekbrains.micecreator.dto.basic.list.ListItemDto;
 import ru.geekbrains.micecreator.dto.basic.list.SimpleTypes;
@@ -24,6 +25,33 @@ public class AirportService extends SimpleTypeService<AirportDto, Airport> {
 	private final RegionService regionService;
 	private final SimpleTypes simpleType = SimpleTypes.AIRPORT;
 
+
+	@Override
+	public List<ListItemDto> findBySearchParams(SearchParams params) {
+		if (params.getRegionId() != null && !params.getNamePart().isBlank() && params.isUsingAlterNames()) {
+			return findAirportByNameOrCodePartAndRegionId(params.getNamePart(), params.getRegionId());
+		} else if (params.getRegionId() != null && !params.getNamePart().isBlank()) {
+			return findAirportByNamePartAndRegionId(params.getNamePart(), params.getRegionId());
+		} else if (params.getRegionId() != null) {
+			return findAirportByRegionId(params.getRegionId());
+		} else if (!params.getNamePart().isBlank() && params.isUsingAlterNames()) {
+			return findAirportByNameOrCodePart(params.getNamePart());
+		} else {
+			return super.findBySearchParams(params);
+		}
+	}
+
+	public List<ListItemDto> findAirportByNameOrCodePartAndRegionId(String namePart,Integer regionId) {
+		List<Airport> result = airportRepo.findByRegionIdAndNameStartingWith(regionId, namePart);
+		result.addAll(airportRepo.findByRegionIdAndCodeStartingWith(regionId, namePart));
+		return result.stream().map(this::mapToListItemDto).collect(Collectors.toList());
+	}
+
+	public List<ListItemDto> findAirportByNamePartAndRegionId(String namePart,Integer regionId) {
+		List<Airport> result = airportRepo.findByRegionIdAndNameStartingWith(regionId, namePart);
+		result.addAll(airportRepo.findByRegionIdAndCodeStartingWith(regionId, namePart));
+		return result.stream().map(this::mapToListItemDto).collect(Collectors.toList());
+	}
 
 	public List<ListItemDto> findAirportByNameOrCodePart(String namePart) {
 		List<ListItemDto> result = new ArrayList<>(findListDtoByNamePart(namePart));
