@@ -45,7 +45,7 @@ public abstract class SimpleTypeService<D extends BasicDto, E> {
 		if (dto == null || dto.getId() != null) {
 			throw new BadInputException("Invalid input for entity creation: Dto must be not null and have no id.");
 		}
-		dto.setName(nameToStandard(dto.getName()));
+		dto.setName(nameToStandardForSave(dto.getName()));
 		return mapToDto(save(mapToEntity(dto)));
 	}
 
@@ -56,7 +56,7 @@ public abstract class SimpleTypeService<D extends BasicDto, E> {
 		if (findById(dto.getId()) == null) {
 			throw new DataNotFoundException(String.format("Can't make changes: no entity with id %s found.", dto.getId()));
 		}
-		dto.setName(nameToStandard(dto.getName()));
+		dto.setName(nameToStandardForSave(dto.getName()));
 		return mapToDto(save(mapToEntity(dto)));
 	}
 
@@ -79,6 +79,13 @@ public abstract class SimpleTypeService<D extends BasicDto, E> {
 
 
 	protected String nameToStandard(String name) {
+		if (StringUtils.isBlank(name)) {
+			throw new BadInputException("Invalid input: name must be not blank.");
+		}
+		return name.toUpperCase()+"%";
+	}
+
+	protected String nameToStandardForSave(String name) {
 		if (StringUtils.isBlank(name)) {
 			throw new BadInputException("Invalid input: name must be not blank.");
 		}

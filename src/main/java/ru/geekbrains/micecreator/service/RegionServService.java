@@ -28,19 +28,19 @@ public class RegionServService extends SimpleTypeService<RegionServiceDto, Regio
 	@Override
 	public List<ListItemDto> findBySearchParams(SearchParams params) {
 		if (params.getRegionId() != null && !StringUtils.isBlank(params.getNamePart())){
-			return findLocationByRegionIdAndNamePart(params.getRegionId(), params.getNamePart());
+			return findRegServByRegionIdAndNamePart(params.getRegionId(), params.getNamePart());
 		}else if (params.getRegionId() != null) {
-			return findLocationByRegionId(params.getRegionId());
+			return findRegServByRegionId(params.getRegionId());
 		}else {
 			return super.findBySearchParams(params);
 		}
 	}
 
-	public List<ListItemDto> findLocationByRegionId(Integer regionId) {
+	public List<ListItemDto> findRegServByRegionId(Integer regionId) {
 		return findByRegion(regionId).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
-	public List<ListItemDto> findLocationByRegionIdAndNamePart(Integer regionId, String namePart) {
+	public List<ListItemDto> findRegServByRegionIdAndNamePart(Integer regionId, String namePart) {
 		return findByRegionAndNamePart(regionId, namePart).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 

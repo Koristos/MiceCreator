@@ -1,0 +1,26 @@
+.tour-images {
+}
+.wrapper {
+  float: left;
+  position: relative;
+  width: 45%;
+  padding-bottom: 22%;
+  margin: 1.66%;
+}
+
+.wrapper-small {
+  float: left;
+  position: relative;
+  width: 29%;
+  padding-bottom: 20%;
+  margin: 1.66%;
+}
+
+img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: auto;
+  cursor: pointer
+}

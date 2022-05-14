@@ -12,6 +12,7 @@ import ru.geekbrains.micecreator.repository.RegionRepo;
 import ru.geekbrains.micecreator.service.prototypes.SimpleTypeService;
 import ru.geekbrains.micecreator.utils.StringUtils;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,8 +52,9 @@ public class RegionService extends SimpleTypeService<RegionDto, Region> {
 		return regionRepo.findByCountryId(countryId);
 	}
 
+	@Transactional
 	protected List<Region> findByCountryAndNamePart(Integer countryId, String namePart) {
-		return regionRepo.findByCountryIdAndNameStartsWith(countryId, nameToStandard(namePart));
+		return regionRepo.findByCountryIdAndNamePart(countryId, nameToStandard(namePart));
 	}
 
 	@Override
@@ -67,7 +69,7 @@ public class RegionService extends SimpleTypeService<RegionDto, Region> {
 
 	@Override
 	protected List<Region> findByNamePart(String namePart) {
-		return regionRepo.findByNameStartingWith(namePart);
+		return regionRepo.findByNamePart(nameToStandard(namePart));
 	}
 
 	@Override

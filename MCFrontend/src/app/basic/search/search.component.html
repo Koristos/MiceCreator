@@ -1,0 +1,53 @@
+<div class="row py-2">
+  <h1>ПОИСК СРЕДИ {{header}}</h1>
+  <div class="col-12">
+    <a class="btn btn-primary list-part" routerLink="/{{type}}/new">Добавить новый компонент</a>
+    <input class="form-control form-control-lg list-part" type="text" placeholder="Введите название или его часть" (input)="findByName($event)">
+
+    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="params.country" (ngModelChange)="getRegions()"
+            [hidden]="!(countryAllowed.indexOf(type)+1)">
+      <option selected value="null">Выберите страну...</option>
+      <option *ngFor="let country_option of countryList" [value]="country_option.id">{{country_option.name}}</option>
+    </select>
+
+    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="params.region" (ngModelChange)="getLocations()"
+            [disabled]="params.country == 'null'" [hidden]="!(regionAllowed.indexOf(type)+1)">
+      <option selected value="null">Выберите регион...</option>
+      <option *ngFor="let region_option of regionList" [value]="region_option.id">{{region_option.name}}</option>
+    </select>
+
+    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="params.location" (ngModelChange)="getHotels()"
+            [disabled]="params.region == 'null'" [hidden]="!(locationAllowed.indexOf(type)+1)">
+      <option selected value="null">Выберите локацию...</option>
+      <option *ngFor="let location_option of locationList" [value]="location_option.id">{{location_option.name}}</option>
+    </select>
+
+    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="params.hotel" (ngModelChange)="findByParams()"
+            [disabled]="params.location == 'null'" [hidden]="!(hotelAllowed.indexOf(type)+1)">
+      <option selected value="null">Выберите отель...</option>
+      <option *ngFor="let hotel_option of hotelList" [value]="hotel_option.id">{{hotel_option.name}}</option>
+    </select>
+  </div>
+
+  <div class="col-12 last-div">
+    <table class="table table-bordered my-2">
+      <thead>
+      <tr>
+        <th scope="col" style="width: 8%">Id</th>
+        <th scope="col" style="width: 72%">Название</th>
+        <th scope="col" style="width: 20%">Действия</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let shortForm of searchResult">
+        <th scope="row">{{shortForm.id}}</th>
+        <td>{{shortForm.name}}</td>
+        <td>
+          <a class="btn but btn-info" routerLink="/{{type}}/{{shortForm.id}}"><i class="fas fa-edit">Просмотр</i></a>
+          <a class="btn but btn-danger" (click)="deleteConfirm(shortForm.id)"><i class="far fa-trash-alt">Удалить</i></a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

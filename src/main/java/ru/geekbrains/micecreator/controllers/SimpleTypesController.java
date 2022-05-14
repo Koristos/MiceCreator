@@ -81,6 +81,32 @@ public class SimpleTypesController {
 		return findServiceByType(type.toUpperCase()).findListDtoById(id);
 	}
 
+	@GetMapping("/get_parent/{type}/{id}")
+	public ListItemDto findParentById(@PathVariable("type") String type, @NonNull @PathVariable("id") Integer id) {
+		try {
+			switch (SimpleTypes.valueOf(type.toUpperCase())) {
+				case AIRPORT:
+					return regionService.findListDtoById(airportService.findDtoById(id).getRegionId());
+				case HOTEL_SERVICE:
+					return hotelService.findListDtoById(hotelServService.findDtoById(id).getHotelId());
+				case HOTEL:
+					return locationService.findListDtoById(hotelService.findDtoById(id).getLocationId());
+				case LOCATION:
+					return regionService.findListDtoById(locationService.findDtoById(id).getRegionId());
+				case REGION:
+					return countryService.findListDtoById(regionService.findDtoById(id).getCountryId());
+				case REGION_SERVICE:
+					return regionService.findListDtoById(regionServService.findDtoById(id).getRegionId());
+				case ROOM:
+					return hotelService.findListDtoById(roomService.findDtoById(id).getHotelId());
+				default:
+					throw new IllegalStateException("Unexpected value: " + SimpleTypes.valueOf(type));
+			}
+		} catch (IllegalArgumentException e) {
+			throw new BadInputException(String.format("Transmitted entity type %s is not supported.", type));
+		}
+	}
+
 	@DeleteMapping("/{type}/{id}")
 	public boolean deleteEntity(@PathVariable("type") String type, @NonNull @PathVariable("id") Integer id) {
 		return findServiceByType(type.toUpperCase()).deleteEntity(id);
