@@ -1,0 +1,49 @@
+<div>
+  <img class="logo-image-big" src="assets/images/mice.png" alt="logo">
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-light">
+  <a class="navbar-brand" href="#">MICE CREATOR MENU</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" routerLink="/tour/new">Создать новый тур</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/tour_search">Найти тур</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="elementsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Найти услуги
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" routerLink="/search_components/country">Страны</a>
+          <a class="dropdown-item" routerLink="/search_components/region">Регионы</a>
+          <a class="dropdown-item" routerLink="/search_components/location">Локации</a>
+          <a class="dropdown-item" routerLink="/search_components/hotel">Отели</a>
+          <a class="dropdown-item" routerLink="/search_components/airport">Аэропорты</a>
+          <a class="dropdown-item" routerLink="/search_components/airline">Авиакомпании</a>
+          <a class="dropdown-item" routerLink="/search_components/accomm_type">Типы размещения</a>
+          <a class="dropdown-item" routerLink="/search_components/room">Типы комнат</a>
+          <a class="dropdown-item" routerLink="/search_components/hotel_service">Отельные мероприятия</a>
+          <a class="dropdown-item" routerLink="/search_components/region_service">Региональные мероприятия</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Статистика
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" routerLink="flight_search">Перелеты</a>
+          <a class="dropdown-item" routerLink="accommodation_search">Проживание</a>
+          <a class="dropdown-item" routerLink="region_event_search">Региональные эвенты</a>
+          <a class="dropdown-item" routerLink="hotel_event_search">Отельные эвенты</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>

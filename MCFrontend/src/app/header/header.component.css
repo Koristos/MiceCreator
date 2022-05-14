@@ -1,0 +1,17 @@
+.logo-image-big{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+  padding-top: 30px;
+}
+
+.navbar {
+  background-color: #d3fcff;
+  font-size: large;
+}
+
+.navbar-brand {
+  font-size: larger;
+  font-weight: bold;
+}

@@ -1,7 +1,5 @@
 package ru.geekbrains.micecreator.utils;
 
-import java.time.format.DateTimeFormatter;
-
 public final class StringUtils {
 
 	private StringUtils(){};

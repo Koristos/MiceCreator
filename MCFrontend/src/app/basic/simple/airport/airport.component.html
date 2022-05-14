@@ -1,0 +1,40 @@
+<div>
+  <h1>{{title}}</h1>
+  <button type="submit" class="btn btn-warning" (click)="enableEdit()" [disabled]="editEnabled">Редактировать данные</button>
+  <button type="submit" class="btn btn-danger side-button" (click)="deleteConfirm()" [hidden]="airport.id == null">Удалить аэропорт</button>
+  <div class="row py-2">
+    <div class="col-12">
+
+      <label>Страна</label>
+      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="countryId" (ngModelChange)="getRegionsWithDrop()"
+              [disabled]="!editEnabled">
+        <option selected value=0>Выберите страну...</option>
+        <option *ngFor="let country_option of countryList" [value]="country_option.id">{{country_option.name}}</option>
+      </select>
+
+      <label>Регион</label>
+      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="airport.regionId"
+              [disabled]="countryId == 0 || !editEnabled">
+        <option selected value=0>Выберите регион...</option>
+        <option *ngFor="let region_option of regionList" [value]="region_option.id">{{region_option.name}}</option>
+      </select>
+
+      <form (ngSubmit)="save()">
+        <div class="form-group">
+          <label>Название аэропорта</label>
+          <input [(ngModel)]="airport.name" type="text" class="form-control" id="name" name="name" placeholder="Введите название аэропорта"
+                 [disabled]="!editEnabled">
+        </div>
+
+        <div class="form-group">
+          <label>Код аэропорта</label>
+          <input [(ngModel)]="airport.code" type="text" class="form-control" id="code" name="code" placeholder="Введите код аэропорта"
+                 [disabled]="!editEnabled">
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="!editEnabled">Сохранить изменения</button>
+
+      </form>
+    </div>
+  </div>
+</div>

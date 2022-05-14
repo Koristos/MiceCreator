@@ -43,14 +43,15 @@ public class AirportService extends SimpleTypeService<AirportDto, Airport> {
 	}
 
 	public List<ListItemDto> findAirportByNameOrCodePartAndRegionId(String namePart,Integer regionId) {
-		List<Airport> result = airportRepo.findByRegionIdAndNameStartingWith(regionId, namePart);
-		result.addAll(airportRepo.findByRegionIdAndCodeStartingWith(regionId, namePart));
+		List<Airport> result = airportRepo.findByRegionIdAndNameStartingWith(regionId, nameToStandard(namePart));
+		if (namePart.length()<=3) {
+			result.addAll(airportRepo.findByRegionIdAndCodeStartingWith(regionId, nameToStandard(namePart)));
+		}
 		return result.stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
 	public List<ListItemDto> findAirportByNamePartAndRegionId(String namePart,Integer regionId) {
-		List<Airport> result = airportRepo.findByRegionIdAndNameStartingWith(regionId, namePart);
-		result.addAll(airportRepo.findByRegionIdAndCodeStartingWith(regionId, namePart));
+		List<Airport> result = airportRepo.findByRegionIdAndNameStartingWith(regionId, nameToStandard(namePart));
 		return result.stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 

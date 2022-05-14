@@ -5,7 +5,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/mice_creator
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/mice_creator?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: 12345
   jpa:
