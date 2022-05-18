@@ -2,6 +2,7 @@ package ru.geekbrains.micecreator.controllers.full.complex;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,8 @@ import java.util.List;
 @RequestMapping("api/v1/flight")
 @AllArgsConstructor
 public class FlightController {
+
+	@Autowired
 	private FlightService service;
 
 	@GetMapping("/{id}")
@@ -43,8 +46,8 @@ public class FlightController {
 		params.setAirlineId(airlineId);
 		params.setDepartureAirportId(departureAirportId);
 		params.setArrivalAirportId(arrivalAirportId);
-		params.setFirstDate(first);
-		params.setSecondDate(second);
+		params.setFirstDateFromString(first);
+		params.setSecondDateFromString(second);
 		return service.findByParams(params);
 	}
 

@@ -7,7 +7,8 @@
       <form (ngSubmit)="save()">
         <div class="form-group">
           <label>Название страны</label>
-          <input [(ngModel)]="country.name" type="text" class="form-control" id="name" name="name" placeholder="Введите название страны" [disabled]="!editEnabled">
+          <input [(ngModel)]="country.name" type="text" class="form-control" id="name" name="name" placeholder="Введите название страны"
+                 [disabled]="!editEnabled">
         </div>
         <button type="submit" class="btn btn-primary" [disabled]="!editEnabled">Сохранить изменения</button>
       </form>

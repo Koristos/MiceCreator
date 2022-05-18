@@ -16,7 +16,8 @@ export class AirlineComponent implements OnInit {
   public title: string = "СОЗДАНИЕ НОВОЙ АВИАКОМПАНИИ";
 
   constructor(private route: ActivatedRoute,
-              private airlineService: AirlineserviceService) { }
+              private airlineService: AirlineserviceService) {
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(param => {
@@ -35,8 +36,8 @@ export class AirlineComponent implements OnInit {
     }
   }
 
-  save(){
-    if(confirm("Вы уверены, что хотите сохранить изменения?")) {
+  save() {
+    if (confirm("Вы уверены, что хотите сохранить изменения?")) {
       this.airlineService.save(this.airline).subscribe(result => {
         this.airline = result;
         this.title = "РЕДАКТИРОВАНИЕ АВИАКОМПАНИИ";
@@ -47,8 +48,8 @@ export class AirlineComponent implements OnInit {
     }
   }
 
-  deleteConfirm(){
-    if(confirm("Вы уверены, что хотите удалить элемент?")) {
+  deleteConfirm() {
+    if (confirm("Вы уверены, что хотите удалить элемент?")) {
       alert("Удаление в процессе реализации.");
     }
   }

@@ -1,1 +1,70 @@
-<p>accom-search works!</p>
+<div>
+  <h1>ПОИСК ДАННЫХ ПО РАЗМЕЩЕНИЮ</h1>
+  <div class="row py-2">
+    <div class="col-12">
+      <div>
+        <div class="pick-elem pick-item">
+          <div class="form-list">
+            <label>Отель</label>
+            <input [value]="hotel.name" class="form-control form-control-lg but-inp" type="text" placeholder="Выберите отель" (click)="findHotel()" readonly>
+          </div>
+          <div class="form-list">
+            <label>Тип размещения</label>
+            <input [value]="accType.name" class="form-control form-control-lg but-inp" type="text" placeholder="Выберите тип размещения" (click)="findAccType()"
+                   readonly>
+          </div>
+        </div>
+        <div class="form-list pick-date">
+          <label>С даты</label>
+          <div class="input-group date" data-provide="datepicker">
+            <input type="date" class="form-control" required [(ngModel)]="accommodationSearchParams.firstDate">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+            </div>
+          </div>
+        </div>
+        <div class="form-list pick-date">
+          <label>По дату</label>
+          <div class="input-group date" data-provide="datepicker">
+            <input type="date" class="form-control" required [(ngModel)]="accommodationSearchParams.lastDate">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary" (click)="search()">Найти размещение</button>
+  </div>
+  <div class="col-12 last-div">
+    <h2 [hidden]="!isSearchCommitted || accommList.length != 0">По заданным параметрам размещение не найдено</h2>
+    <table class="table table-bordered my-2" [hidden]="!isSearchCommitted || accommList.length == 0">
+      <thead>
+      <tr>
+        <th scope="col">Номер</th>
+        <th scope="col">Название отеля</th>
+        <th scope="col">Дата заселения</th>
+        <th scope="col">Дата выезда</th>
+        <th scope="col">Тип комнаты</th>
+        <th scope="col">Тип размещения</th>
+        <th scope="col">Кол-во человек</th>
+        <th scope="col">Цена размещения</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let accomElement of accommList">
+        <th scope="row">{{accommList.indexOf(accomElement) + 1}}</th>
+        <td>{{accomElement.hotel.name}}</td>
+        <td>{{dateToPattern(accomElement.checkInDate)}}</td>
+        <td>{{dateToPattern(accomElement.checkOutDate)}}</td>
+        <td>{{accomElement.room.name}}</td>
+        <td>{{accomElement.accType.name}}</td>
+        <td>{{accomElement.pax}}</td>
+        <td>{{accomElement.price}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+

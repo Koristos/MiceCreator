@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ShortForm} from "../../../service/basic/shortform";
 import {RequestParams} from "../../../service/basic/request-params";
 import {ActivatedRoute} from "@angular/router";
@@ -26,7 +26,8 @@ export class HotelComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private hotelService: HotelService,
-              private basicSearchService: BasicSearchService) { }
+              private basicSearchService: BasicSearchService) {
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(param => {
@@ -64,8 +65,8 @@ export class HotelComponent implements OnInit {
     }
   }
 
-  save(){
-    if(confirm("Вы уверены, что хотите сохранить изменения?")) {
+  save() {
+    if (confirm("Вы уверены, что хотите сохранить изменения?")) {
       this.hotelService.save(this.hotel).subscribe(result => {
         this.hotel = result;
         this.title = "РЕДАКТИРОВАНИЕ ОТЕЛЯ";
@@ -76,13 +77,13 @@ export class HotelComponent implements OnInit {
     }
   }
 
-  deleteConfirm(){
-    if(confirm("Вы уверены, что хотите удалить элемент?")) {
+  deleteConfirm() {
+    if (confirm("Вы уверены, что хотите удалить элемент?")) {
       alert("Удаление в процессе реализации.");
     }
   }
 
-  getLocations(){
+  getLocations() {
     this.params.region = this.regionId;
     this.basicSearchService.findByParams('location', this.params.prepareForSending()).subscribe(result => {
       this.locationList = result;
@@ -91,12 +92,12 @@ export class HotelComponent implements OnInit {
     });
   }
 
-  getLocationsWithDrop(){
+  getLocationsWithDrop() {
     this.getLocations();
     this.hotel.locationId = 0;
   }
 
-  getRegions(){
+  getRegions() {
     this.params.country = this.countryId;
     this.basicSearchService.findByParams('region', this.params.prepareForSending()).subscribe(result => {
       this.regionList = result;
@@ -105,13 +106,13 @@ export class HotelComponent implements OnInit {
     });
   }
 
-  getRegionsWithDrop(){
+  getRegionsWithDrop() {
     this.getRegions();
     this.hotel.locationId = 0;
     this.regionId = 0;
   }
 
-  getCountries(){
+  getCountries() {
     this.basicSearchService.findAll('country').subscribe(result => {
       this.countryList = result;
     }, error => {
@@ -119,7 +120,7 @@ export class HotelComponent implements OnInit {
     });
   }
 
-  enableEdit(){
+  enableEdit() {
     this.params.reset();
     this.params.country = this.countryId;
     this.params.region = this.regionId;

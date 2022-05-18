@@ -1,1 +1,78 @@
-<p>accommodation works!</p>
+<div>
+  <h1>{{title}}</h1>
+  <div class="row py-2">
+    <div class="col-12">
+      <div>
+        <button type="submit" class="btn btn-warning form-list-two" (click)="isEditable = true" [disabled]="isEditable"><i class="fa fa-wrench"> Редактировать
+          размещение</i></button>
+        <button type="submit" class="btn btn-success form-list-two" (click)="return()"><i class="fa fa-backward"> Вернуться к туру</i></button>
+      </div>
+      <div>
+        <div class="form-list pick-date">
+          <label>Дата заселения</label>
+          <div class="input-group date" data-provide="datepicker">
+            <input type="date" class="form-control" required [(ngModel)]="in_date" [disabled]="!isEditable">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+            </div>
+          </div>
+        </div>
+        <div class="form-list pick-date">
+          <label>Дата выезда</label>
+          <div class="input-group date" data-provide="datepicker">
+            <input type="date" class="form-control" required [(ngModel)]="out_date" [disabled]="!isEditable">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+            </div>
+          </div>
+        </div>
+        <div class="form-list">
+          <label>Количество ночей</label>
+          <input [(ngModel)]="accommodation.nights" class="form-control form-control-lg but-info" type="text" placeholder="Будет посчитано после сохранения"
+                 readonly>
+        </div>
+        <div class="pick-elem pick-item">
+          <div class="form-list">
+            <label>Отель</label>
+            <input [(ngModel)]="accommodation.hotel.name" class="form-control form-control-lg but-info" type="text" placeholder="Отель не выбран" readonly>
+          </div>
+          <div class="form-list">
+            <label>Тип номера</label>
+            <input [(ngModel)]="accommodation.room.name" class="form-control form-control-lg but-inp" type="text" placeholder="Выберите тип номера"
+                   (click)="findRoom()" readonly [disabled]="!isEditable">
+          </div>
+          <div class="form-list">
+            <label>Тип размещения</label>
+            <input [(ngModel)]="accommodation.accType.name" class="form-control form-control-lg but-inp" type="text" placeholder="Выберите тип размещения"
+                   (click)="findAccType()" readonly [disabled]="!isEditable">
+          </div>
+          <div class="form-list">
+            <label>Цена</label>
+            <input [(ngModel)]="accommodation.price" class="form-control form-control-lg" type="number" placeholder="Введите стоимость"
+                   [disabled]="!isEditable">
+          </div>
+          <div class="form-list">
+            <label>Кол-во человек</label>
+            <input [(ngModel)]="accommodation.pax" class="form-control form-control-lg" type="number" placeholder="Введите количество проживающих"
+                   [disabled]="!isEditable">
+          </div>
+          <div class="form-list">
+            <label>Количество номеров</label>
+            <input [(ngModel)]="accommodation.roomCount" class="form-control form-control-lg but-info" type="text"
+                   placeholder="Будет посчитано после сохранения" readonly>
+          </div>
+          <div class="form-list">
+            <label>Итоговая стоимость</label>
+            <input [(ngModel)]="accommodation.total" class="form-control form-control-lg but-info" type="text" placeholder="Будет посчитано после сохранения"
+                   readonly>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="save-btn-div">
+      <button type="submit" class="btn btn-primary save-btn" (click)="save()" [disabled]="!isEditable">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+

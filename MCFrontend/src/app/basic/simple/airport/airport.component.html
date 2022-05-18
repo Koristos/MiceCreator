@@ -6,7 +6,8 @@
     <div class="col-12">
 
       <label>Страна</label>
-      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="countryId" (ngModelChange)="getRegionsWithDrop()"
+      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="countryId"
+              (ngModelChange)="getRegionsWithDrop()"
               [disabled]="!editEnabled">
         <option selected value=0>Выберите страну...</option>
         <option *ngFor="let country_option of countryList" [value]="country_option.id">{{country_option.name}}</option>

@@ -7,12 +7,13 @@
       <form (ngSubmit)="save()">
         <div class="form-group">
           <label>Название типа размещения</label>
-          <input [(ngModel)]="accType.name" type="text" class="form-control" id="name" name="name" placeholder="Введите название типа размещения" [disabled]="!editEnabled">
+          <input [(ngModel)]="accType.name" type="text" class="form-control" id="name" name="name" placeholder="Введите название типа размещения"
+                 [disabled]="!editEnabled">
         </div>
         <div class="form-group">
           <label>Количество проживающих</label>
-          <input [(ngModel)]="accType.paxNumber" type="number"  class="form-control" id="pax" name="pax"
-                    placeholder="Введите количество проживающих" [disabled]="!editEnabled"/>
+          <input [(ngModel)]="accType.paxNumber" type="number" class="form-control" id="pax" name="pax"
+                 placeholder="Введите количество проживающих" [disabled]="!editEnabled"/>
         </div>
         <button type="submit" class="btn btn-primary" [disabled]="!editEnabled">Сохранить изменения</button>
       </form>

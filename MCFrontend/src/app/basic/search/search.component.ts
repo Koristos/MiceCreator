@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router, NavigationStart} from "@angular/router";
 import {BasicSearchService} from "../../service/basic/basic-search.service";
 import {ShortForm} from "../../service/basic/shortform";
 import {RequestParams} from "../../service/basic/request-params";
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-search',
@@ -11,10 +12,10 @@ import {RequestParams} from "../../service/basic/request-params";
 })
 export class SearchComponent implements OnInit {
 
-  public hotelAllowed: string[] = ['hotel_service','room'];
-  public locationAllowed: string[] = ['hotel_service','room', 'hotel'];
-  public regionAllowed: string[] = ['hotel_service','room', 'hotel', 'airport', 'region_service', 'location'];
-  public countryAllowed: string[] = ['hotel_service','room','hotel', 'airport', 'region_service', 'location', 'region'];
+  public hotelAllowed: string[] = ['hotel_service', 'room'];
+  public locationAllowed: string[] = ['hotel_service', 'room', 'hotel'];
+  public regionAllowed: string[] = ['hotel_service', 'room', 'hotel', 'airport', 'region_service', 'location'];
+  public countryAllowed: string[] = ['hotel_service', 'room', 'hotel', 'airport', 'region_service', 'location', 'region'];
 
   public type = "";
   public selectedOption: any;
@@ -25,17 +26,24 @@ export class SearchComponent implements OnInit {
   regionList: ShortForm[] = [];
   locationList: ShortForm[] = [];
   hotelList: ShortForm[] = [];
+  isToAdd: boolean = false;
   private typeMap = new Map();
+  private component_name: any = undefined;
 
   constructor(public searchService: BasicSearchService,
               public route: ActivatedRoute,
-              public router: Router) {
+              public router: Router,
+              private _location: Location) {
   }
 
   ngOnInit(): void {
     this.fillTypes();
     this.route.params.subscribe(param => {
       this.type = param['type'];
+      this.component_name = param['cn'];
+      if (this.component_name != undefined) {
+        this.isToAdd = true;
+      }
       this.header = this.typeMap.get(this.type);
       this.searchService.findAll(this.type).subscribe(result => {
         this.searchResult = result;
@@ -53,7 +61,7 @@ export class SearchComponent implements OnInit {
     });
   }
 
-  fillTypes(): void{
+  fillTypes(): void {
     this.typeMap.set('country', 'СТРАН');
     this.typeMap.set('region', 'РЕГИОНОВ');
     this.typeMap.set('location', 'ЛОКАЦИЙ');
@@ -67,7 +75,7 @@ export class SearchComponent implements OnInit {
 
   }
 
-  getRegions(){
+  getRegions() {
     this.searchService.findByParams('region', this.params.prepareForSending()).subscribe(result => {
       this.regionList = result;
       this.params.region = "null";
@@ -81,7 +89,7 @@ export class SearchComponent implements OnInit {
     });
   }
 
-  getLocations(){
+  getLocations() {
     this.searchService.findByParams('location', this.params.prepareForSending()).subscribe(result => {
       this.locationList = result;
       this.hotelList = [];
@@ -92,7 +100,7 @@ export class SearchComponent implements OnInit {
     });
   }
 
-  getHotels(){
+  getHotels() {
     this.searchService.findByParams('hotel', this.params.prepareForSending()).subscribe(result => {
       this.hotelList = result;
       this.findByParams();
@@ -101,7 +109,7 @@ export class SearchComponent implements OnInit {
     });
   }
 
-  findByParams(){
+  findByParams() {
     this.searchService.findByParams(this.type, this.params.prepareForSending()).subscribe(result => {
       this.searchResult = result;
     }, error => {
@@ -109,8 +117,8 @@ export class SearchComponent implements OnInit {
     });
   }
 
-  findByName(event: any){
-    if (event.target.value == ""){
+  findByName(event: any) {
+    if (event.target.value == "") {
       this.params.name = "null";
     } else {
       this.params.name = event.target.value;
@@ -118,9 +126,14 @@ export class SearchComponent implements OnInit {
     this.findByParams();
   }
 
-  deleteConfirm(id: number){
-    if(confirm("Вы уверены, что хотите удалить элемент?")) {
+  deleteConfirm(id: number) {
+    if (confirm("Вы уверены, что хотите удалить элемент?")) {
       alert("Удаление в процессе реализации.");
     }
+  }
+
+  addElementAndGoBack(form: ShortForm) {
+    sessionStorage.setItem(`${this.component_name}`, JSON.stringify(form));
+    this._location.back();
   }
 }

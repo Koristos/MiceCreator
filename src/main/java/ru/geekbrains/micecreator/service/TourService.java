@@ -12,6 +12,7 @@ import ru.geekbrains.micecreator.models.complex.RegionEvent;
 import ru.geekbrains.micecreator.models.complex.Tour;
 import ru.geekbrains.micecreator.repository.TourRepo;
 import ru.geekbrains.micecreator.service.prototypes.ComplexTypeService;
+import ru.geekbrains.micecreator.utils.AppUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -115,7 +116,8 @@ public class TourService extends ComplexTypeService<TourDto, Tour> {
 		BigDecimal total = BigDecimal.ZERO;
 
 		for (Accommodation item : tour.getAccommodations()) {
-			total = total.add(BigDecimal.valueOf(item.getPax()).multiply(item.getPrice()));
+			Long nights = AppUtils.countDaysDifference(item.getCheckInDate(), item.getCheckOutDate());
+			total = total.add(BigDecimal.valueOf(item.getPax()).multiply(item.getPrice()).multiply(BigDecimal.valueOf(nights)));
 		}
 
 		for (Flight item : tour.getFlights()) {

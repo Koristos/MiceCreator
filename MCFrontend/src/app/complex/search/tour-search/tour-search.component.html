@@ -1,1 +1,65 @@
-<p>tour-search works!</p>
+<div>
+  <h1>ПОИСК ТУРА</h1>
+  <div class="row py-2">
+    <div class="col-12">
+      <div>
+        <div class="pick-elem pick-item">
+          <label>Страна</label>
+          <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="tourSearchParams.countryId">
+            <option selected value=0>Выберите страну...</option>
+            <option *ngFor="let country_option of countryList" [value]="country_option.id">{{country_option.name}}</option>
+          </select>
+        </div>
+        <div class="pick-elem pick-date">
+          <label>С даты</label>
+          <div class="input-group date" data-provide="datepicker">
+            <input type="date" class="form-control" required [(ngModel)]="tourSearchParams.firstDate">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+            </div>
+          </div>
+        </div>
+        <div class="pick-elem pick-date">
+          <label>По дату</label>
+          <div class="input-group date" data-provide="datepicker">
+            <input type="date" class="form-control" required [(ngModel)]="tourSearchParams.lastDate">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary" (click)="search()">Найти туры</button>
+  </div>
+  <div class="col-12 last-div">
+    <h2 [hidden]="!isSearchCommitted || tourList.length != 0">По заданным параметрам туры не найдены</h2>
+    <table class="table table-bordered my-2" [hidden]="!isSearchCommitted || tourList.length == 0">
+      <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Страна</th>
+        <th scope="col">Дата начала</th>
+        <th scope="col">Дата завершения</th>
+        <th scope="col">Количество человек</th>
+        <th scope="col">Цена</th>
+        <th scope="col">Действия</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let tourElement of tourList">
+        <th scope="row">{{tourElement.id}}</th>
+        <td>{{tourElement.country.name}}</td>
+        <td>{{dateToPattern(tourElement.startDate)}}</td>
+        <td>{{dateToPattern(tourElement.endDate)}}</td>
+        <td>{{tourElement.pax}}</td>
+        <td>{{tourElement.totalPrice}}</td>
+        <td>
+          <a class="btn but btn-info" routerLink="/tour/{{tourElement.id}}"><i class="fas fa-edit"> Просмотр</i></a>
+          <a class="btn but btn-danger" (click)="deleteConfirm(tourElement.id)"><i class="far fa-trash-alt"> Удалить</i></a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ShortForm} from "../../../service/basic/shortform";
 import {ActivatedRoute} from "@angular/router";
 import {BasicSearchService} from "../../../service/basic/basic-search.service";
@@ -20,7 +20,8 @@ export class RegionComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private regionService: RegionService,
-              private basicSearchService: BasicSearchService) { }
+              private basicSearchService: BasicSearchService) {
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(param => {
@@ -44,8 +45,8 @@ export class RegionComponent implements OnInit {
     }
   }
 
-  save(){
-    if(confirm("Вы уверены, что хотите сохранить изменения?")) {
+  save() {
+    if (confirm("Вы уверены, что хотите сохранить изменения?")) {
       this.regionService.save(this.region).subscribe(result => {
         this.region = result;
         this.title = "РЕДАКТИРОВАНИЕ РЕГИОНА";
@@ -56,18 +57,18 @@ export class RegionComponent implements OnInit {
     }
   }
 
-  deleteConfirm(){
-    if(confirm("Вы уверены, что хотите удалить элемент?")) {
+  deleteConfirm() {
+    if (confirm("Вы уверены, что хотите удалить элемент?")) {
       alert("Удаление в процессе реализации.");
     }
   }
 
-  enableEdit(){
+  enableEdit() {
     this.getCountries();
     this.editEnabled = true;
   }
 
-  getCountries(){
+  getCountries() {
     this.basicSearchService.findAll('country').subscribe(result => {
       this.countryList = result;
     }, error => {

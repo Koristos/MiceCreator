@@ -6,21 +6,24 @@
     <div class="col-12">
 
       <label>Страна</label>
-      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="countryId" (ngModelChange)="getRegionsWithDrop()"
+      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="countryId"
+              (ngModelChange)="getRegionsWithDrop()"
               [disabled]="!editEnabled">
         <option selected value=0>Выберите страну...</option>
         <option *ngFor="let country_option of countryList" [value]="country_option.id">{{country_option.name}}</option>
       </select>
 
       <label>Регион</label>
-      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="regionId" (ngModelChange)="getLocationsWithDrop()"
+      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="regionId"
+              (ngModelChange)="getLocationsWithDrop()"
               [disabled]="countryId == 0 || !editEnabled">
         <option selected value=0>Выберите регион...</option>
         <option *ngFor="let region_option of regionList" [value]="region_option.id">{{region_option.name}}</option>
       </select>
 
       <label>Локация</label>
-      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="locationId" (ngModelChange)="getHotelsWithDrop()"
+      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="locationId"
+              (ngModelChange)="getHotelsWithDrop()"
               [disabled]="regionId == 0 || !editEnabled ">
         <option selected value=0>Выберите локацию...</option>
         <option *ngFor="let location_option of locationList" [value]="location_option.id">{{location_option.name}}</option>
@@ -42,7 +45,7 @@
 
         <div class="form-group">
           <label>Описание отельной услуги</label>
-          <textarea [(ngModel)]="hotelServ.description" rows="10"  class="form-control" id="description" name="description"
+          <textarea [(ngModel)]="hotelServ.description" rows="10" class="form-control" id="description" name="description"
                     placeholder="Введите описание отельной услуги" [disabled]="!editEnabled"></textarea>
         </div>
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {Airport} from "../../../service/basic/airport/airport";
 import {AirportService} from "../../../service/basic/airport/airport.service";
@@ -24,7 +24,8 @@ export class AirportComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private airportService: AirportService,
-              private basicSearchService: BasicSearchService) { }
+              private basicSearchService: BasicSearchService) {
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(param => {
@@ -56,8 +57,8 @@ export class AirportComponent implements OnInit {
     }
   }
 
-  save(){
-    if(confirm("Вы уверены, что хотите сохранить изменения?")) {
+  save() {
+    if (confirm("Вы уверены, что хотите сохранить изменения?")) {
       this.airportService.save(this.airport).subscribe(result => {
         this.airport = result;
         this.title = "РЕДАКТИРОВАНИЕ АЭРОПОРТА";
@@ -68,13 +69,13 @@ export class AirportComponent implements OnInit {
     }
   }
 
-  deleteConfirm(){
-    if(confirm("Вы уверены, что хотите удалить элемент?")) {
+  deleteConfirm() {
+    if (confirm("Вы уверены, что хотите удалить элемент?")) {
       alert("Удаление в процессе реализации.");
     }
   }
 
-  getRegions(){
+  getRegions() {
     this.params.country = this.countryId;
     this.basicSearchService.findByParams('region', this.params.prepareForSending()).subscribe(result => {
       this.regionList = result;
@@ -83,12 +84,12 @@ export class AirportComponent implements OnInit {
     });
   }
 
-  getRegionsWithDrop(){
+  getRegionsWithDrop() {
     this.getRegions();
     this.airport.regionId = 0;
   }
 
-  getCountries(){
+  getCountries() {
     this.basicSearchService.findAll('country').subscribe(result => {
       this.countryList = result;
     }, error => {
@@ -96,7 +97,7 @@ export class AirportComponent implements OnInit {
     });
   }
 
-  enableEdit(){
+  enableEdit() {
     this.params.reset();
     this.params.country = this.countryId;
     this.getRegions();

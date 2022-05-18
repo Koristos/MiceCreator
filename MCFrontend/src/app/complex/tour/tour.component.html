@@ -1,1 +1,182 @@
-<p>tour works!</p>
+<div class="general">
+  <h1>{{title}}</h1>
+  <div>
+    <button type="submit" class="btn btn-primary btn-row" (click)="edit()" [disabled]="editEnabled"><i class="fas fa-edit"> Редактировать</i></button>
+    <button type="submit" class="btn btn btn-success btn-row" (click)="downloadEstimate()" [disabled]="editEnabled"><i class="fa fa-file-excel"> Выгрузить
+      смету</i></button>
+    <button type="submit" class="btn btn btn-danger btn-row" (click)="downloadPresentation()" [disabled]="editEnabled"><i class="fa fa-file-pdf"> Выгрузить
+      презентацию</i></button>
+  </div>
+  <div class="row py-2">
+    <div class="col-12">
+      <div class="pick-div">
+        <div class="pick-item">
+          <label>Страна</label>
+          <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="fullTour.tour.country.id"
+                  [disabled]="!editEnabled">
+            <option selected value=0>Выберите страну...</option>
+            <option *ngFor="let country_option of countryList" [value]="country_option.id">{{country_option.name}}</option>
+          </select>
+        </div>
+        <div class="pick-div">
+          <div class="pick-elem pick-date">
+            <label>Дата начала</label>
+            <div class="input-group date" data-provide="datepicker">
+              <input type="date" class="form-control" required [(ngModel)]="startDate" [disabled]="!editEnabled">
+              <div class="input-group-addon">
+                <span class="glyphicon glyphicon-th"></span>
+              </div>
+            </div>
+          </div>
+          <div class="pick-elem pick-date">
+            <label>Дата окончания</label>
+            <div class="input-group date" data-provide="datepicker">
+              <input type="date" class="form-control" required [(ngModel)]="endDate" [disabled]="!editEnabled">
+              <div class="input-group-addon">
+                <span class="glyphicon glyphicon-th"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pick-div">
+          <div class="form-group pick-elem">
+            <label>Количество человек</label>
+            <input [(ngModel)]="fullTour.tour.pax" type="number" class="form-control" id="pax" name="pax"
+                   placeholder="Введите количество туристов" [disabled]="!editEnabled"/>
+          </div>
+          <div class="form-group pick-elem">
+            <label>Итоговая стоимость</label>
+            <input [(ngModel)]="fullTour.tour.totalPrice" type="number" class="form-control" id="total" name="total"
+                   placeholder="0.00" readonly/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary btn-last" (click)="save()" [disabled]="!editEnabled">Сохранить</button>
+  </div>
+
+  <div class="col-12">
+    <h2>Размещение</h2>
+    <h3 [hidden]="fullTour.accommodations.length != 0">В туре отсутствует размещение</h3>
+    <table class="table table-bordered my-2" [hidden]="fullTour.accommodations.length == 0">
+      <thead>
+      <tr>
+        <th scope="col">Номер</th>
+        <th scope="col">Отель</th>
+        <th scope="col">Дата заселения</th>
+        <th scope="col">Дата выезда</th>
+        <th scope="col">Тип номера</th>
+        <th scope="col">Тип размещения</th>
+        <th scope="col">Кол-во человек</th>
+        <th scope="col" class="but-pannel">Действия</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let accommElement of fullTour.accommodations">
+        <th scope="row">{{fullTour.accommodations.indexOf(accommElement) + 1}}</th>
+        <td>{{accommElement.hotel.name}}</td>
+        <td>{{dateToPattern(accommElement.checkInDate)}}</td>
+        <td>{{dateToPattern(accommElement.checkOutDate)}}</td>
+        <td>{{accommElement.room.name}}</td>
+        <td>{{accommElement.accType.name}}</td>
+        <td>{{accommElement.pax}}</td>
+        <td>
+          <a class="btn but btn-info" (click)="showAccommodation(accommElement.id)"><i class="fas fa-edit"> Просмотр</i></a>
+          <a class="btn but btn-danger" (click)="deleteAccommodationConfirm(accommElement.id)"><i class="far fa-trash-alt"> Удалить</i></a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <button class="btn btn-primary" routerLink="../../accommodation/new/{{fullTour.tour.id}}" [disabled]="isNew"> Добавить размещение</button>
+  </div>
+  <div class="col-12">
+    <h2>Перелеты</h2>
+    <h3 [hidden]="fullTour.flights.length != 0">В туре отсутствуют перелеты</h3>
+    <table class="table table-bordered my-2" [hidden]="fullTour.flights.length == 0">
+      <thead>
+      <tr>
+        <th scope="col">Номер</th>
+        <th scope="col">Аэропорт вылета</th>
+        <th scope="col">Дата вылета</th>
+        <th scope="col">Дата прилета</th>
+        <th scope="col">Аэропорт прилета</th>
+        <th scope="col">Авиакомпания</th>
+        <th scope="col">Кол-во человек</th>
+        <th scope="col" class="but-pannel">Действия</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let flightElement of fullTour.flights">
+        <th scope="row">{{fullTour.flights.indexOf(flightElement) + 1}}</th>
+        <td>{{flightElement.departureAirport.name}}</td>
+        <td>{{dateTimeToPattern(flightElement.departureDate)}}</td>
+        <td>{{dateTimeToPattern(flightElement.arrivalDate)}}</td>
+        <td>{{flightElement.arrivalAirport.name}}</td>
+        <td>{{flightElement.airline.name}}</td>
+        <td>{{flightElement.pax}}</td>
+        <td>
+          <a class="btn but btn-info" (click)="showFlight(flightElement.id)"><i class="fas fa-edit"> Просмотр</i></a>
+          <a class="btn but btn-danger" (click)="deleteFlightConfirm(flightElement.id)"><i class="far fa-trash-alt"> Удалить</i></a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <button class="btn btn-primary" routerLink="../../flight/new/{{fullTour.tour.id}}" [disabled]="isNew"> Добавить перелет</button>
+  </div>
+  <div class="col-12">
+    <h2>Региональные эвенты</h2>
+    <h3 [hidden]="fullTour.regionEvents.length != 0">В туре отсутствуют региональные эвенеты</h3>
+    <table class="table table-bordered my-2" [hidden]="fullTour.regionEvents.length == 0">
+      <thead>
+      <tr>
+        <th scope="col">Номер</th>
+        <th scope="col">Услуга</th>
+        <th scope="col">Дата проведения</th>
+        <th scope="col">Кол-во человек</th>
+        <th scope="col" class="but-pannel">Действия</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let regEventElement of fullTour.regionEvents">
+        <th scope="row">{{fullTour.regionEvents.indexOf(regEventElement) + 1}}</th>
+        <td>{{regEventElement.service.name}}</td>
+        <td>{{dateToPattern(regEventElement.eventDate)}}</td>
+        <td>{{regEventElement.pax}}</td>
+        <td>
+          <a class="btn but btn-info" (click)="showRegEvent(regEventElement.id)"><i class="fas fa-edit"> Просмотр</i></a>
+          <a class="btn but btn-danger" (click)="deleteRegEventConfirm(regEventElement.id)"><i class="far fa-trash-alt"> Удалить</i></a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <button class="btn btn-primary" routerLink="../../region_event/new/{{fullTour.tour.id}}" [disabled]="isNew"> Добавить региональный эвент</button>
+  </div>
+  <div class="col-12 last-div">
+    <h2>Отельные эвенты</h2>
+    <h3 [hidden]="fullTour.hotelEvents.length != 0">В туре отсутствуют отельные эвенеты</h3>
+    <table class="table table-bordered my-2" [hidden]="fullTour.hotelEvents.length == 0">
+      <thead>
+      <tr>
+        <th scope="col">Номер</th>
+        <th scope="col">Услуга</th>
+        <th scope="col">Дата проведения</th>
+        <th scope="col">Кол-во человек</th>
+        <th scope="col" class="but-pannel">Действия</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let hotelEventElement of fullTour.hotelEvents">
+        <th scope="row">{{fullTour.hotelEvents.indexOf(hotelEventElement) + 1}}</th>
+        <td>{{hotelEventElement.service.name}}</td>
+        <td>{{dateToPattern(hotelEventElement.eventDate)}}</td>
+        <td>{{hotelEventElement.pax}}</td>
+        <td>
+          <a class="btn but btn-info" (click)="showHotelEvent(hotelEventElement.id)"><i class="fas fa-edit"> Просмотр</i></a>
+          <a class="btn but btn-danger" (click)="deleteHotelEventConfirm(hotelEventElement.id)"><i class="far fa-trash-alt"> Удалить</i></a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <button class="btn btn-primary" routerLink="../../hotel_event/new/{{fullTour.tour.id}}" [disabled]="isNew"> Добавить отельный эвент</button>
+  </div>
+</div>

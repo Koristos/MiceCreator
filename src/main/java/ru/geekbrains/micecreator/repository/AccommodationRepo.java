@@ -14,4 +14,6 @@ public interface AccommodationRepo extends JpaRepository<Accommodation, Integer>
 	List<Accommodation> findByTourId(Integer tourId);
 
 	List<Accommodation> findByRoomIdAndAccTypeIdAndCheckInDateBetween(Integer roomId, Integer accTypeId, Date firstDate, Date secondDate);
+
+	List<Accommodation> findByRoom_HotelIdAndAccTypeIdAndCheckInDateBetween(Integer hotelId, Integer accTypeId, Date firstDate, Date secondDate);
 }

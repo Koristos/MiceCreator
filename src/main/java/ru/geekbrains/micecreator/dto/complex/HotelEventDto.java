@@ -13,10 +13,11 @@ import java.util.Date;
 public class HotelEventDto implements IdPositive {
 
 	private Integer id;
-	private Date date;
+	private Date eventDate;
 	private Integer pax;
 	private BigDecimal price;
 	private Integer tourId;
 	private ListItemDto service;
+	private BigDecimal total;
 
 }

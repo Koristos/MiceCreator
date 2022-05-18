@@ -21,4 +21,5 @@ public class FlightDto implements IdPositive {
 	private ListItemDto airline;
 	private ListItemDto departureAirport;
 	private ListItemDto arrivalAirport;
+	private BigDecimal total;
 }

@@ -8,7 +8,10 @@ import ru.geekbrains.micecreator.dto.complex.ComplexParams;
 import ru.geekbrains.micecreator.models.complex.Accommodation;
 import ru.geekbrains.micecreator.repository.AccommodationRepo;
 import ru.geekbrains.micecreator.service.prototypes.ComplexTypeService;
+import ru.geekbrains.micecreator.utils.AppUtils;
 
+
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,16 +28,28 @@ public class AccommodationService extends ComplexTypeService<AccommodationDto, A
 	private final AccommodationTypeService accommodationTypeService;
 	@Autowired
 	private final TourService tourService;
+	@Autowired
+	private final HotelService hotelService;
 
 	public List<AccommodationDto> findByParams(ComplexParams params) {
-		checkInput(params.getRoomId(), params.getAccTypeId(), params.getFirstDate(), params.getSecondDate());
 		checkDates(params.getFirstDate(), params.getSecondDate());
-		return findByRoomAccTypeIdsInDates(params.getRoomId(), params.getAccTypeId(), params.getFirstDate(), params.getSecondDate()).stream()
-				.map(this::mapToDto).collect(Collectors.toList());
+		if (params.getRoomId() != null) {
+			checkInput(params.getRoomId(), params.getAccTypeId(), params.getFirstDate(), params.getSecondDate());
+			return findByRoomAccTypeIdsInDates(params.getRoomId(), params.getAccTypeId(), params.getFirstDate(), params.getSecondDate()).stream()
+					.map(this::mapToDto).collect(Collectors.toList());
+		} else {
+			checkInput(params.getHotelId(), params.getAccTypeId(), params.getFirstDate(), params.getSecondDate());
+			return findByHotelAccTypeIdsInDates(params.getHotelId(), params.getAccTypeId(), params.getFirstDate(), params.getSecondDate()).stream()
+					.map(this::mapToDto).collect(Collectors.toList());
+		}
 	}
 
 	protected List<Accommodation> findByRoomAccTypeIdsInDates(Integer roomId, Integer accTypeId, Date firstDate, Date secondDate) {
 		return accommodationRepo.findByRoomIdAndAccTypeIdAndCheckInDateBetween(roomId, accTypeId, firstDate, secondDate);
+	}
+
+	protected List<Accommodation> findByHotelAccTypeIdsInDates(Integer hotelId, Integer accTypeId, Date firstDate, Date secondDate) {
+		return accommodationRepo.findByRoom_HotelIdAndAccTypeIdAndCheckInDateBetween(hotelId, accTypeId, firstDate, secondDate);
 	}
 
 	@Override
@@ -81,6 +96,10 @@ public class AccommodationService extends ComplexTypeService<AccommodationDto, A
 		dto.setTourId(entity.getTour().getId());
 		dto.setRoom(roomService.findListDtoById(entity.getRoom().getId()));
 		dto.setAccType(accommodationTypeService.findListDtoById(entity.getAccType().getId()));
+		dto.setHotel(hotelService.findListDtoById(roomService.findDtoById(entity.getRoom().getId()).getHotelId()));
+		dto.setNights(AppUtils.countDaysDifference(entity.getCheckInDate(), entity.getCheckOutDate()));
+		dto.setRoomCount((int) Math.ceil(((double)entity.getPax() / entity.getAccType().getPaxNumber())));
+		dto.setTotal(entity.getPrice().multiply(BigDecimal.valueOf(entity.getPax())).multiply(BigDecimal.valueOf(dto.getNights())));
 		return dto;
 	}
 

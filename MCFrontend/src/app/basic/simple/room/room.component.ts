@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ShortForm} from "../../../service/basic/shortform";
 import {RequestParams} from "../../../service/basic/request-params";
 import {ActivatedRoute} from "@angular/router";
@@ -28,7 +28,8 @@ export class RoomComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private roomService: RoomService,
-              private basicSearchService: BasicSearchService) { }
+              private basicSearchService: BasicSearchService) {
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(param => {
@@ -72,8 +73,8 @@ export class RoomComponent implements OnInit {
     }
   }
 
-  save(){
-    if(confirm("Вы уверены, что хотите сохранить изменения?")) {
+  save() {
+    if (confirm("Вы уверены, что хотите сохранить изменения?")) {
       this.roomService.save(this.room).subscribe(result => {
         this.room = result;
         this.title = "РЕДАКТИРОВАНИЕ ТИПА КОМНАТЫ";
@@ -84,13 +85,13 @@ export class RoomComponent implements OnInit {
     }
   }
 
-  deleteConfirm(){
-    if(confirm("Вы уверены, что хотите удалить элемент?")) {
+  deleteConfirm() {
+    if (confirm("Вы уверены, что хотите удалить элемент?")) {
       alert("Удаление в процессе реализации.");
     }
   }
 
-  getHotels(){
+  getHotels() {
     this.params.location = this.locationId;
     this.basicSearchService.findByParams('hotel', this.params.prepareForSending()).subscribe(result => {
       this.hotelList = result;
@@ -99,13 +100,13 @@ export class RoomComponent implements OnInit {
     });
   }
 
-  getHotelsWithDrop(){
+  getHotelsWithDrop() {
     this.getHotels();
     this.room.hotelId = 0;
   }
 
 
-  getLocations(){
+  getLocations() {
     this.params.region = this.regionId;
     this.basicSearchService.findByParams('location', this.params.prepareForSending()).subscribe(result => {
       this.locationList = result;
@@ -114,13 +115,13 @@ export class RoomComponent implements OnInit {
     });
   }
 
-  getLocationsWithDrop(){
+  getLocationsWithDrop() {
     this.getLocations();
     this.room.hotelId = 0;
     this.locationId = 0;
   }
 
-  getRegions(){
+  getRegions() {
     this.params.country = this.countryId;
     this.basicSearchService.findByParams('region', this.params.prepareForSending()).subscribe(result => {
       this.regionList = result;
@@ -129,14 +130,14 @@ export class RoomComponent implements OnInit {
     });
   }
 
-  getRegionsWithDrop(){
+  getRegionsWithDrop() {
     this.getRegions();
     this.room.hotelId = 0;
     this.locationId = 0;
     this.regionId = 0;
   }
 
-  getCountries(){
+  getCountries() {
     this.basicSearchService.findAll('country').subscribe(result => {
       this.countryList = result;
     }, error => {
@@ -144,7 +145,7 @@ export class RoomComponent implements OnInit {
     });
   }
 
-  enableEdit(){
+  enableEdit() {
     this.params.reset();
     this.params.country = this.countryId;
     this.params.region = this.regionId;
