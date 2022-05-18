@@ -15,8 +15,8 @@ import ru.geekbrains.micecreator.service.prototypes.ComplexTypeService;
 import ru.geekbrains.micecreator.utils.AppUtils;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,23 +37,23 @@ public class TourService extends ComplexTypeService<TourDto, Tour> {
 		}
 	}
 
-	public List<TourDto> findDtoToursByDatesAndCountry(Date firstDate, Date secondDate, Integer countryId) {
+	public List<TourDto> findDtoToursByDatesAndCountry(LocalDate firstDate, LocalDate secondDate, Integer countryId) {
 		checkInput(firstDate, secondDate, countryId);
 		checkDates(firstDate, secondDate);
 		return findByDatesAndCountry(firstDate, secondDate, countryId).stream().map(this::mapToDto).collect(Collectors.toList());
 	}
 
-	public List<TourDto> findDtoToursByDates(Date firstDate, Date secondDate) {
+	public List<TourDto> findDtoToursByDates(LocalDate firstDate, LocalDate secondDate) {
 		checkInput(firstDate, secondDate);
 		checkDates(firstDate, secondDate);
 		return findByDates(firstDate, secondDate).stream().map(this::mapToDto).collect(Collectors.toList());
 	}
 
-	protected List<Tour> findByDatesAndCountry(Date firstDate, Date secondDate, Integer countryId) {
+	protected List<Tour> findByDatesAndCountry(LocalDate firstDate, LocalDate secondDate, Integer countryId) {
 		return tourRepo.findByStartDateBetweenAndCountryId(firstDate, secondDate, countryId);
 	}
 
-	protected List<Tour> findByDates(Date firstDate, Date secondDate) {
+	protected List<Tour> findByDates(LocalDate firstDate, LocalDate secondDate) {
 		return tourRepo.findByStartDateBetween(firstDate, secondDate);
 	}
 

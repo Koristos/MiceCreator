@@ -4,6 +4,7 @@ import ru.geekbrains.micecreator.dto.complex.prototype.IdPositive;
 import ru.geekbrains.micecreator.exceptions.BadInputException;
 import ru.geekbrains.micecreator.exceptions.DataNotFoundException;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -64,7 +65,7 @@ public abstract class ComplexTypeService<D extends IdPositive, E> {
 		}
 	}
 
-	protected void checkDates(Date firstDate, Date secondDate) {
+	protected void checkDates(LocalDate firstDate, LocalDate secondDate) {
 		if (firstDate.compareTo(secondDate) > 0) {
 			throw new BadInputException(String.format("Wrong date range: firstDate %s must be earlier than secondDate %s.", firstDate, secondDate));
 		}

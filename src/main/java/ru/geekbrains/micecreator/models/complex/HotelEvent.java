@@ -13,7 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "hotel_events")
@@ -27,7 +27,7 @@ public class HotelEvent {
 	private Integer id;
 
 	@Column(name = "hotel_events_date")
-	private Date date;
+	private LocalDate date;
 
 	@Column(name = "pax")
 	private Integer pax;

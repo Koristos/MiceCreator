@@ -10,7 +10,7 @@ import ru.geekbrains.micecreator.repository.RegionEventRepo;
 import ru.geekbrains.micecreator.service.prototypes.ComplexTypeService;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,7 +34,7 @@ public class RegionEventService extends ComplexTypeService<RegionEventDto, Regio
 	}
 
 
-	public List<RegionEvent> findByServiceIdInDates(Integer regionServId, Date firstDate, Date secondDate) {
+	public List<RegionEvent> findByServiceIdInDates(Integer regionServId, LocalDate firstDate, LocalDate secondDate) {
 		return regionEventRepo.findByServiceIdAndDateBetween(regionServId, firstDate, secondDate);
 	}
 

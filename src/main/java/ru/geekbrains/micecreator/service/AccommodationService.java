@@ -12,7 +12,7 @@ import ru.geekbrains.micecreator.utils.AppUtils;
 
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,11 +44,11 @@ public class AccommodationService extends ComplexTypeService<AccommodationDto, A
 		}
 	}
 
-	protected List<Accommodation> findByRoomAccTypeIdsInDates(Integer roomId, Integer accTypeId, Date firstDate, Date secondDate) {
+	protected List<Accommodation> findByRoomAccTypeIdsInDates(Integer roomId, Integer accTypeId, LocalDate firstDate, LocalDate secondDate) {
 		return accommodationRepo.findByRoomIdAndAccTypeIdAndCheckInDateBetween(roomId, accTypeId, firstDate, secondDate);
 	}
 
-	protected List<Accommodation> findByHotelAccTypeIdsInDates(Integer hotelId, Integer accTypeId, Date firstDate, Date secondDate) {
+	protected List<Accommodation> findByHotelAccTypeIdsInDates(Integer hotelId, Integer accTypeId, LocalDate firstDate, LocalDate secondDate) {
 		return accommodationRepo.findByRoom_HotelIdAndAccTypeIdAndCheckInDateBetween(hotelId, accTypeId, firstDate, secondDate);
 	}
 

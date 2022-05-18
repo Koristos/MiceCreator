@@ -14,7 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "accommodations")
@@ -28,10 +28,10 @@ public class Accommodation {
 	private Integer id;
 
 	@Column(name = "check_in_date")
-	private Date checkInDate;
+	private LocalDate checkInDate;
 
 	@Column(name = "check_out_date")
-	private Date checkOutDate;
+	private LocalDate checkOutDate;
 
 	@Column(name = "pax")
 	private Integer pax;

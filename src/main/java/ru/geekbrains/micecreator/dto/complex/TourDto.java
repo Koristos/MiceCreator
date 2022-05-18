@@ -6,7 +6,7 @@ import ru.geekbrains.micecreator.dto.basic.list.ListItemDto;
 import ru.geekbrains.micecreator.dto.complex.prototype.IdPositive;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -14,8 +14,8 @@ public class TourDto implements IdPositive {
 
 	private Integer id;
 	private Integer pax;
-	private Date startDate;
-	private Date endDate;
+	private LocalDate startDate;
+	private LocalDate endDate;
 	private BigDecimal totalPrice;
 	private ListItemDto country;
 
