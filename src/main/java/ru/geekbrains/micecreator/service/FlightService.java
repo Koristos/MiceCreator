@@ -52,11 +52,11 @@ public class FlightService extends ComplexTypeService<FlightDto, Flight> {
 
 
 	protected List<Flight> findByAirportsIdsAndDates(Integer departureAirportId, Integer arrivalAirportId, LocalDate firstDate, LocalDate secondDate) {
-		return flightRepo.findByDepartureAirportIdAndArrivalAirportIdAndDepartureDateBetween(departureAirportId, arrivalAirportId, firstDate, secondDate);
+		return flightRepo.findByDepartureAirportIdAndArrivalAirportIdAndDepartureDateBetween(departureAirportId, arrivalAirportId, firstDate.atStartOfDay(), secondDate.atStartOfDay());
 	}
 
 	protected List<Flight> findByAirportsAirlineIdsAndDates(Integer departureAirportId, Integer arrivalAirportId, Integer airlineId, LocalDate firstDate, LocalDate secondDate) {
-		return flightRepo.findByDepartureAirportIdAndArrivalAirportIdAndAirlineIdAndDepartureDateBetween(departureAirportId, arrivalAirportId, airlineId, firstDate, secondDate);
+		return flightRepo.findByDepartureAirportIdAndArrivalAirportIdAndAirlineIdAndDepartureDateBetween(departureAirportId, arrivalAirportId, airlineId, firstDate.atStartOfDay(), secondDate.atStartOfDay());
 	}
 
 	@Override
