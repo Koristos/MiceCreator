@@ -8,7 +8,6 @@ import ru.geekbrains.micecreator.exceptions.BadInputException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -17,8 +16,8 @@ public class ComplexParams {
 
 	private static final DateTimeFormatter RANGE_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
-	private Date firstDate;
-	private Date secondDate;
+	private LocalDate firstDate;
+	private LocalDate secondDate;
 	private Integer roomId;
 	private Integer accTypeId;
 	private Integer departureAirportId;
@@ -37,10 +36,9 @@ public class ComplexParams {
 		this.secondDate = convertRangeDate(secondDate);
 	}
 
-	private Date convertRangeDate (String string) {
+	private LocalDate convertRangeDate (String string) {
 		try {
-			LocalDate date = LocalDate.parse(string, RANGE_DATE_FORMATTER);
-			return java.sql.Date.valueOf(date);
+			return LocalDate.parse(string, RANGE_DATE_FORMATTER);
 		} catch (DateTimeParseException e) {
 			throw new BadInputException("Input range dates must follow pattern dd.MM.yyyy");
 		}

@@ -10,7 +10,7 @@ import ru.geekbrains.micecreator.repository.FlightRepo;
 import ru.geekbrains.micecreator.service.prototypes.ComplexTypeService;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,14 +36,14 @@ public class FlightService extends ComplexTypeService<FlightDto, Flight> {
 		}
 	}
 
-	public List<FlightDto> findDtoByPointsAndDates(Integer departureAirportId, Integer arrivalAirportId, Date firstDate, Date secondDate) {
+	public List<FlightDto> findDtoByPointsAndDates(Integer departureAirportId, Integer arrivalAirportId, LocalDate firstDate, LocalDate secondDate) {
 		checkInput(departureAirportId, arrivalAirportId, firstDate, secondDate);
 		checkDates(firstDate, secondDate);
 		return findByAirportsIdsAndDates(departureAirportId, arrivalAirportId, firstDate, secondDate).stream()
 				.map(this::mapToDto).collect(Collectors.toList());
 	}
 
-	public List<FlightDto> findDtoByPointsAndAirlineAndDates(Integer departureAirportId, Integer arrivalAirportId, Integer airlineId, Date firstDate, Date secondDate) {
+	public List<FlightDto> findDtoByPointsAndAirlineAndDates(Integer departureAirportId, Integer arrivalAirportId, Integer airlineId, LocalDate firstDate, LocalDate secondDate) {
 		checkInput(departureAirportId, arrivalAirportId, airlineId, firstDate, secondDate);
 		checkDates(firstDate, secondDate);
 		return findByAirportsAirlineIdsAndDates(departureAirportId, arrivalAirportId, airlineId, firstDate, secondDate).stream()
@@ -51,11 +51,11 @@ public class FlightService extends ComplexTypeService<FlightDto, Flight> {
 	}
 
 
-	protected List<Flight> findByAirportsIdsAndDates(Integer departureAirportId, Integer arrivalAirportId, Date firstDate, Date secondDate) {
+	protected List<Flight> findByAirportsIdsAndDates(Integer departureAirportId, Integer arrivalAirportId, LocalDate firstDate, LocalDate secondDate) {
 		return flightRepo.findByDepartureAirportIdAndArrivalAirportIdAndDepartureDateBetween(departureAirportId, arrivalAirportId, firstDate, secondDate);
 	}
 
-	protected List<Flight> findByAirportsAirlineIdsAndDates(Integer departureAirportId, Integer arrivalAirportId, Integer airlineId, Date firstDate, Date secondDate) {
+	protected List<Flight> findByAirportsAirlineIdsAndDates(Integer departureAirportId, Integer arrivalAirportId, Integer airlineId, LocalDate firstDate, LocalDate secondDate) {
 		return flightRepo.findByDepartureAirportIdAndArrivalAirportIdAndAirlineIdAndDepartureDateBetween(departureAirportId, arrivalAirportId, airlineId, firstDate, secondDate);
 	}
 

@@ -1,7 +1,7 @@
 package ru.geekbrains.micecreator.utils;
 
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
+import java.time.LocalDate;
 
 public final class AppUtils {
 
@@ -14,8 +14,8 @@ public final class AppUtils {
 		return string.isBlank();
 	}
 
-	public static Long countDaysDifference(Date first, Date second) {
-		long diffInMillies = Math.abs(second.getTime() - first.getTime());
-		return TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+	public static Long countDaysDifference(LocalDate first, LocalDate second) {
+		Duration duration = Duration.between(first.atStartOfDay(), second.atStartOfDay());
+		return duration.toDays();
 	}
 }

@@ -10,7 +10,7 @@ import ru.geekbrains.micecreator.repository.HotelEventRepo;
 import ru.geekbrains.micecreator.service.prototypes.ComplexTypeService;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +33,7 @@ public class HotelEventService extends ComplexTypeService<HotelEventDto, HotelEv
 				.map(this::mapToDto).collect(Collectors.toList());
 	}
 
-	protected List<HotelEvent> findByServiceIdInDates(Integer hotelServId, Date firstDate, Date secondDate) {
+	protected List<HotelEvent> findByServiceIdInDates(Integer hotelServId, LocalDate firstDate, LocalDate secondDate) {
 		return hotelEventRepo.findByServiceIdAndDateBetween(hotelServId, firstDate, secondDate);
 	}
 

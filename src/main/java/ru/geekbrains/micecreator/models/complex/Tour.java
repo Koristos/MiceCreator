@@ -15,7 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -33,10 +33,10 @@ public class Tour {
 	private Integer pax;
 
 	@Column(name = "start_date")
-	private Date startDate;
+	private LocalDate startDate;
 
 	@Column(name = "end_date")
-	private Date endDate;
+	private LocalDate endDate;
 
 	@Column(name = "total_price")
 	private BigDecimal totalPrice;
