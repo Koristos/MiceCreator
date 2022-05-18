@@ -1,0 +1,28 @@
+.form-list {
+  display: inline-block;
+  margin-left: 2%;
+  width: 48%;
+  margin-bottom: 3%;
+}
+
+h1 {
+  margin-top: 2%;
+  margin-bottom: 2%;
+  text-align: center;
+}
+
+h2 {
+  margin-top: 2%;
+  margin-bottom: 2%;
+  text-align: center;
+  color: darkred;
+}
+
+.but-inp {
+  background-color: beige;
+  cursor: pointer;
+}
+
+.but-not {
+  background-color: lightgrey;
+}

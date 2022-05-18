@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {Country} from "../../../service/basic/country/country";
 import {CountryService} from "../../../service/basic/country/country.service";
@@ -16,7 +16,8 @@ export class CountryComponent implements OnInit {
   public title: string = "СОЗДАНИЕ НОВОЙ СТРАНЫ";
 
   constructor(private route: ActivatedRoute,
-              private countryService: CountryService) { }
+              private countryService: CountryService) {
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(param => {
@@ -35,8 +36,8 @@ export class CountryComponent implements OnInit {
     }
   }
 
-  save(){
-    if(confirm("Вы уверены, что хотите сохранить изменения?")) {
+  save() {
+    if (confirm("Вы уверены, что хотите сохранить изменения?")) {
       this.countryService.save(this.country).subscribe(result => {
         this.country = result;
         this.title = "РЕДАКТИРОВАНИЕ СТРАНЫ";
@@ -47,8 +48,8 @@ export class CountryComponent implements OnInit {
     }
   }
 
-  deleteConfirm(){
-    if(confirm("Вы уверены, что хотите удалить элемент?")) {
+  deleteConfirm() {
+    if (confirm("Вы уверены, что хотите удалить элемент?")) {
       alert("Удаление в процессе реализации.");
     }
   }

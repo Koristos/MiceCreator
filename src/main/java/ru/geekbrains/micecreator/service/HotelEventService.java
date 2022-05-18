@@ -9,6 +9,7 @@ import ru.geekbrains.micecreator.models.complex.HotelEvent;
 import ru.geekbrains.micecreator.repository.HotelEventRepo;
 import ru.geekbrains.micecreator.service.prototypes.ComplexTypeService;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,11 +74,12 @@ public class HotelEventService extends ComplexTypeService<HotelEventDto, HotelEv
 	protected HotelEventDto mapToDto(HotelEvent entity) {
 		HotelEventDto dto = new HotelEventDto();
 		dto.setId(entity.getId());
-		dto.setDate(entity.getDate());
+		dto.setEventDate(entity.getDate());
 		dto.setPax(entity.getPax());
 		dto.setPrice(entity.getPrice());
 		dto.setTourId(entity.getTour().getId());
 		dto.setService(hotelServService.findListDtoById(entity.getService().getId()));
+		dto.setTotal(entity.getPrice().multiply(BigDecimal.valueOf(entity.getPax())));
 		return dto;
 	}
 
@@ -85,7 +87,7 @@ public class HotelEventService extends ComplexTypeService<HotelEventDto, HotelEv
 	protected HotelEvent mapToEntity(HotelEventDto dto) {
 		HotelEvent event = new HotelEvent();
 		event.setId(dto.getId());
-		event.setDate(dto.getDate());
+		event.setDate(dto.getEventDate());
 		event.setPax(dto.getPax());
 		event.setPrice(dto.getPrice());
 		event.setTour(tourService.findById(dto.getTourId()));

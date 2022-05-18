@@ -20,4 +20,9 @@ public class AccommodationDto implements IdPositive {
 	private Integer tourId;
 	private ListItemDto room;
 	private ListItemDto accType;
+	private ListItemDto hotel;
+	private Long nights;
+	private Integer roomCount;
+	private BigDecimal total;
+
 }

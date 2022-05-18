@@ -6,14 +6,16 @@
     <div class="col-12">
 
       <label>Страна</label>
-      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="countryId" (ngModelChange)="getRegionsWithDrop()"
+      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="countryId"
+              (ngModelChange)="getRegionsWithDrop()"
               [disabled]="!editEnabled">
         <option selected value=0>Выберите страну...</option>
         <option *ngFor="let country_option of countryList" [value]="country_option.id">{{country_option.name}}</option>
       </select>
 
       <label>Регион</label>
-      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="regionId" (ngModelChange)="getLocationsWithDrop()"
+      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="regionId"
+              (ngModelChange)="getLocationsWithDrop()"
               [disabled]="countryId == 0 || !editEnabled">
         <option selected value=0>Выберите регион...</option>
         <option *ngFor="let region_option of regionList" [value]="region_option.id">{{region_option.name}}</option>
@@ -35,7 +37,7 @@
 
         <div class="form-group">
           <label>Описание отеля</label>
-          <textarea [(ngModel)]="hotel.description" rows="10"  class="form-control" id="description" name="description"
+          <textarea [(ngModel)]="hotel.description" rows="10" class="form-control" id="description" name="description"
                     placeholder="Введите описание отеля" [disabled]="!editEnabled"></textarea>
         </div>
 

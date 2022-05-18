@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Country} from "./country";
 
@@ -7,17 +7,18 @@ import {Country} from "./country";
 })
 export class CountryService {
 
-  private path: string ='api/v1/country/';
+  private path: string = 'api/v1/country/';
 
-  constructor(public http: HttpClient) { }
+  constructor(public http: HttpClient) {
+  }
 
   public findById(id: number) {
     return this.http.get<Country>(`${this.path}${id}`);
   }
 
-  public save(country: Country){
+  public save(country: Country) {
     console.log(country);
-    if (country.id == null){
+    if (country.id == null) {
       return this.http.post<Country>(this.path, country);
     }
     return this.http.put<Country>(this.path, country);

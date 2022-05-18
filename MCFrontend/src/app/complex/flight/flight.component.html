@@ -1,1 +1,67 @@
-<p>flight works!</p>
+<div>
+  <h1>{{title}}</h1>
+  <div class="row py-2">
+    <div class="col-12">
+      <div>
+        <button type="submit" class="btn btn-warning form-list-two" (click)="isEditable = true" [disabled]="isEditable"><i class="fa fa-wrench"> Редактировать
+          перелет</i></button>
+        <button type="submit" class="btn btn-success form-list-two" (click)="return()"><i class="fa fa-backward"> Вернуться к туру</i></button>
+      </div>
+      <div>
+        <div class="form-list pick-date">
+          <label>Дата вылета</label>
+          <div class="input-group date" data-provide="datepicker">
+            <input type="datetime-local" class="form-control" required [(ngModel)]="dep_date" [disabled]="!isEditable">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+            </div>
+          </div>
+        </div>
+        <div class="form-list pick-date">
+          <label>Дата прилета</label>
+          <div class="input-group date" data-provide="datepicker">
+            <input type="datetime-local" class="form-control" required [(ngModel)]="arr_date" [disabled]="!isEditable">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+            </div>
+          </div>
+        </div>
+        <div class="form-list">
+          <label>Кол-во человек</label>
+          <input [(ngModel)]="flight.pax" class="form-control form-control-lg" type="number" placeholder="Введите количество пассажиров"
+                 [disabled]="!isEditable">
+        </div>
+        <div class="form-list">
+          <label>Аэропорт вылета</label>
+          <input [(ngModel)]="flight.departureAirport.name" class="form-control form-control-lg but-inp" type="text" placeholder="Выберите аэропорт"
+                 (click)="findDepPort()" readonly [disabled]="!isEditable">
+        </div>
+        <div class="form-list">
+          <label>Аэропорт прилета</label>
+          <input [(ngModel)]="flight.arrivalAirport.name" class="form-control form-control-lg but-inp" type="text" placeholder="Выберите тип аэропорт"
+                 (click)="findArrPort()" readonly [disabled]="!isEditable">
+        </div>
+        <div class="form-list">
+          <label>Авиакомпания</label>
+          <input [(ngModel)]="flight.airline.name" class="form-control form-control-lg but-inp" type="text" placeholder="Выберите авиакомпанию"
+                 (click)="findAirline()" readonly [disabled]="!isEditable">
+        </div>
+        <div class="form-list">
+          <label>Цена</label>
+          <input [(ngModel)]="flight.price" class="form-control form-control-lg" type="number" placeholder="Введите стоимость"
+                 [disabled]="!isEditable">
+        </div>
+        <div class="form-list">
+          <label>Итоговая стоимость</label>
+          <input [(ngModel)]="flight.total" class="form-control form-control-lg but-info" type="text" placeholder="Отель не выбран" readonly>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="save-btn-div">
+    <button type="submit" class="btn btn-primary save-btn" (click)="save()" [disabled]="!isEditable">Сохранить</button>
+  </div>
+</div>
+
+
+

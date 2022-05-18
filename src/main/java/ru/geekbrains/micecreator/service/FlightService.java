@@ -9,6 +9,7 @@ import ru.geekbrains.micecreator.models.complex.Flight;
 import ru.geekbrains.micecreator.repository.FlightRepo;
 import ru.geekbrains.micecreator.service.prototypes.ComplexTypeService;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -103,6 +104,7 @@ public class FlightService extends ComplexTypeService<FlightDto, Flight> {
 		dto.setAirline(airlineService.findListDtoById(entity.getAirline().getId()));
 		dto.setDepartureAirport(airportService.findListDtoById(entity.getDepartureAirport().getId()));
 		dto.setArrivalAirport(airportService.findListDtoById(entity.getArrivalAirport().getId()));
+		dto.setTotal(entity.getPrice().multiply(BigDecimal.valueOf(entity.getPax())));
 		return dto;
 	}
 

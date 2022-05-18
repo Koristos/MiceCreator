@@ -1,1 +1,75 @@
-<p>flight-search works!</p>
+<div>
+  <h1>ПОИСК ДАННЫХ ПО РЕЙСАМ</h1>
+  <div class="row py-2">
+    <div class="col-12">
+      <div>
+        <div class="pick-elem pick-item">
+          <div class="form-list">
+            <label>Аэропорт вылета</label>
+            <input [value]="depAirport.name" class="form-control form-control-lg but-inp" type="text" placeholder="Выберите аэропорт вылета"
+                   (click)="findDepPort()" readonly>
+          </div>
+          <div class="form-list">
+            <label>Аэропорт прилета</label>
+            <input [value]="arrAirport.name" class="form-control form-control-lg but-inp" type="text" placeholder="Выберите аэропорт прилета"
+                   (click)="findArrPort()" readonly>
+          </div>
+          <div class="form-list">
+            <label>Авиакомпания</label>
+            <input [value]="airline.name" class="form-control form-control-lg but-inp" type="text" placeholder="Выберите авиакомпанию" (click)="findAirline()"
+                   readonly>
+          </div>
+        </div>
+        <div class="form-list pick-date">
+          <label>С даты</label>
+          <div class="input-group date" data-provide="datepicker">
+            <input type="date" class="form-control" required [(ngModel)]="flightSearchParams.firstDate">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+            </div>
+          </div>
+        </div>
+        <div class="form-list pick-date">
+          <label>По дату</label>
+          <div class="input-group date" data-provide="datepicker">
+            <input type="date" class="form-control" required [(ngModel)]="flightSearchParams.lastDate">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary" (click)="search()">Найти перелеты</button>
+  </div>
+  <div class="col-12 last-div">
+    <h2 [hidden]="!isSearchCommitted || flightList.length != 0">По заданным параметрам перелеты не найдены</h2>
+    <table class="table table-bordered my-2" [hidden]="!isSearchCommitted || flightList.length == 0">
+      <thead>
+      <tr>
+        <th scope="col">Номер</th>
+        <th scope="col">Аэропорт вылета</th>
+        <th scope="col">Дата вылета</th>
+        <th scope="col">Дата прилета</th>
+        <th scope="col">Аэропорт прилета</th>
+        <th scope="col">Авиакомпания</th>
+        <th scope="col">Кол-во человек</th>
+        <th scope="col">Цена билета</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let flightElement of flightList">
+        <th scope="row">{{flightList.indexOf(flightElement) + 1}}</th>
+        <td>{{flightElement.departureAirport.name}}</td>
+        <td>{{dateTimeToPattern(flightElement.departureDate)}}</td>
+        <td>{{dateTimeToPattern(flightElement.arrivalDate)}}</td>
+        <td>{{flightElement.arrivalAirport.name}}</td>
+        <td>{{flightElement.airline.name}}</td>
+        <td>{{flightElement.pax}}</td>
+        <td>{{flightElement.price}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

@@ -10,7 +10,7 @@ import ru.geekbrains.micecreator.dto.basic.list.SimpleTypes;
 import ru.geekbrains.micecreator.models.basic.Location;
 import ru.geekbrains.micecreator.repository.LocationRepo;
 import ru.geekbrains.micecreator.service.prototypes.SimpleTypeService;
-import ru.geekbrains.micecreator.utils.StringUtils;
+import ru.geekbrains.micecreator.utils.AppUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +27,7 @@ public class LocationService extends SimpleTypeService<LocationDto, Location> {
 
 	@Override
 	public List<ListItemDto> findBySearchParams(SearchParams params) {
-		if (params.getRegionId() != null && !StringUtils.isBlank(params.getNamePart())){
+		if (params.getRegionId() != null && !AppUtils.isBlank(params.getNamePart())){
 			return findLocationByRegionIdAndNamePart(params.getRegionId(), params.getNamePart());
 		}else if (params.getRegionId() != null) {
 			return findLocationByRegionId(params.getRegionId());

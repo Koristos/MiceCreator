@@ -1,0 +1,48 @@
+.last-div {
+  margin-bottom: 10%;
+}
+
+.but-pannel {
+  width: 20%;
+}
+
+h2 {
+  text-align: center;
+  margin-top: 3%;
+  margin-bottom: 1%;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+.pick-elem {
+  display: inline-block;
+  margin-left: 2%;
+  margin-bottom: 1%;
+  width: 48%
+}
+
+.btn-last {
+  margin-top: 1%;
+}
+
+h3 {
+  margin-top: 2%;
+  margin-bottom: 2%;
+  text-align: center;
+  color: darkred;
+}
+
+.btn-row {
+  display: inline-block;
+  margin-left: 2%;
+  width: 30%;
+}
+
+.but {
+  margin-left: 2%;
+}
+

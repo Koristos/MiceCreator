@@ -9,6 +9,7 @@ import ru.geekbrains.micecreator.models.complex.RegionEvent;
 import ru.geekbrains.micecreator.repository.RegionEventRepo;
 import ru.geekbrains.micecreator.service.prototypes.ComplexTypeService;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,11 +75,12 @@ public class RegionEventService extends ComplexTypeService<RegionEventDto, Regio
 	protected RegionEventDto mapToDto(RegionEvent entity) {
 		RegionEventDto dto = new RegionEventDto();
 		dto.setId(entity.getId());
-		dto.setDate(entity.getDate());
+		dto.setEventDate(entity.getDate());
 		dto.setPax(entity.getPax());
 		dto.setPrice(entity.getPrice());
 		dto.setTourId(entity.getTour().getId());
 		dto.setService(regionServService.findListDtoById(entity.getService().getId()));
+		dto.setTotal(entity.getPrice().multiply(BigDecimal.valueOf(entity.getPax())));
 		return dto;
 	}
 
@@ -86,7 +88,7 @@ public class RegionEventService extends ComplexTypeService<RegionEventDto, Regio
 	protected RegionEvent mapToEntity(RegionEventDto dto) {
 		RegionEvent event = new RegionEvent();
 		event.setId(dto.getId());
-		event.setDate(dto.getDate());
+		event.setDate(dto.getEventDate());
 		event.setPax(dto.getPax());
 		event.setPrice(dto.getPrice());
 		event.setTour(tourService.findById(dto.getTourId()));

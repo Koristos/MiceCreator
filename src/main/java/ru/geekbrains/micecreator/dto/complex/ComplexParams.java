@@ -27,12 +27,13 @@ public class ComplexParams {
 	private Integer hotelServId;
 	private Integer regionServId;
 	private Integer countryId;
+	private Integer hotelId;
 
-	public void setFirstDate(String firstDate) {
+	public void setFirstDateFromString(String firstDate) {
 		this.firstDate = convertRangeDate(firstDate);
 	}
 
-	public void setSecondDate(String secondDate){
+	public void setSecondDateFromString(String secondDate){
 		this.secondDate = convertRangeDate(secondDate);
 	}
 

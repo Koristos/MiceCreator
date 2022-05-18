@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {AccType} from "../../../service/basic/accom-type/acctype";
 import {AccomTypeService} from "../../../service/basic/accom-type/accom-type.service";
@@ -15,7 +15,8 @@ export class AccomTypeComponent implements OnInit {
   public title: string = "СОЗДАНИЕ НОВОГО ТИПА РАЗМЕЩЕНИЯ";
 
   constructor(private route: ActivatedRoute,
-              private accomTypeService: AccomTypeService) { }
+              private accomTypeService: AccomTypeService) {
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(param => {
@@ -34,8 +35,8 @@ export class AccomTypeComponent implements OnInit {
     }
   }
 
-  save(){
-    if(confirm("Вы уверены, что хотите сохранить изменения?")) {
+  save() {
+    if (confirm("Вы уверены, что хотите сохранить изменения?")) {
       this.accomTypeService.save(this.accType).subscribe(result => {
         this.accType = result;
         this.title = "СОЗДАНИЕ НОВОГО ТИПА РАЗМЕЩЕНИЯ";
@@ -46,8 +47,8 @@ export class AccomTypeComponent implements OnInit {
     }
   }
 
-  deleteConfirm(){
-    if(confirm("Вы уверены, что хотите удалить элемент?")) {
+  deleteConfirm() {
+    if (confirm("Вы уверены, что хотите удалить элемент?")) {
       alert("Удаление в процессе реализации.");
     }
   }

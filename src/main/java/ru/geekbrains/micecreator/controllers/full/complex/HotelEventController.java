@@ -2,6 +2,7 @@ package ru.geekbrains.micecreator.controllers.full.complex;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 public class HotelEventController {
 
+	@Autowired
 	private HotelEventService service;
 
 	@GetMapping("/{id}")
@@ -40,8 +42,8 @@ public class HotelEventController {
 	                                       @RequestParam(name = "second_date") String second) {
 		ComplexParams params = new ComplexParams();
 		params.setHotelServId(hotelServId);
-		params.setFirstDate(first);
-		params.setSecondDate(second);
+		params.setFirstDateFromString(first);
+		params.setSecondDateFromString(second);
 		return service.findByParams(params);
 	}
 

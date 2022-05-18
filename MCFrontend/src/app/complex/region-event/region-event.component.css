@@ -1,0 +1,49 @@
+.form-list {
+  display: inline-block;
+  margin-left: 2%;
+  width: 30%;
+  margin-bottom: 3%;
+}
+
+.form-list-two {
+  display: inline-block;
+  margin-left: 2%;
+  width: 46%;
+  margin-bottom: 3%;
+}
+
+h1 {
+  margin-top: 2%;
+  margin-bottom: 2%;
+  text-align: center;
+}
+
+h2 {
+  margin-top: 2%;
+  margin-bottom: 2%;
+  text-align: center;
+  color: darkred;
+}
+
+.but-inp {
+  background-color: beige;
+  cursor: pointer;
+}
+
+.but-info {
+  background-color: lightgrey;
+}
+
+input:disabled,
+input[disabled] {
+  background-color: lightgrey;
+}
+
+.save-btn {
+  width: 95%;
+}
+
+.save-btn-div {
+  display: flex;
+  justify-content: center;
+}

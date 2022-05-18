@@ -5,7 +5,7 @@ import ru.geekbrains.micecreator.dto.basic.list.ListItemDto;
 import ru.geekbrains.micecreator.dto.basic.prototype.BasicDto;
 import ru.geekbrains.micecreator.exceptions.BadInputException;
 import ru.geekbrains.micecreator.exceptions.DataNotFoundException;
-import ru.geekbrains.micecreator.utils.StringUtils;
+import ru.geekbrains.micecreator.utils.AppUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -71,7 +71,7 @@ public abstract class SimpleTypeService<D extends BasicDto, E> {
 	}
 
 	public List<ListItemDto> findBySearchParams(SearchParams params) {
-		if (!StringUtils.isBlank(params.getNamePart())) {
+		if (!AppUtils.isBlank(params.getNamePart())) {
 			return findListDtoByNamePart(params.getNamePart());
 		}
 		return findAllListDto();
@@ -79,14 +79,14 @@ public abstract class SimpleTypeService<D extends BasicDto, E> {
 
 
 	protected String nameToStandard(String name) {
-		if (StringUtils.isBlank(name)) {
+		if (AppUtils.isBlank(name)) {
 			throw new BadInputException("Invalid input: name must be not blank.");
 		}
 		return name.toUpperCase()+"%";
 	}
 
 	protected String nameToStandardForSave(String name) {
-		if (StringUtils.isBlank(name)) {
+		if (AppUtils.isBlank(name)) {
 			throw new BadInputException("Invalid input: name must be not blank.");
 		}
 		return name.toUpperCase();

@@ -7,11 +7,12 @@
       <form (ngSubmit)="save()">
         <div class="form-group">
           <label>Название авиакомпании</label>
-          <input [(ngModel)]="airline.name" type="text" class="form-control" id="name" name="name" placeholder="Введите название авиакомпании" [disabled]="!editEnabled">
+          <input [(ngModel)]="airline.name" type="text" class="form-control" id="name" name="name" placeholder="Введите название авиакомпании"
+                 [disabled]="!editEnabled">
         </div>
         <div class="form-group">
           <label>Описание авиакомпании</label>
-          <textarea [(ngModel)]="airline.description" rows="10"  class="form-control" id="description" name="description"
+          <textarea [(ngModel)]="airline.description" rows="10" class="form-control" id="description" name="description"
                     placeholder="Введите описание авиакомпании" [disabled]="!editEnabled"></textarea>
         </div>
         <button type="submit" class="btn btn-primary" [disabled]="!editEnabled">Сохранить изменения</button>

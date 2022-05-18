@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ShortForm} from "../../../service/basic/shortform";
 import {RequestParams} from "../../../service/basic/request-params";
 import {ActivatedRoute} from "@angular/router";
@@ -24,7 +24,8 @@ export class RegionServComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private regionServService: RegionServService,
-              private basicSearchService: BasicSearchService) { }
+              private basicSearchService: BasicSearchService) {
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(param => {
@@ -56,8 +57,8 @@ export class RegionServComponent implements OnInit {
     }
   }
 
-  save(){
-    if(confirm("Вы уверены, что хотите сохранить изменения?")) {
+  save() {
+    if (confirm("Вы уверены, что хотите сохранить изменения?")) {
       this.regionServService.save(this.regionServ).subscribe(result => {
         this.regionServ = result;
         this.title = "РЕДАКТИРОВАНИЕ РЕГИОНАЛЬНОЙ УСЛУГИ";
@@ -68,13 +69,13 @@ export class RegionServComponent implements OnInit {
     }
   }
 
-  deleteConfirm(){
-    if(confirm("Вы уверены, что хотите удалить элемент?")) {
+  deleteConfirm() {
+    if (confirm("Вы уверены, что хотите удалить элемент?")) {
       alert("Удаление в процессе реализации.");
     }
   }
 
-  getRegions(){
+  getRegions() {
     this.params.country = this.countryId;
     this.basicSearchService.findByParams('region', this.params.prepareForSending()).subscribe(result => {
       this.regionList = result;
@@ -83,12 +84,12 @@ export class RegionServComponent implements OnInit {
     });
   }
 
-  getRegionsWithDrop(){
+  getRegionsWithDrop() {
     this.getRegions();
     this.regionServ.regionId = 0;
   }
 
-  getCountries(){
+  getCountries() {
     this.basicSearchService.findAll('country').subscribe(result => {
       this.countryList = result;
     }, error => {
@@ -96,7 +97,7 @@ export class RegionServComponent implements OnInit {
     });
   }
 
-  enableEdit(){
+  enableEdit() {
     this.params.reset();
     this.params.country = this.countryId;
     this.getRegions();

@@ -10,7 +10,7 @@ import ru.geekbrains.micecreator.dto.basic.list.SimpleTypes;
 import ru.geekbrains.micecreator.models.basic.Room;
 import ru.geekbrains.micecreator.repository.RoomRepo;
 import ru.geekbrains.micecreator.service.prototypes.SimpleTypeService;
-import ru.geekbrains.micecreator.utils.StringUtils;
+import ru.geekbrains.micecreator.utils.AppUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +27,7 @@ public class RoomService extends SimpleTypeService<RoomDto, Room> {
 
 	@Override
 	public List<ListItemDto> findBySearchParams(SearchParams params) {
-		if (params.getHotelId() != null && !StringUtils.isBlank(params.getNamePart())){
+		if (params.getHotelId() != null && !AppUtils.isBlank(params.getNamePart())){
 			return findServiceByHotelAndNamePart(params.getHotelId(), params.getNamePart());
 		}else if (params.getHotelId() != null) {
 			return findServiceByHotel(params.getHotelId());
