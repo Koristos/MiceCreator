@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.geekbrains.micecreator.service.files.FileService;
 
 
-
 @RestController
 @RequestMapping("api/v1/files")
 @AllArgsConstructor

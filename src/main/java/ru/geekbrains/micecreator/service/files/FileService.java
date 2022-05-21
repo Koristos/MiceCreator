@@ -47,6 +47,7 @@ public class FileService {
 			throw new RuntimeException("Could not initialize folder for upload!");
 		}
 	}
+
 	public void save(MultipartFile file) {
 		try {
 			Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
@@ -54,6 +55,7 @@ public class FileService {
 			throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
 		}
 	}
+
 	public Resource loadEstimate(Integer tourId) {
 		estimateCreator.createEstimate(makeEstimate(tourId), root.resolve(ESTIMATE_TEMP).toString());
 		try {
@@ -73,7 +75,7 @@ public class FileService {
 		FileSystemUtils.deleteRecursively(root.toFile());
 	}
 
-	private TourEstimate makeEstimate (Integer tourId) {
+	private TourEstimate makeEstimate(Integer tourId) {
 		TourEstimate estimate = new TourEstimate();
 		estimate.setTour(tourService.findDtoById(tourId));
 		estimate.setAccommodations(accommodationService.makeEstimate(tourId));
