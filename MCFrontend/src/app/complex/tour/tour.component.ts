@@ -7,6 +7,7 @@ import {FullTour} from "../../service/complex/tour/full-tour";
 import {Tour} from "../../service/complex/tour/tour";
 import {Country} from "../../service/basic/country/country";
 import {formatDate} from "@angular/common";
+import {FileService} from "../../service/files/file.service";
 
 @Component({
   selector: 'app-tour',
@@ -29,7 +30,8 @@ export class TourComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private tourService: TourService,
               private basicSearchService: BasicSearchService,
-              private router: Router
+              private router: Router,
+              private fileService: FileService
   ) {
   }
 
@@ -126,7 +128,7 @@ export class TourComponent implements OnInit {
   }
 
   downloadEstimate() {
-    alert("функционал в разработке");
+    this.fileService.getEstimate(this.fullTour.tour.id);
   }
 
   showAccommodation(accommId: number) {

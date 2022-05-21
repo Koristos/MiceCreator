@@ -66,6 +66,9 @@ public class AirportService extends SimpleTypeService<AirportDto, Airport> {
 		return findByRegion(regionId).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
+	public Integer findParentId (Integer id) {
+		return findById(id).getRegion().getId();
+	}
 
 	protected List<Airport> findByRegion(Integer regionId) {
 		return airportRepo.findByRegionId(regionId);

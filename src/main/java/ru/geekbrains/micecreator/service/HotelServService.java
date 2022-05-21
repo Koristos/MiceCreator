@@ -47,6 +47,10 @@ public class HotelServService extends SimpleTypeService<HotelServiceDto, HotelSe
 		return findByHotelAndNamePart(hotelId, namePart).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
+	public Integer findParentId (Integer id) {
+		return findById(id).getHotel().getId();
+	}
+
 
 	protected List<HotelServ> findByHotel(Integer hotelId) {
 		return hotelServRepo.findByHotelId(hotelId);

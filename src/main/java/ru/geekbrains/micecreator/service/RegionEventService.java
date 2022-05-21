@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.geekbrains.micecreator.dto.complex.ComplexParams;
 import ru.geekbrains.micecreator.dto.complex.RegionEventDto;
+import ru.geekbrains.micecreator.dto.complex.estimate.RegionEventEstimate;
 import ru.geekbrains.micecreator.models.complex.RegionEvent;
 import ru.geekbrains.micecreator.repository.RegionEventRepo;
 import ru.geekbrains.micecreator.service.prototypes.ComplexTypeService;
@@ -24,6 +25,8 @@ public class RegionEventService extends ComplexTypeService<RegionEventDto, Regio
 	private final RegionServService regionServService;
 	@Autowired
 	private final TourService tourService;
+	@Autowired
+	private final RegionService regionService;
 
 
 	public List<RegionEventDto> findByParams(ComplexParams params) {
@@ -36,6 +39,11 @@ public class RegionEventService extends ComplexTypeService<RegionEventDto, Regio
 
 	public List<RegionEvent> findByServiceIdInDates(Integer regionServId, LocalDate firstDate, LocalDate secondDate) {
 		return regionEventRepo.findByServiceIdAndDateBetween(regionServId, firstDate, secondDate);
+	}
+
+	public List<RegionEventEstimate> makeEstimate(Integer tourId) {
+		return findByTour (tourId).stream().map(this::mapToEstimate).collect(Collectors.toList());
+
 	}
 
 	@Override
@@ -94,6 +102,16 @@ public class RegionEventService extends ComplexTypeService<RegionEventDto, Regio
 		event.setTour(tourService.findById(dto.getTourId()));
 		event.setService(regionServService.findById(dto.getService().getId()));
 		return event;
+	}
+
+	private RegionEventEstimate mapToEstimate (RegionEvent regionEvent) {
+		RegionEventEstimate estimate = new RegionEventEstimate();
+		estimate.setEventDate(regionEvent.getDate());
+		estimate.setPax(regionEvent.getPax());
+		estimate.setPrice(regionEvent.getPrice());
+		estimate.setService(regionServService.findListDtoById(regionEvent.getService().getId()));
+		estimate.setRegion(regionService.findListDtoById(regionServService.findParentId(regionEvent.getService().getId())));
+		return estimate;
 	}
 
 }

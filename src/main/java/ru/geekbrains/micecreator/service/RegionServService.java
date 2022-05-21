@@ -44,6 +44,10 @@ public class RegionServService extends SimpleTypeService<RegionServiceDto, Regio
 		return findByRegionAndNamePart(regionId, namePart).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
+	public Integer findParentId (Integer id) {
+		return findById(id).getRegion().getId();
+	}
+
 	protected List<RegionServ> findByRegion(Integer regionId) {
 		checkInputId(regionId);
 		return regionServRepo.findByRegionId(regionId);

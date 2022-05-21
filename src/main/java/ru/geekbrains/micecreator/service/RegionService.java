@@ -48,6 +48,10 @@ public class RegionService extends SimpleTypeService<RegionDto, Region> {
 		return findByCountryAndNamePart(countryId, namePart).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
+	public Integer findParentId (Integer id) {
+		return findById(id).getCountry().getId();
+	}
+
 	protected List<Region> findByCountry(Integer countryId) {
 		return regionRepo.findByCountryId(countryId);
 	}

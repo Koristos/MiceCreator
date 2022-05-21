@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.geekbrains.micecreator.dto.complex.AccommodationDto;
 import ru.geekbrains.micecreator.dto.complex.ComplexParams;
+import ru.geekbrains.micecreator.dto.complex.estimate.AccommodationEstimate;
 import ru.geekbrains.micecreator.models.complex.Accommodation;
 import ru.geekbrains.micecreator.repository.AccommodationRepo;
 import ru.geekbrains.micecreator.service.prototypes.ComplexTypeService;
@@ -42,6 +43,11 @@ public class AccommodationService extends ComplexTypeService<AccommodationDto, A
 			return findByHotelAccTypeIdsInDates(params.getHotelId(), params.getAccTypeId(), params.getFirstDate(), params.getSecondDate()).stream()
 					.map(this::mapToDto).collect(Collectors.toList());
 		}
+	}
+
+	public List<AccommodationEstimate> makeEstimate(Integer tourId) {
+		return findByTour (tourId).stream().map(this::mapToEstimate).collect(Collectors.toList());
+
 	}
 
 	protected List<Accommodation> findByRoomAccTypeIdsInDates(Integer roomId, Integer accTypeId, LocalDate firstDate, LocalDate secondDate) {
@@ -115,6 +121,20 @@ public class AccommodationService extends ComplexTypeService<AccommodationDto, A
 		entity.setRoom(roomService.findById(dto.getRoom().getId()));
 		entity.setAccType(accommodationTypeService.findById(dto.getAccType().getId()));
 		return entity;
+	}
+
+	private AccommodationEstimate mapToEstimate (Accommodation accommodation) {
+		AccommodationEstimate estimate = new AccommodationEstimate();
+		estimate.setCheckInDate(accommodation.getCheckInDate());
+		estimate.setCheckOutDate(accommodation.getCheckOutDate());
+		estimate.setPax(accommodation.getPax());
+		estimate.setPrice(accommodation.getPrice());
+		estimate.setRoom(roomService.findListDtoById(accommodation.getRoom().getId()));
+		estimate.setAccType(accommodationTypeService.findListDtoById(accommodation.getAccType().getId()));
+		estimate.setHotel(hotelService.findListDtoById(roomService.findDtoById(accommodation.getRoom().getId()).getHotelId()));
+		estimate.setNights(AppUtils.countDaysDifference(accommodation.getCheckInDate(), accommodation.getCheckOutDate()));
+		estimate.setRoomCount((int) Math.ceil(((double)accommodation.getPax() / accommodation.getAccType().getPaxNumber())));
+		return estimate;
 	}
 
 }

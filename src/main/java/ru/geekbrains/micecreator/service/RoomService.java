@@ -44,6 +44,10 @@ public class RoomService extends SimpleTypeService<RoomDto, Room> {
 		return findByHotelAndNamePart(hotelId, namePart).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
+	public Integer findParentId (Integer id) {
+		return findById(id).getHotel().getId();
+	}
+
 
 	protected List<Room> findByHotel(Integer hotelId) {
 		checkInputId(hotelId);
