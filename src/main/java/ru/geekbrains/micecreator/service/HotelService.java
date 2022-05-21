@@ -75,6 +75,10 @@ public class HotelService extends SimpleTypeService<HotelDto, Hotel> {
 		return findByLocationAndNamePart(locationId, namePart).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
+	public Integer findParentId (Integer id) {
+		return findById(id).getLocation().getId();
+	}
+
 
 	protected List<Hotel> findByCountry(Integer countryId) {
 		return hotelRepo.findByLocation_Region_CountryId(countryId);

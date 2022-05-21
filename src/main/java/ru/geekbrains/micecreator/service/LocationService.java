@@ -46,6 +46,10 @@ public class LocationService extends SimpleTypeService<LocationDto, Location> {
 		return findByRegionAndNamePart(regionId, namePart).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
+	public Integer findParentId (Integer id) {
+		return findById(id).getRegion().getId();
+	}
+
 	protected List<Location> findByRegion(Integer regionId) {
 		return locationRepo.findByRegionId(regionId);
 	}

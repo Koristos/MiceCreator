@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.geekbrains.micecreator.dto.complex.ComplexParams;
 import ru.geekbrains.micecreator.dto.complex.HotelEventDto;
+import ru.geekbrains.micecreator.dto.complex.estimate.HotelEventEstimate;
 import ru.geekbrains.micecreator.models.complex.HotelEvent;
 import ru.geekbrains.micecreator.repository.HotelEventRepo;
 import ru.geekbrains.micecreator.service.prototypes.ComplexTypeService;
@@ -24,6 +25,8 @@ public class HotelEventService extends ComplexTypeService<HotelEventDto, HotelEv
 	private final HotelServService hotelServService;
 	@Autowired
 	private final TourService tourService;
+	@Autowired
+	private final HotelService hotelService;
 
 
 	public List<HotelEventDto> findByParams(ComplexParams params) {
@@ -35,6 +38,11 @@ public class HotelEventService extends ComplexTypeService<HotelEventDto, HotelEv
 
 	protected List<HotelEvent> findByServiceIdInDates(Integer hotelServId, LocalDate firstDate, LocalDate secondDate) {
 		return hotelEventRepo.findByServiceIdAndDateBetween(hotelServId, firstDate, secondDate);
+	}
+
+	public List<HotelEventEstimate> makeEstimate(Integer tourId) {
+		return findByTour (tourId).stream().map(this::mapToEstimate).collect(Collectors.toList());
+
 	}
 
 	@Override
@@ -93,6 +101,16 @@ public class HotelEventService extends ComplexTypeService<HotelEventDto, HotelEv
 		event.setTour(tourService.findById(dto.getTourId()));
 		event.setService(hotelServService.findById(dto.getService().getId()));
 		return event;
+	}
+
+	private HotelEventEstimate mapToEstimate (HotelEvent hotelEvent) {
+		HotelEventEstimate estimate = new HotelEventEstimate();
+		estimate.setEventDate(hotelEvent.getDate());
+		estimate.setPax(hotelEvent.getPax());
+		estimate.setPrice(hotelEvent.getPrice());
+		estimate.setService(hotelServService.findListDtoById(hotelEvent.getService().getId()));
+		estimate.setHotel(hotelService.findListDtoById(hotelServService.findParentId(hotelEvent.getService().getId())));
+		return estimate;
 	}
 
 }

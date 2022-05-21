@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.geekbrains.micecreator.dto.complex.ComplexParams;
 import ru.geekbrains.micecreator.dto.complex.FlightDto;
+import ru.geekbrains.micecreator.dto.complex.estimate.FlightEstimate;
 import ru.geekbrains.micecreator.models.complex.Flight;
 import ru.geekbrains.micecreator.repository.FlightRepo;
 import ru.geekbrains.micecreator.service.prototypes.ComplexTypeService;
@@ -48,6 +49,11 @@ public class FlightService extends ComplexTypeService<FlightDto, Flight> {
 		checkDates(firstDate, secondDate);
 		return findByAirportsAirlineIdsAndDates(departureAirportId, arrivalAirportId, airlineId, firstDate, secondDate).stream()
 				.map(this::mapToDto).collect(Collectors.toList());
+	}
+
+	public List<FlightEstimate> makeEstimate(Integer tourId) {
+		return findByTour (tourId).stream().map(this::mapToEstimate).collect(Collectors.toList());
+
 	}
 
 
@@ -121,6 +127,18 @@ public class FlightService extends ComplexTypeService<FlightDto, Flight> {
 		flight.setDepartureAirport(airportService.findById(dto.getDepartureAirport().getId()));
 		flight.setArrivalAirport(airportService.findById(dto.getArrivalAirport().getId()));
 		return flight;
+	}
+
+	private FlightEstimate mapToEstimate (Flight flight) {
+		FlightEstimate estimate = new FlightEstimate();
+		estimate.setDepartureDate(flight.getDepartureDate());
+		estimate.setArrivalDate(flight.getArrivalDate());
+		estimate.setPax(flight.getPax());
+		estimate.setPrice(flight.getPrice());
+		estimate.setAirline(airlineService.findListDtoById(flight.getAirline().getId()));
+		estimate.setDepartureAirport(airportService.findListDtoById(flight.getDepartureAirport().getId()));
+		estimate.setArrivalAirport(airportService.findListDtoById(flight.getArrivalAirport().getId()));
+		return estimate;
 	}
 
 }

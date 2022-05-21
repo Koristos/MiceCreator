@@ -86,19 +86,19 @@ public class SimpleTypesController {
 		try {
 			switch (SimpleTypes.valueOf(type.toUpperCase())) {
 				case AIRPORT:
-					return regionService.findListDtoById(airportService.findDtoById(id).getRegionId());
+					return regionService.findListDtoById(airportService.findParentId(id));
 				case HOTEL_SERVICE:
-					return hotelService.findListDtoById(hotelServService.findDtoById(id).getHotelId());
+					return hotelService.findListDtoById(hotelServService.findParentId(id));
 				case HOTEL:
-					return locationService.findListDtoById(hotelService.findDtoById(id).getLocationId());
+					return locationService.findListDtoById(hotelService.findParentId(id));
 				case LOCATION:
-					return regionService.findListDtoById(locationService.findDtoById(id).getRegionId());
+					return regionService.findListDtoById(locationService.findParentId(id));
 				case REGION:
-					return countryService.findListDtoById(regionService.findDtoById(id).getCountryId());
+					return countryService.findListDtoById(regionService.findParentId(id));
 				case REGION_SERVICE:
-					return regionService.findListDtoById(regionServService.findDtoById(id).getRegionId());
+					return regionService.findListDtoById(regionServService.findParentId(id));
 				case ROOM:
-					return hotelService.findListDtoById(roomService.findDtoById(id).getHotelId());
+					return hotelService.findListDtoById(roomService.findParentId(id));
 				default:
 					throw new IllegalStateException("Unexpected value: " + SimpleTypes.valueOf(type));
 			}
