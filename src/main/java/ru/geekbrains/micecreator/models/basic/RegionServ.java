@@ -29,6 +29,12 @@ public class RegionServ {
 	@Column(name = "region_service_desc")
 	private String description;
 
+	@Column(name = "image_one")
+	private String imageOne;
+
+	@Column(name = "image_two")
+	private String imageTwo;
+
 	@ManyToOne
 	@JoinColumn(name = "region_id")
 	private Region region;

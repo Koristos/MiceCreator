@@ -9,4 +9,5 @@ import ru.geekbrains.micecreator.dto.basic.prototype.BasicDto;
 public class RegionDto extends BasicDto {
 
 	private Integer countryId;
+	private String imageOne;
 }

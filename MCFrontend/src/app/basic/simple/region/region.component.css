@@ -11,3 +11,38 @@ h1 {
 .col-12 {
   margin-bottom: 10%;
 }
+
+
+.img-div {
+  margin-top: 3%;
+}
+
+.img-cont {
+  display: block;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.form-list-two {
+  display: inline-block;
+  margin-right: 1%;
+}
+
+.fl-long {
+  width: 85%;
+}
+
+.fl-short {
+  width: 9%;
+}
+
+.block-img {
+  display: inline-block;
+  margin-right: 1%;
+  width: 98%;
+}
+
+.save {
+  width: 100%;
+}

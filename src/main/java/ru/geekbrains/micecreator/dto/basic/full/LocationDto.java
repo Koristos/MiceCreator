@@ -10,4 +10,5 @@ public class LocationDto extends BasicDto {
 
 	private String description;
 	private Integer regionId;
+	private String imageOne;
 }

@@ -91,6 +91,7 @@ public class LocationService extends SimpleTypeService<LocationDto, Location> {
 		dto.setName(entity.getName());
 		dto.setDescription(entity.getDescription());
 		dto.setRegionId(entity.getRegion().getId());
+		dto.setImageOne(entity.getImageOne());
 		return dto;
 	}
 
@@ -110,7 +111,16 @@ public class LocationService extends SimpleTypeService<LocationDto, Location> {
 		entity.setName(dto.getName());
 		entity.setDescription(dto.getDescription());
 		entity.setRegion(regionService.findById(dto.getRegionId()));
+		if (AppUtils.isBlank(dto.getImageOne()) || dto.getId() == null || !isImageExist(dto.getId(), 1)) {
+			entity.setImageOne(null);
+		} else {
+			entity.setImageOne(AppUtils.createImageName("location", dto.getId(), 1));
+		}
 		return entity;
+	}
+
+	private boolean isImageExist(Integer entityId, Integer imageNum) {
+		return AppUtils.isImageExist(AppUtils.createImageName("location", entityId, imageNum));
 	}
 
 }

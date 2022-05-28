@@ -32,6 +32,9 @@ public class Location {
 	@Column(name = "location_desc")
 	private String description;
 
+	@Column(name = "image_one")
+	private String imageOne;
+
 	@ManyToOne
 	@JoinColumn(name = "region_id")
 	private Region region;

@@ -137,6 +137,8 @@ public class HotelService extends SimpleTypeService<HotelDto, Hotel> {
 		dto.setName(entity.getName());
 		dto.setDescription(entity.getDescription());
 		dto.setLocationId(entity.getLocation().getId());
+		dto.setImageOne(entity.getImageOne());
+		dto.setImageTwo(entity.getImageTwo());
 		return dto;
 	}
 
@@ -156,7 +158,21 @@ public class HotelService extends SimpleTypeService<HotelDto, Hotel> {
 		entity.setName(dto.getName());
 		entity.setDescription(dto.getDescription());
 		entity.setLocation(locationService.findById(dto.getLocationId()));
+		if (AppUtils.isBlank(dto.getImageOne()) || dto.getId() == null || !isImageExist(dto.getId(), 1)) {
+			entity.setImageOne(null);
+		} else {
+			entity.setImageOne(AppUtils.createImageName("hotel", dto.getId(), 1));
+		}
+		if (AppUtils.isBlank(dto.getImageTwo()) || dto.getId() == null || !isImageExist(dto.getId(), 2)) {
+			entity.setImageTwo(null);
+		} else {
+			entity.setImageTwo(AppUtils.createImageName("hotel", dto.getId(), 2));
+		}
 		return entity;
+	}
+
+	private boolean isImageExist(Integer entityId, Integer imageNum) {
+		return AppUtils.isImageExist(AppUtils.createImageName("hotel", entityId, imageNum));
 	}
 
 }
