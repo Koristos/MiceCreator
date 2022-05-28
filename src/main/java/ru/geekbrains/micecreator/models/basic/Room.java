@@ -29,6 +29,12 @@ public class Room {
 	@Column(name = "room_desc")
 	private String description;
 
+	@Column(name = "image_one")
+	private String imageOne;
+
+	@Column(name = "image_two")
+	private String imageTwo;
+
 	@ManyToOne
 	@JoinColumn(name = "hotel_id")
 	private Hotel hotel;

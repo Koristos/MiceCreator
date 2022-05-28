@@ -17,7 +17,24 @@
           <input [(ngModel)]="region.name" type="text" class="form-control" id="name" name="name" placeholder="Введите название аэропорта"
                  [disabled]="!editEnabled">
         </div>
-        <button type="submit" class="btn btn-primary" [disabled]="!editEnabled">Сохранить изменения</button>
+
+        <div class="mb-3 block-img">
+          <label for="formFile1" class="form-label">Фото региона</label>
+          <div>
+            <div class="form-list-two fl-long">
+              <input class="form-control imageOne" accept=".jpg" type="file" id="formFile1" (change)="onFileChanged($event)" [disabled]="!editEnabled || region.id == null">
+            </div>
+            <div class="form-list-two fl-short">
+              <a class="btn but btn-danger" (click)="deleteImage(1)" [hidden]="!editEnabled || region.id == null"><i class="far fa-trash-alt"> Удалить </i></a>
+            </div>
+          </div>
+          <div class="img-div">
+            <img [src]="imageOneUrl" class="img-cont" [hidden]="imageOneUrl == null">
+          </div>
+        </div>
+        <div>
+          <button type="submit" class="btn btn-primary save" [disabled]="!editEnabled">Сохранить изменения</button>
+        </div>
       </form>
     </div>
   </div>

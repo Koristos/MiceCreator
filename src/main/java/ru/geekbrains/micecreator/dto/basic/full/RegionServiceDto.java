@@ -10,4 +10,6 @@ public class RegionServiceDto extends BasicDto {
 
 	private String description;
 	private Integer regionId;
+	private String imageOne;
+	private String imageTwo;
 }

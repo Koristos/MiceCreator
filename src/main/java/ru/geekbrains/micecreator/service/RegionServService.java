@@ -91,6 +91,8 @@ public class RegionServService extends SimpleTypeService<RegionServiceDto, Regio
 		dto.setName(entity.getName());
 		dto.setDescription(entity.getDescription());
 		dto.setRegionId(entity.getRegion().getId());
+		dto.setImageOne(entity.getImageOne());
+		dto.setImageTwo(entity.getImageTwo());
 		return dto;
 	}
 
@@ -110,6 +112,20 @@ public class RegionServService extends SimpleTypeService<RegionServiceDto, Regio
 		entity.setName(dto.getName());
 		entity.setDescription(dto.getDescription());
 		entity.setRegion(regionService.findById(dto.getRegionId()));
+		if (AppUtils.isBlank(dto.getImageOne()) || dto.getId() == null || !isImageExist(dto.getId(), 1)) {
+			entity.setImageOne(null);
+		} else {
+			entity.setImageOne(AppUtils.createImageName("region_service", dto.getId(), 1));
+		}
+		if (AppUtils.isBlank(dto.getImageTwo()) || dto.getId() == null || !isImageExist(dto.getId(), 2)) {
+			entity.setImageTwo(null);
+		} else {
+			entity.setImageTwo(AppUtils.createImageName("region_service", dto.getId(), 2));
+		}
 		return entity;
+	}
+
+	private boolean isImageExist(Integer entityId, Integer imageNum) {
+		return AppUtils.isImageExist(AppUtils.createImageName("region_service", entityId, imageNum));
 	}
 }

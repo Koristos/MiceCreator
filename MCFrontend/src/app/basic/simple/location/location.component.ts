@@ -5,6 +5,8 @@ import {ActivatedRoute} from "@angular/router";
 import {BasicSearchService} from "../../../service/basic/basic-search.service";
 import {Location} from "../../../service/basic/location/location";
 import {LocationService} from "../../../service/basic/location/location.service";
+import {FileService} from "../../../service/files/file.service";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-location',
@@ -15,16 +17,20 @@ export class LocationComponent implements OnInit {
 
   public editEnabled: boolean = true;
   public id: any;
-  public location: Location = new Location(null, "", "", 0);
+  public location: Location = new Location(null, "", "", 0, null);
   public title: string = "СОЗДАНИЕ НОВОЙ ЛОКАЦИИ";
   public countryId: number = 0;
   countryList: ShortForm[] = [];
   regionList: ShortForm[] = [];
+  public imageOneUrl: any = null;
+  public imageOneFile: any = null;
   private params: RequestParams = new RequestParams();
 
   constructor(private route: ActivatedRoute,
               private locationService: LocationService,
-              private basicSearchService: BasicSearchService) {
+              private basicSearchService: BasicSearchService,
+              private fileService: FileService,
+              private domSanitizer: DomSanitizer) {
   }
 
   ngOnInit(): void {
@@ -38,6 +44,7 @@ export class LocationComponent implements OnInit {
       this.editEnabled = false;
       this.locationService.findById(this.id).subscribe(result => {
         this.location = result;
+        this.loadImageOneIfNeeded();
         this.basicSearchService.findById('region', this.location.regionId).subscribe(reg => {
           this.regionList.push(reg);
           this.basicSearchService.findParentById('region', reg.id).subscribe(country => {
@@ -59,14 +66,32 @@ export class LocationComponent implements OnInit {
 
   save() {
     if (confirm("Вы уверены, что хотите сохранить изменения?")) {
-      this.locationService.save(this.location).subscribe(result => {
-        this.location = result;
-        this.title = "РЕДАКТИРОВАНИЕ ЛОКАЦИИ";
-        this.editEnabled = false;
-      }, error => {
-        console.log(`Error ${error}`);
-      });
+      this.saveStepOne();
     }
+  }
+
+  private saveStepOne(){
+      if (this.location.imageOne == "changed" && this.location.id != null){
+        this.fileService.saveImage("location", this.location.id, 1, this.imageOneFile).subscribe(result => {
+          this.saveStepTwo();
+        });
+      } else if(this.location.imageOne == "deleted" && this.location.id != null) {
+        this.fileService.deleteImage("location", this.location.id, 1).subscribe(result => {
+          this.saveStepTwo();
+        });
+      } else {
+      this.saveStepTwo();
+    }
+  }
+  private saveStepTwo(){
+    this.locationService.save(this.location).subscribe(result => {
+      this.location = result;
+      this.loadImageOneIfNeeded();
+      this.title = "РЕДАКТИРОВАНИЕ ЛОКАЦИИ";
+      this.editEnabled = false;
+    }, error => {
+      console.log(`Error ${error}`);
+    });
   }
 
   deleteConfirm() {
@@ -104,4 +129,40 @@ export class LocationComponent implements OnInit {
     this.getCountries();
     this.editEnabled = true;
   }
+
+
+  onFileChanged(event: any) {
+    const fileReader: FileReader = new FileReader();
+    if (event.target.classList.contains("imageOne")){
+      this.imageOneFile = event.target.files[0];
+      fileReader.readAsDataURL(this.imageOneFile);
+      fileReader.onload = () => {
+        this.imageOneUrl = fileReader.result;
+      };
+      this.location.imageOne = "changed";
+    }
+  }
+
+  deleteImage(imageNum: number){
+    if (imageNum == 1) {
+      this.imageOneUrl = null;
+      this.imageOneFile = null;
+      this.location.imageOne = "deleted";
+    }
+  }
+
+  private loadImageOneIfNeeded(){
+    const fileReader: FileReader = new FileReader();
+    if (this.location.imageOne != null){
+      this.fileService.getImage(this.location.imageOne).subscribe(result => {
+        this.imageOneFile = new File([result], "imageOne", {type: "image", lastModified: Date.now()});
+        fileReader.readAsDataURL(this.imageOneFile);
+        fileReader.onload = () => {
+          this.imageOneUrl = fileReader.result;
+          this.imageOneUrl = this.domSanitizer.bypassSecurityTrustUrl(this.imageOneUrl);
+        };
+      });
+    } else this.imageOneUrl = null;
+  }
+
 }

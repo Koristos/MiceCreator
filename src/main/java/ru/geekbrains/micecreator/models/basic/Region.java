@@ -33,6 +33,9 @@ public class Region {
 	@JoinColumn(name = "country_id")
 	private Country country;
 
+	@Column(name = "image_one")
+	private String imageOne;
+
 	@OneToMany(mappedBy = "region", fetch = FetchType.LAZY)
 	private List<Airport> airports;
 

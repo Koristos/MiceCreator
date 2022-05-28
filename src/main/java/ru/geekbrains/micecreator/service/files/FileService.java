@@ -1,6 +1,7 @@
 package ru.geekbrains.micecreator.service.files;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -23,9 +24,12 @@ import java.nio.file.Paths;
 
 @Service
 @AllArgsConstructor
+@Data
 public class FileService {
 
-	private final Path root = Paths.get("C:/MiceCreatorUploads");
+	private final Path root = Paths.get("C:/MiceCreator");
+	private final Path uploads = Paths.get(root.toString(), "/uploads");
+	private final Path images = Paths.get(root.toString(), "/images");
 	public final static String ESTIMATE_TEMP = "estimate.xls";
 	@Autowired
 	private final EstimateCreator estimateCreator;
@@ -42,37 +46,54 @@ public class FileService {
 
 	public void init() {
 		try {
-			Files.createDirectory(root);
+			if (!Files.exists(root)){
+				Files.createDirectory(root);
+			}
+			if (!Files.exists(images)) {
+				Files.createDirectory(images);
+			}
+			if (!Files.exists(uploads)) {
+				Files.createDirectory(uploads);
+			}
 		} catch (IOException e) {
 			throw new RuntimeException("Could not initialize folder for upload!");
 		}
 	}
 
-	public void save(MultipartFile file) {
+	public boolean saveImage(MultipartFile file, String imageId) {
+		Path path = this.images.resolve(imageId);
+		if (Files.exists(path)){
+			FileSystemUtils.deleteRecursively(path.toFile());
+		}
 		try {
-			Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
+			Files.copy(file.getInputStream(), path);
 		} catch (Exception e) {
 			throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
 		}
+		return true;
+	}
+
+	public Resource getImage(String imageId) {
+		Path file = images.resolve(imageId);
+		return getFile(file);
 	}
 
 	public Resource loadEstimate(Integer tourId) {
-		estimateCreator.createEstimate(makeEstimate(tourId), root.resolve(ESTIMATE_TEMP).toString());
-		try {
-			Path file = root.resolve(ESTIMATE_TEMP);
-			Resource resource = new UrlResource(file.toUri());
-			if (resource.exists() || resource.isReadable()) {
-				return resource;
-			} else {
-				throw new RuntimeException("Could not read the file!");
-			}
-		} catch (MalformedURLException e) {
-			throw new RuntimeException("Error: " + e.getMessage());
-		}
+		Path file = uploads.resolve(ESTIMATE_TEMP);
+		estimateCreator.createEstimate(makeEstimate(tourId), file.toString());
+		return getFile(file);
 	}
 
-	public void deleteAll() {
-		FileSystemUtils.deleteRecursively(root.toFile());
+	public void clearUploads() {
+		FileSystemUtils.deleteRecursively(uploads.toFile());
+	}
+
+	public boolean deleteImage(String imageName) {
+		Path path = this.images.resolve(imageName);
+		if (Files.exists(path)){
+			FileSystemUtils.deleteRecursively(path.toFile());
+		}
+		return true;
 	}
 
 	private TourEstimate makeEstimate(Integer tourId) {
@@ -83,6 +104,19 @@ public class FileService {
 		estimate.setHotelEvents(hotelEventService.makeEstimate(tourId));
 		estimate.setRegionEvents(regionEventService.makeEstimate(tourId));
 		return estimate;
+	}
+
+	private Resource getFile(Path path) {
+		try {
+			Resource resource = new UrlResource(path.toUri());
+			if (resource.exists() || resource.isReadable()) {
+				return resource;
+			} else {
+				throw new RuntimeException("Could not read the file!");
+			}
+		} catch (MalformedURLException e) {
+			throw new RuntimeException("Error: " + e.getMessage());
+		}
 	}
 
 }

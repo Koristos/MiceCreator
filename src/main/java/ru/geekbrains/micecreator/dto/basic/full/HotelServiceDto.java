@@ -10,5 +10,7 @@ public class HotelServiceDto extends BasicDto {
 
 	private String description;
 	private Integer hotelId;
+	private String imageOne;
+	private String imageTwo;
 
 }
