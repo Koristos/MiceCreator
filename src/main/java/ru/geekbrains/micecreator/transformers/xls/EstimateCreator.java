@@ -18,6 +18,7 @@ import ru.geekbrains.micecreator.dto.complex.estimate.FlightEstimate;
 import ru.geekbrains.micecreator.dto.complex.estimate.HotelEventEstimate;
 import ru.geekbrains.micecreator.dto.complex.estimate.RegionEventEstimate;
 import ru.geekbrains.micecreator.dto.complex.estimate.TourEstimate;
+import ru.geekbrains.micecreator.exceptions.EstimateException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -242,6 +243,7 @@ public class EstimateCreator {
 			estimate.write(out);
 		} catch (IOException e) {
 			e.printStackTrace();
+			throw new EstimateException(e.getMessage());
 		}
 	}
 
