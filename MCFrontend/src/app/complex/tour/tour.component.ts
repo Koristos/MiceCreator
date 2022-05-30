@@ -124,7 +124,7 @@ export class TourComponent implements OnInit {
   }
 
   downloadPresentation() {
-    alert("функционал в разработке");
+    this.fileService.getPresentation(this.fullTour.tour.id);
   }
 
   downloadEstimate() {

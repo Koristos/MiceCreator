@@ -21,6 +21,15 @@ export class FileService {
     });
   }
 
+  public getPresentation(id: number) {
+    this.http.get<Blob>(`${this.path}presentation/${id}`, {
+      responseType: 'blob' as 'json',
+    }).subscribe(result => {
+      console.log(result);
+      saveAs(result, `Tour №${id} presentation.pdf`);
+    });
+  }
+
   public getImage(id: string) {
     return this.http.get<Blob>(`${this.path}image/${id}`, {
       responseType: 'blob' as 'json',

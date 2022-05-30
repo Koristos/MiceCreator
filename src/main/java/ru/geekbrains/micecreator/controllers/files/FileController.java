@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.geekbrains.micecreator.exceptions.BadInputException;
 import ru.geekbrains.micecreator.service.files.FileService;
 import ru.geekbrains.micecreator.utils.AppUtils;
-
 
 
 @RestController
@@ -29,7 +29,7 @@ public class FileController {
 	@GetMapping("/{type}/{id}")
 	public ResponseEntity<Resource> findAll(@PathVariable("type") String type, @PathVariable("id") String entityId) {
 		Resource file;
-		switch (type){
+		switch (type) {
 			case "estimate":
 				file = fileService.loadEstimate(Integer.parseInt(entityId));
 				break;
@@ -37,24 +37,24 @@ public class FileController {
 				file = fileService.getImage(entityId);
 				break;
 			case "presentation":
-				file = fileService.loadEstimate(Integer.parseInt(entityId));
+				file = fileService.loadPresentation(Integer.parseInt(entityId));
 				break;
 			default:
-				throw new RuntimeException("!!!!");
+				throw new BadInputException(String.format("Тип файла %s не поддерживается!", type));
 		}
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
 	}
 
 	@PostMapping("/image")
-	public boolean postImage(@ModelAttribute ImageFormData formDataWithFile){
+	public boolean postImage(@ModelAttribute ImageFormData formDataWithFile) {
 		return fileService.saveImage(formDataWithFile.getImage(), AppUtils.createImageName(formDataWithFile.getEntityType(),
 				formDataWithFile.getEntityId(), formDataWithFile.getImageNum()));
 	}
 
 	@DeleteMapping("/image/{entityType}/{entityId}/{imageNum}")
 	public boolean deleteImage(@PathVariable("entityType") String entityType, @PathVariable("entityId") Integer entityId,
-	                           @PathVariable("imageNum") Integer imageNum){
+	                           @PathVariable("imageNum") Integer imageNum) {
 		return fileService.deleteImage(AppUtils.createImageName(entityType, entityId, imageNum));
 	}
 }
