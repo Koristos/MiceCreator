@@ -1,7 +1,7 @@
 <div>
   <h1>{{title}}</h1>
   <button type="submit" class="btn btn-warning" (click)="editEnabled=true" [disabled]="editEnabled">Редактировать данные</button>
-  <button type="submit" class="btn btn-danger side-button" (click)="deleteConfirm()" [hidden]="accType.id == null">Удалить тип размещения</button>
+  <button type="submit" class="btn btn-danger side-button" (click)="deleteConfirm()" [hidden]="accType.id == null || !isDeleteOn">Удалить тип размещения</button>
   <div class="row py-2">
     <div class="col-12">
       <form (ngSubmit)="save()">

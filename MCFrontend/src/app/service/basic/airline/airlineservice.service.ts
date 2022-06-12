@@ -22,4 +22,8 @@ export class AirlineserviceService {
     }
     return this.http.put<Airline>(this.path, airline);
   }
+
+  public delete(id: number) {
+    return this.http.delete<boolean>(`${this.path}${id}`);
+  }
 }

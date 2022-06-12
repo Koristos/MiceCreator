@@ -56,7 +56,7 @@
         <td>{{tourElement.totalPrice}}</td>
         <td>
           <a class="btn but btn-info" routerLink="/tour/{{tourElement.id}}"><i class="fas fa-edit"> Просмотр</i></a>
-          <a class="btn but btn-danger" (click)="deleteConfirm(tourElement.id)"><i class="far fa-trash-alt"> Удалить</i></a>
+          <a class="btn but btn-danger" (click)="deleteConfirm(tourElement.id)" [hidden]="!isDeleteOn"><i class="far fa-trash-alt"> Удалить</i></a>
         </td>
       </tr>
       </tbody>

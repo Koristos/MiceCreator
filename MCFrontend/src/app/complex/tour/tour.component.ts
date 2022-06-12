@@ -8,6 +8,7 @@ import {Tour} from "../../service/complex/tour/tour";
 import {Country} from "../../service/basic/country/country";
 import {formatDate} from "@angular/common";
 import {FileService} from "../../service/files/file.service";
+import {AppComponent} from "../../app.component";
 
 @Component({
   selector: 'app-tour',
@@ -31,11 +32,13 @@ export class TourComponent implements OnInit {
               private tourService: TourService,
               private basicSearchService: BasicSearchService,
               private router: Router,
-              private fileService: FileService
+              private fileService: FileService,
+              private app: AppComponent
   ) {
   }
 
   ngOnInit(): void {
+    this.app.loginCheck();
     this.route.params.subscribe(param => {
       this.id = param['id'];
     }, error => {

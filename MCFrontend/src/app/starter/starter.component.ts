@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {AppComponent} from "../app.component";
 
 @Component({
   selector: 'app-starter',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StarterComponent implements OnInit {
 
-  constructor() { }
+  constructor(private app: AppComponent) { }
 
   ngOnInit(): void {
+    this.app.loginCheck();
   }
 
 }

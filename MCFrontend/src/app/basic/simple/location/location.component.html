@@ -1,7 +1,7 @@
 <div>
   <h1>{{title}}</h1>
   <button type="submit" class="btn btn-warning" (click)="enableEdit()" [disabled]="editEnabled">Редактировать данные</button>
-  <button type="submit" class="btn btn-danger side-button" (click)="deleteConfirm()" [hidden]="location.id == null">Удалить локацию</button>
+  <button type="submit" class="btn btn-danger side-button" (click)="deleteConfirm()" [hidden]="location.id == null || !isDeleteOn">Удалить локацию</button>
   <div class="row py-2">
     <div class="col-12">
 

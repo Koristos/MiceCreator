@@ -45,7 +45,7 @@
         <td>
           <a class="btn but btn-info" routerLink="/{{type}}/{{shortForm.id}}" [hidden]="isToAdd"><i class="fas fa-edit"> Просмотр</i></a>
           <a class="btn but btn-success" (click)="addElementAndGoBack(shortForm)" [hidden]="!isToAdd"><i class="fas fa-plus-square"> Выбрать</i></a>
-          <a class="btn but btn-danger" (click)="deleteConfirm(shortForm.id)" [hidden]="isToAdd"><i class="far fa-trash-alt"> Удалить</i></a>
+          <a class="btn but btn-danger" (click)="deleteConfirm(shortForm.id)" [hidden]="isToAdd || !isDeleteOn"><i class="far fa-trash-alt"> Удалить</i></a>
         </td>
       </tr>
       </tbody>

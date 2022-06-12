@@ -5,6 +5,7 @@ import {Accommodation} from "../../service/complex/accommodation/accommodation";
 import {ShortForm} from "../../service/basic/shortform";
 import {formatDate} from "@angular/common";
 import {BasicSearchService} from "../../service/basic/basic-search.service";
+import {AppComponent} from "../../app.component";
 
 @Component({
   selector: 'app-accommodation',
@@ -16,7 +17,8 @@ export class AccommodationComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private accommodationService: AccommodationService,
               private basicSearchService: BasicSearchService,
-              private router: Router) {
+              private router: Router,
+              private app: AppComponent) {
   }
 
   public id: any;
@@ -28,6 +30,7 @@ export class AccommodationComponent implements OnInit {
   public title: string = "Редактирование размещения";
 
   ngOnInit(): void {
+    this.app.loginCheck();
     this.route.params.subscribe(param => {
       this.id = param['id'];
       this.accommodation.tourId = param['tour_id'];

@@ -1,0 +1,18 @@
+<div class="login-form">
+  <div class="alert alert-danger login-form-elem" [hidden]="!error">
+    <p>{{errorMessage}}</p>
+  </div>
+  <form role="form" (submit)="login()">
+    <div class="form-group login-form-elem">
+      <label for="username">Логин:</label> <input type="text"
+                                                  class="form-control" id="username" name="username" [(ngModel)]="userName"/>
+    </div>
+    <div class="form-group login-form-elem">
+      <label for="password">Пароль:</label> <input type="password"
+                                                   class="form-control" id="password" name="password" [(ngModel)]="password"/>
+    </div>
+    <div class="login-form-elem">
+      <button type="submit" class="btn btn-primary form-btn">Войти</button>
+    </div>
+  </form>
+</div>

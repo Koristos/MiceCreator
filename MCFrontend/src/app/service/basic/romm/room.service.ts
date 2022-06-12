@@ -22,4 +22,8 @@ export class RoomService {
     }
     return this.http.put<Room>(this.path, room);
   }
+
+  public delete(id: number) {
+    return this.http.delete<boolean>(`${this.path}${id}`);
+  }
 }

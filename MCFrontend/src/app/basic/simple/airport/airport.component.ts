@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Airport} from "../../../service/basic/airport/airport";
 import {AirportService} from "../../../service/basic/airport/airport.service";
 import {BasicSearchService} from "../../../service/basic/basic-search.service";
 import {ShortForm} from "../../../service/basic/shortform";
 import {RequestParams} from "../../../service/basic/request-params";
+import {AppComponent} from "../../../app.component";
 
 @Component({
   selector: 'app-airport',
@@ -21,13 +22,18 @@ export class AirportComponent implements OnInit {
   countryList: ShortForm[] = [];
   regionList: ShortForm[] = [];
   private params: RequestParams = new RequestParams();
+  public isDeleteOn: boolean = false;
 
   constructor(private route: ActivatedRoute,
               private airportService: AirportService,
-              private basicSearchService: BasicSearchService) {
+              private basicSearchService: BasicSearchService,
+              private app: AppComponent,
+              private router: Router) {
   }
 
   ngOnInit(): void {
+    this.app.loginCheck();
+    this.isDeleteOn = (this.app.user.role.includes("ROLE_ADMIN"));
     this.route.params.subscribe(param => {
       this.id = param['id'];
     }, error => {
@@ -71,7 +77,13 @@ export class AirportComponent implements OnInit {
 
   deleteConfirm() {
     if (confirm("Вы уверены, что хотите удалить элемент?")) {
-      alert("Удаление в процессе реализации.");
+      this.airportService.delete(this.id).subscribe(result => {
+        if (result){
+          this.router.navigateByUrl("/search_components/airport");
+        }
+      }, error => {
+        console.log(`Error ${error}`);
+      });
     }
   }
 

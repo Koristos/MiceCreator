@@ -1,0 +1,5 @@
+CREATE TABLE tokens
+(
+	id_tokens INT PRIMARY KEY AUTO_INCREMENT,
+	token VARCHAR(200) NOT NULL
+);

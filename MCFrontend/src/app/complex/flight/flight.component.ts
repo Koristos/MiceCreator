@@ -5,6 +5,7 @@ import {ShortForm} from "../../service/basic/shortform";
 import {formatDate} from "@angular/common";
 import {FlightService} from "../../service/complex/flight/flight.service";
 import {Flight} from "../../service/complex/flight/flight";
+import {AppComponent} from "../../app.component";
 
 @Component({
   selector: 'app-flight',
@@ -16,7 +17,8 @@ export class FlightComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private flightService: FlightService,
               private basicSearchService: BasicSearchService,
-              private router: Router) {
+              private router: Router,
+              private app: AppComponent) {
   }
 
   public id: any;
@@ -28,6 +30,7 @@ export class FlightComponent implements OnInit {
   public title: string = "Редактирование перелета";
 
   ngOnInit(): void {
+    this.app.loginCheck();
     this.route.params.subscribe(param => {
       this.id = param['id'];
       this.flight.tourId = param['tour_id'];

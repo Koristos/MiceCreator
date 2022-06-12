@@ -6,6 +6,7 @@ import {BasicSearchService} from "../../../service/basic/basic-search.service";
 import {RegEvent} from "../../../service/complex/regionevent/regevent";
 import {RegEventSearchParams} from "../../../service/complex/regionevent/reg-event-search-params";
 import {RegionEventService} from "../../../service/complex/regionevent/region-event.service";
+import {AppComponent} from "../../../app.component";
 
 @Component({
   selector: 'app-region-event-search',
@@ -23,10 +24,12 @@ export class RegionEventSearchComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private regionEventService: RegionEventService,
-              private basicSearchService: BasicSearchService) {
+              private basicSearchService: BasicSearchService,
+              private app: AppComponent) {
   }
 
   ngOnInit(): void {
+    this.app.loginCheck();
     if (sessionStorage.getItem("RS_REGION_SERVICE")) {
       this.regionService = JSON.parse(sessionStorage.getItem("RS_REGION_SERVICE") || 'new ShortForm(0, "")');
       this.basicSearchService.findParentById('region_service', this.regionService.id).subscribe(result => {

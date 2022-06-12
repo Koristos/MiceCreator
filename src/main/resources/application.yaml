@@ -15,3 +15,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
+micecreator:
+  security:
+    jwtSecret: micecreator
+    jwtExpirationMs: 86400000

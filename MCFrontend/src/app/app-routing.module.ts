@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 import {SearchComponent} from "./basic/search/search.component";
 import {AccomTypeComponent} from "./basic/simple/accom-type/accom-type.component";
 import {AirlineComponent} from "./basic/simple/airline/airline.component";
@@ -22,6 +22,7 @@ import {AccommodationComponent} from "./complex/accommodation/accommodation.comp
 import {RegionEventComponent} from "./complex/region-event/region-event.component";
 import {HotelEventComponent} from "./complex/hotel-event/hotel-event.component";
 import {TourComponent} from "./complex/tour/tour.component";
+import {LoginComponent} from "./authorisation/login/login.component";
 
 const routes: Routes = [
   {path: "", pathMatch: "full", component: StarterComponent},
@@ -62,10 +63,12 @@ const routes: Routes = [
   {path: "hotel_event/new/:tour_id", component: HotelEventComponent},
   {path: "tour/:id", component: TourComponent},
   {path: "tour/new", component: TourComponent},
+  {path: "login", component: LoginComponent},
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}
