@@ -27,4 +27,8 @@ export class BasicSearchService {
   public findParentById(type: string, id: number) {
     return this.http.get<ShortForm>(`${this.path}get_parent/${type}/${id}`);
   }
+
+  public delete(type: string, id: number) {
+    return this.http.delete<boolean>(`${this.path}${type}/${id}`);
+  }
 }

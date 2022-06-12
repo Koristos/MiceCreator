@@ -6,6 +6,7 @@ import {HotelEvent} from "../../../service/complex/hotelevent/hotelevent";
 import {HotelEventSearchParams} from "../../../service/complex/hotelevent/hotel-event-search-params";
 import {HotelEventService} from "../../../service/complex/hotelevent/hotel-event.service";
 import {BasicSearchService} from "../../../service/basic/basic-search.service";
+import {AppComponent} from "../../../app.component";
 
 @Component({
   selector: 'app-hotel-event-search',
@@ -23,10 +24,12 @@ export class HotelEventSearchComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private hotelEventService: HotelEventService,
-              private basicSearchService: BasicSearchService) {
+              private basicSearchService: BasicSearchService,
+              private app: AppComponent) {
   }
 
   ngOnInit(): void {
+    this.app.loginCheck();
     if (sessionStorage.getItem("HS_HOTEL_SERVICE")) {
       this.hotelService = JSON.parse(sessionStorage.getItem("HS_HOTEL_SERVICE") || 'new ShortForm(0, "")');
       this.basicSearchService.findParentById('hotel_service', this.hotelService.id).subscribe(result => {

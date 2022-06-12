@@ -5,6 +5,7 @@ import {Flight} from "../../../service/complex/flight/flight";
 import {FlightService} from "../../../service/complex/flight/flight.service";
 import {FlightSearchParams} from "../../../service/complex/flight/flight-search-params";
 import {ShortForm} from "../../../service/basic/shortform";
+import {AppComponent} from "../../../app.component";
 
 @Component({
   selector: 'app-flight-search',
@@ -22,10 +23,12 @@ export class FlightSearchComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private flightService: FlightService) {
+              private flightService: FlightService,
+              private app: AppComponent) {
   }
 
   ngOnInit(): void {
+    this.app.loginCheck();
     if (sessionStorage.getItem("FS_AIRLINE")) {
       this.airline = JSON.parse(sessionStorage.getItem("FS_AIRLINE") || 'new ShortForm(0, "")');
     }

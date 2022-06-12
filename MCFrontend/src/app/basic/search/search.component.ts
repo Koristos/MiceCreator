@@ -4,6 +4,7 @@ import {BasicSearchService} from "../../service/basic/basic-search.service";
 import {ShortForm} from "../../service/basic/shortform";
 import {RequestParams} from "../../service/basic/request-params";
 import {Location} from '@angular/common';
+import {AppComponent} from "../../app.component";
 
 @Component({
   selector: 'app-search',
@@ -29,14 +30,18 @@ export class SearchComponent implements OnInit {
   isToAdd: boolean = false;
   private typeMap = new Map();
   private component_name: any = undefined;
+  public isDeleteOn: boolean = false;
 
   constructor(public searchService: BasicSearchService,
               public route: ActivatedRoute,
               public router: Router,
-              private _location: Location) {
+              private _location: Location,
+              private app: AppComponent) {
   }
 
   ngOnInit(): void {
+    this.app.loginCheck();
+    this.isDeleteOn = (this.app.user.role.includes("ROLE_ADMIN"));
     this.fillTypes();
     this.route.params.subscribe(param => {
       this.type = param['type'];
@@ -128,7 +133,15 @@ export class SearchComponent implements OnInit {
 
   deleteConfirm(id: number) {
     if (confirm("Вы уверены, что хотите удалить элемент?")) {
-      alert("Удаление в процессе реализации.");
+      this.searchService.delete(this.type, id).subscribe(res => {
+        if (res == true) {
+          this.searchService.findAll(this.type).subscribe(result => {
+            this.searchResult = result;
+          }, error => {
+            console.log(`Error ${error}`);
+          });
+        }
+      });
     }
   }
 

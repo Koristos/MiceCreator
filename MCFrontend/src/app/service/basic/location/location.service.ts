@@ -22,4 +22,8 @@ export class LocationService {
     }
     return this.http.put<Location>(this.path, location);
   }
+
+  public delete(id: number) {
+    return this.http.delete<boolean>(`${this.path}${id}`);
+  }
 }

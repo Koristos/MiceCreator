@@ -1,12 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {ShortForm} from "../../../service/basic/shortform";
 import {RequestParams} from "../../../service/basic/request-params";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {BasicSearchService} from "../../../service/basic/basic-search.service";
 import {Hotel} from "../../../service/basic/hotel/hotel";
 import {HotelService} from "../../../service/basic/hotel/hotel.service";
 import {FileService} from "../../../service/files/file.service";
 import { DomSanitizer } from '@angular/platform-browser';
+import {AppComponent} from "../../../app.component";
 
 @Component({
   selector: 'app-hotel',
@@ -29,15 +30,20 @@ export class HotelComponent implements OnInit {
   regionList: ShortForm[] = [];
   locationList: ShortForm[] = [];
   private params: RequestParams = new RequestParams();
+  public isDeleteOn: boolean = false;
 
   constructor(private route: ActivatedRoute,
               private hotelService: HotelService,
               private basicSearchService: BasicSearchService,
               private fileService: FileService,
-              private domSanitizer: DomSanitizer) {
+              private domSanitizer: DomSanitizer,
+              private app: AppComponent,
+              private router: Router) {
   }
 
   ngOnInit(): void {
+    this.app.loginCheck();
+    this.isDeleteOn = (this.app.user.role.includes("ROLE_ADMIN"));
     this.route.params.subscribe(param => {
       this.id = param['id'];
     }, error => {
@@ -120,7 +126,13 @@ export class HotelComponent implements OnInit {
 
   deleteConfirm() {
     if (confirm("Вы уверены, что хотите удалить элемент?")) {
-      alert("Удаление в процессе реализации.");
+      this.hotelService.delete(this.id).subscribe(result => {
+        if (result){
+          this.router.navigateByUrl("/search_components/hotel");
+        }
+      }, error => {
+        console.log(`Error ${error}`);
+      });
     }
   }
 

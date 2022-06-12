@@ -5,6 +5,7 @@ import {ShortForm} from "../../service/basic/shortform";
 import {formatDate} from "@angular/common";
 import {RegionEventService} from "../../service/complex/regionevent/region-event.service";
 import {RegEvent} from "../../service/complex/regionevent/regevent";
+import {AppComponent} from "../../app.component";
 
 @Component({
   selector: 'app-region-event',
@@ -16,7 +17,8 @@ export class RegionEventComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private regionEventService: RegionEventService,
               private basicSearchService: BasicSearchService,
-              private router: Router) {
+              private router: Router,
+              private app: AppComponent) {
   }
 
   public id: any;
@@ -28,6 +30,7 @@ export class RegionEventComponent implements OnInit {
   public region: ShortForm = new ShortForm(0, "");
 
   ngOnInit(): void {
+    this.app.loginCheck();
     this.route.params.subscribe(param => {
       this.id = param['id'];
       this.regEvent.tourId = param['tour_id'];

@@ -22,4 +22,8 @@ export class RegionServService {
     }
     return this.http.put<RegionServ>(this.path, regionServ);
   }
+
+  public delete(id: number) {
+    return this.http.delete<boolean>(`${this.path}${id}`);
+  }
 }

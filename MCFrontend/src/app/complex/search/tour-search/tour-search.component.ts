@@ -6,6 +6,7 @@ import {ShortForm} from "../../../service/basic/shortform";
 import {Tour} from "../../../service/complex/tour/tour";
 import {TourSearchParams} from "../../../service/complex/tour/tour-search-params";
 import {formatDate} from "@angular/common";
+import {AppComponent} from "../../../app.component";
 
 
 @Component({
@@ -19,13 +20,17 @@ export class TourSearchComponent implements OnInit {
   public tourList: Tour[] = [];
   public isSearchCommitted: boolean = false;
   public tourSearchParams: TourSearchParams = new TourSearchParams();
+  public isDeleteOn: boolean = false;
 
   constructor(private route: ActivatedRoute,
               private tourService: TourService,
-              private basicSearchService: BasicSearchService) {
+              private basicSearchService: BasicSearchService,
+              private app: AppComponent) {
   }
 
   ngOnInit(): void {
+    this.app.loginCheck();
+    this.isDeleteOn = (this.app.user.role.includes("ROLE_ADMIN") || this.app.user.role.includes("ROLE_LEADER"));
     this.basicSearchService.findAll('country').subscribe(result => {
       this.countryList = result;
     }, error => {
@@ -44,7 +49,11 @@ export class TourSearchComponent implements OnInit {
 
   deleteConfirm(id: number) {
     if (confirm("Вы уверены, что хотите удалить элемент?")) {
-      alert("Удаление в процессе реализации.");
+      this.tourService.delete(id).subscribe(result => {
+        if (result == true) {
+          this.search();
+        }
+      });
     }
   }
 

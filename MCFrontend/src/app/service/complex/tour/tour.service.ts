@@ -27,5 +27,9 @@ export class TourService {
     }
     return this.http.put<Tour>(this.path, tour);
   }
+
+  public delete(tourId: number) {
+    return this.http.delete<any>(`${this.path}${tourId}`);
+  }
 }
 

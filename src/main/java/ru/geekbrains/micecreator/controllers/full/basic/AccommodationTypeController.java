@@ -3,6 +3,7 @@ package ru.geekbrains.micecreator.controllers.full.basic;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +37,7 @@ public class AccommodationTypeController {
 		return service.editEntity(dto);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping("/{id}")
 	public boolean deleteById(@PathVariable("id") Integer id) {
 		return service.deleteEntity(id);

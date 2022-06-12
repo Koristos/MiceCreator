@@ -22,4 +22,8 @@ export class HotelService {
     }
     return this.http.put<Hotel>(this.path, hotel);
   }
+
+  public delete(id: number) {
+    return this.http.delete<boolean>(`${this.path}${id}`);
+  }
 }

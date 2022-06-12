@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {AccType} from "../../../service/basic/accom-type/acctype";
 import {AccomTypeService} from "../../../service/basic/accom-type/accom-type.service";
+import {AppComponent} from "../../../app.component";
 
 @Component({
   selector: 'app-accom-type',
@@ -13,12 +14,17 @@ export class AccomTypeComponent implements OnInit {
   public id: any;
   public accType: AccType = new AccType(null, "", 0);
   public title: string = "СОЗДАНИЕ НОВОГО ТИПА РАЗМЕЩЕНИЯ";
+  public isDeleteOn: boolean = false;
 
   constructor(private route: ActivatedRoute,
-              private accomTypeService: AccomTypeService) {
+              private accomTypeService: AccomTypeService,
+              private app: AppComponent,
+              private router: Router) {
   }
 
   ngOnInit(): void {
+    this.app.loginCheck();
+    this.isDeleteOn = (this.app.user.role.includes("ROLE_ADMIN"));
     this.route.params.subscribe(param => {
       this.id = param['id'];
     }, error => {
@@ -49,7 +55,13 @@ export class AccomTypeComponent implements OnInit {
 
   deleteConfirm() {
     if (confirm("Вы уверены, что хотите удалить элемент?")) {
-      alert("Удаление в процессе реализации.");
+      this.accomTypeService.delete(this.id).subscribe(result => {
+        if (result){
+          this.router.navigateByUrl("/search_components/accomm_type");
+        }
+      }, error => {
+        console.log(`Error ${error}`);
+      });
     }
   }
 }

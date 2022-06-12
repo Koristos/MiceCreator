@@ -5,6 +5,7 @@ import {ShortForm} from "../../service/basic/shortform";
 import {formatDate} from "@angular/common";
 import {HotelEventService} from "../../service/complex/hotelevent/hotel-event.service";
 import {HotelEvent} from "../../service/complex/hotelevent/hotelevent";
+import {AppComponent} from "../../app.component";
 
 @Component({
   selector: 'app-hotel-event',
@@ -16,7 +17,8 @@ export class HotelEventComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private hotelEventService: HotelEventService,
               private basicSearchService: BasicSearchService,
-              private router: Router) {
+              private router: Router,
+              private app: AppComponent) {
   }
 
   public id: any;
@@ -28,6 +30,7 @@ export class HotelEventComponent implements OnInit {
   public hotel: ShortForm = new ShortForm(0, "");
 
   ngOnInit(): void {
+    this.app.loginCheck();
     this.route.params.subscribe(param => {
       this.id = param['id'];
       this.hotelEvent.tourId = param['tour_id'];

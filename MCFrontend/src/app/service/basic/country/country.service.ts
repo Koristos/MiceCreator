@@ -23,4 +23,8 @@ export class CountryService {
     }
     return this.http.put<Country>(this.path, country);
   }
+
+  public delete(id: number) {
+    return this.http.delete<boolean>(`${this.path}${id}`);
+  }
 }

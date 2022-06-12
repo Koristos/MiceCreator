@@ -22,4 +22,9 @@ export class AirportService {
     }
     return this.http.put<Airport>(this.path, airport);
   }
+
+  public delete(id: number) {
+    return this.http.delete<boolean>(`${this.path}${id}`);
+  }
+
 }

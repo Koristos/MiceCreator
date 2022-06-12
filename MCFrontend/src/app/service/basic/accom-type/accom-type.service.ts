@@ -17,10 +17,13 @@ export class AccomTypeService {
   }
 
   public save(accType: AccType) {
-    console.log(accType);
     if (accType.id == null) {
       return this.http.post<AccType>(this.path, accType);
     }
     return this.http.put<AccType>(this.path, accType);
+  }
+
+  public delete(id: number) {
+    return this.http.delete<boolean>(`${this.path}${id}`);
   }
 }

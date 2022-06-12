@@ -1,12 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {ShortForm} from "../../../service/basic/shortform";
 import {RequestParams} from "../../../service/basic/request-params";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {BasicSearchService} from "../../../service/basic/basic-search.service";
 import {RegionServService} from "../../../service/basic/regionserv/region-serv.service";
 import {RegionServ} from "../../../service/basic/regionserv/regionserv";
 import {FileService} from "../../../service/files/file.service";
 import {DomSanitizer} from "@angular/platform-browser";
+import {AppComponent} from "../../../app.component";
 
 @Component({
   selector: 'app-region-serv',
@@ -27,15 +28,20 @@ export class RegionServComponent implements OnInit {
   public imageTwoUrl: any = null;
   public imageTwoFile: any = null;
   private params: RequestParams = new RequestParams();
+  public isDeleteOn: boolean = false;
 
   constructor(private route: ActivatedRoute,
               private regionServService: RegionServService,
               private basicSearchService: BasicSearchService,
               private fileService: FileService,
-              private domSanitizer: DomSanitizer) {
+              private domSanitizer: DomSanitizer,
+              private app: AppComponent,
+              private router: Router) {
   }
 
   ngOnInit(): void {
+    this.app.loginCheck();
+    this.isDeleteOn = (this.app.user.role.includes("ROLE_ADMIN"));
     this.route.params.subscribe(param => {
       this.id = param['id'];
     }, error => {
@@ -113,7 +119,13 @@ export class RegionServComponent implements OnInit {
 
   deleteConfirm() {
     if (confirm("Вы уверены, что хотите удалить элемент?")) {
-      alert("Удаление в процессе реализации.");
+      this.regionServService.delete(this.id).subscribe(result => {
+        if (result){
+          this.router.navigateByUrl("/search_components/region_service");
+        }
+      }, error => {
+        console.log(`Error ${error}`);
+      });
     }
   }
 

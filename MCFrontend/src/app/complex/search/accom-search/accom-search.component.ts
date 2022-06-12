@@ -5,6 +5,7 @@ import {formatDate} from "@angular/common";
 import {Accommodation} from "../../../service/complex/accommodation/accommodation";
 import {AccommodationSearchParams} from "../../../service/complex/accommodation/accommodation-search-params";
 import {AccommodationService} from "../../../service/complex/accommodation/accommodation.service";
+import {AppComponent} from "../../../app.component";
 
 @Component({
   selector: 'app-accom-search',
@@ -21,10 +22,12 @@ export class AccomSearchComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private accommodationService: AccommodationService) {
+              private accommodationService: AccommodationService,
+              private app: AppComponent) {
   }
 
   ngOnInit(): void {
+    this.app.loginCheck();
     if (sessionStorage.getItem("AS_HOTEL")) {
       this.hotel = JSON.parse(sessionStorage.getItem("AS_HOTEL") || 'new ShortForm(0, "")');
     }

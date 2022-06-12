@@ -2,15 +2,15 @@
   <img class="logo-image-big" src="assets/images/mice.png" alt="logo">
 </div>
 
-<nav class="navbar navbar-expand-lg navbar-light">
-  <a class="navbar-brand" href="#">MICE CREATOR MENU</a>
+<nav class="navbar navbar-expand-lg navbar-light" [hidden]="!authenticated">
+  <a class="navbar-brand" href="#" [hidden]="!authenticated">MICE CREATOR MENU</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
           aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
+    <ul class="navbar-nav mr-auto" [hidden]="!authenticated">
       <li class="nav-item active">
         <a class="nav-link" routerLink="/tour/new">Создать новый тур</a>
       </li>
@@ -47,4 +47,6 @@
       </li>
     </ul>
   </div>
+  <a class="navbar-brand">{{name}}</a>
+  <button class="btn btn-primary" type="button" (click)="logout()" [disabled]="!authenticated">Выйти</button>
 </nav>

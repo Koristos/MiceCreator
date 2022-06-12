@@ -3,6 +3,7 @@ package ru.geekbrains.micecreator.controllers.full.complex;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -71,6 +72,7 @@ public class TourController {
 		return service.editEntity(dto);
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_LEADER')")
 	@DeleteMapping("/{id}")
 	public boolean deleteById(@PathVariable("id") Integer id) {
 		return service.deleteEntity(id);
