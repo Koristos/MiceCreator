@@ -30,4 +30,9 @@ export class RegionEventService {
     }
     return this.http.put<RegEvent>(this.path, regEvent);
   }
+
+  public delete(id: number) {
+    return this.http.delete<boolean>(`${this.path}${id}`);
+  }
+
 }

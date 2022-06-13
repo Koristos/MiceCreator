@@ -86,8 +86,8 @@ public class AccommodationService extends ComplexTypeService<AccommodationDto, A
 		if (result == null){
 			return false;
 		}
-		tourService.calculate(result.getTour().getId());
 		accommodationRepo.deleteById(id);
+		tourService.calculate(result.getTour().getId());
 		return !accommodationRepo.existsById(id);
 	}
 

@@ -73,8 +73,8 @@ public class HotelEventService extends ComplexTypeService<HotelEventDto, HotelEv
 		if (result == null){
 			return false;
 		}
-		tourService.calculate(result.getTour().getId());
 		hotelEventRepo.deleteById(id);
+		tourService.calculate(result.getTour().getId());
 		return !hotelEventRepo.existsById(id);
 	}
 
