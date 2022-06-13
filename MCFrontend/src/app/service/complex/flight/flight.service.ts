@@ -30,4 +30,8 @@ export class FlightService {
     }
     return this.http.put<Flight>(this.path, flight);
   }
+
+  public delete(id: number) {
+    return this.http.delete<boolean>(`${this.path}${id}`);
+  }
 }

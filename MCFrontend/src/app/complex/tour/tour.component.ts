@@ -9,6 +9,10 @@ import {Country} from "../../service/basic/country/country";
 import {formatDate} from "@angular/common";
 import {FileService} from "../../service/files/file.service";
 import {AppComponent} from "../../app.component";
+import {AccommodationService} from "../../service/complex/accommodation/accommodation.service";
+import {FlightService} from "../../service/complex/flight/flight.service";
+import {HotelEventService} from "../../service/complex/hotelevent/hotel-event.service";
+import {RegionEventService} from "../../service/complex/regionevent/region-event.service";
 
 @Component({
   selector: 'app-tour',
@@ -33,7 +37,11 @@ export class TourComponent implements OnInit {
               private basicSearchService: BasicSearchService,
               private router: Router,
               private fileService: FileService,
-              private app: AppComponent
+              private app: AppComponent,
+              private accommService: AccommodationService,
+              private flightService: FlightService,
+              private hotelEventService: HotelEventService,
+              private regionEventService: RegionEventService
   ) {
   }
 
@@ -104,25 +112,49 @@ export class TourComponent implements OnInit {
 
   deleteAccommodationConfirm(accommId: number) {
     if (confirm("Вы уверены, что хотите удалить размещение?")) {
-      alert("Удаление в процессе реализации.");
+      this.accommService.delete(accommId).subscribe(result => {
+        if (result) {
+          this.ngOnInit();
+        }
+      }, error => {
+        console.log(`Error ${error}`);
+      });
     }
   }
 
   deleteFlightConfirm(flightId: number) {
     if (confirm("Вы уверены, что хотите удалить перелет?")) {
-      alert("Удаление в процессе реализации.");
+      this.flightService.delete(flightId).subscribe(result => {
+        if (result) {
+          this.ngOnInit();
+        }
+      }, error => {
+        console.log(`Error ${error}`);
+      });
     }
   }
 
   deleteRegEventConfirm(regEventId: number) {
     if (confirm("Вы уверены, что хотите удалить региональный эвент?")) {
-      alert("Удаление в процессе реализации.");
+      this.regionEventService.delete(regEventId).subscribe(result => {
+        if (result) {
+          this.ngOnInit();
+        }
+      }, error => {
+        console.log(`Error ${error}`);
+      });
     }
   }
 
   deleteHotelEventConfirm(hotelEventId: number) {
     if (confirm("Вы уверены, что хотите удалить отельный эвент?")) {
-      alert("Удаление в процессе реализации.");
+      this.hotelEventService.delete(hotelEventId).subscribe(result => {
+        if (result) {
+          this.ngOnInit();
+        }
+      }, error => {
+        console.log(`Error ${error}`);
+      });
     }
   }
 

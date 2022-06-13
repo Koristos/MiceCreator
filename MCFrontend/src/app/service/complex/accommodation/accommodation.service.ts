@@ -31,4 +31,9 @@ export class AccommodationService {
     }
     return this.http.put<Accommodation>(this.path, accomm);
   }
+
+  public delete(id: number) {
+    return this.http.delete<boolean>(`${this.path}${id}`);
+  }
+
 }

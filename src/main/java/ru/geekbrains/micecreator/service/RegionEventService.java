@@ -74,8 +74,8 @@ public class RegionEventService extends ComplexTypeService<RegionEventDto, Regio
 		if (result == null){
 			return false;
 		}
-		tourService.calculate(result.getTour().getId());
 		regionEventRepo.deleteById(id);
+		tourService.calculate(result.getTour().getId());
 		return !regionEventRepo.existsById(id);
 	}
 

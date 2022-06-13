@@ -93,8 +93,8 @@ public class FlightService extends ComplexTypeService<FlightDto, Flight> {
 		if (result == null){
 			return false;
 		}
-		tourService.calculate(result.getTour().getId());
 		flightRepo.deleteById(id);
+		tourService.calculate(result.getTour().getId());
 		return !flightRepo.existsById(id);
 	}
 

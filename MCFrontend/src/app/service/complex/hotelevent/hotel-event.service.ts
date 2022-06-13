@@ -31,4 +31,8 @@ export class HotelEventService {
     return this.http.put<HotelEvent>(this.path, hotelEvent);
   }
 
+  public delete(id: number) {
+    return this.http.delete<boolean>(`${this.path}${id}`);
+  }
+
 }

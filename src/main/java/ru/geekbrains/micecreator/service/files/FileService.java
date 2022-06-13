@@ -240,7 +240,7 @@ public class FileService {
 				presentation.getEventHotels().add(place);
 				validPlace = place;
 			} else {
-				presentation.getEventHotels().stream()
+				validPlace = presentation.getEventHotels().stream()
 						.filter(loc -> loc.equals(place)).findFirst().get();
 			}
 			if (!validPlace.getEvents().contains(eventDesc)) {
@@ -260,7 +260,7 @@ public class FileService {
 				presentation.getEventRegions().add(place);
 				validPlace = place;
 			} else {
-				presentation.getEventRegions().stream()
+				validPlace = presentation.getEventRegions().stream()
 						.filter(loc -> loc.equals(place)).findFirst().get();
 			}
 			if (!validPlace.getEvents().contains(eventDesc)) {
