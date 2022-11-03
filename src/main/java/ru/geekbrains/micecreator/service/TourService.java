@@ -10,11 +10,15 @@ import ru.geekbrains.micecreator.models.complex.Flight;
 import ru.geekbrains.micecreator.models.complex.HotelEvent;
 import ru.geekbrains.micecreator.models.complex.RegionEvent;
 import ru.geekbrains.micecreator.models.complex.Tour;
+import ru.geekbrains.micecreator.models.currency.Course;
 import ru.geekbrains.micecreator.repository.TourRepo;
+import ru.geekbrains.micecreator.service.currency.CbCurrencyService;
+import ru.geekbrains.micecreator.service.currency.CourseService;
 import ru.geekbrains.micecreator.service.prototypes.ComplexTypeService;
 import ru.geekbrains.micecreator.utils.AppUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +32,10 @@ public class TourService extends ComplexTypeService<TourDto, Tour> {
 	private final TourRepo tourRepo;
 	@Autowired
 	private final CountryService countryService;
+	@Autowired
+	private final CourseService courseService;
+	@Autowired
+	private final CbCurrencyService cbCurrencyService;
 
 	public List<TourDto> findByParams(ComplexParams params) {
 		if (params.getCountryId() == null) {
@@ -95,6 +103,15 @@ public class TourService extends ComplexTypeService<TourDto, Tour> {
 		dto.setEndDate(entity.getEndDate());
 		dto.setTotalPrice(entity.getTotalPrice());
 		dto.setCountry(countryService.findListDtoById(entity.getCountry().getId()));
+		String currencyName = countryService.findById(entity.getCountry().getId()).getCurrency().getName();
+		dto.setTourCurrency(currencyName);
+		Course course = courseService.getCourse(currencyName);
+		if (course == null) {
+			cbCurrencyService.updateCurrencyInfo();
+			course = courseService.getCourse(currencyName);
+		}
+		dto.setTotalPriceInBasicCurrency(course.getRate().multiply(entity.getTotalPrice())
+				.setScale(2, RoundingMode.HALF_UP));
 		return dto;
 	}
 

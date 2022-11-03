@@ -10,5 +10,6 @@ public enum SimpleTypes {
 	LOCATION,
 	REGION,
 	REGION_SERVICE,
-	ROOM
+	ROOM,
+	CURRENCY
 }

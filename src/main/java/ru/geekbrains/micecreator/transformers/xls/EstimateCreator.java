@@ -238,6 +238,14 @@ public class EstimateCreator {
 		row.createCell(8).setCellFormula(getTotalFormula(countingRows));
 		row.getCell(7).setCellStyle(styleSH);
 		row.getCell(8).setCellStyle(styleLineB);
+		rowNum++;
+
+		row = sheet.createRow(rowNum);
+		row.setHeight((short) 400);
+		row.createCell(7).setCellValue("ВАЛЮТА ТУРА:");
+		row.createCell(8).setCellValue(tourEstimate.getTour().getTourCurrency());
+		row.getCell(7).setCellStyle(styleSH);
+		row.getCell(8).setCellStyle(styleLineB);
 
 		try (FileOutputStream out = new FileOutputStream(new File(path))) {
 			estimate.write(out);

@@ -8,6 +8,7 @@ import ru.geekbrains.micecreator.dto.basic.list.ListItemDto;
 import ru.geekbrains.micecreator.dto.basic.list.SimpleTypes;
 import ru.geekbrains.micecreator.models.basic.Country;
 import ru.geekbrains.micecreator.repository.CountryRepo;
+import ru.geekbrains.micecreator.service.currency.CurrencyService;
 import ru.geekbrains.micecreator.service.prototypes.SimpleTypeService;
 
 import java.util.List;
@@ -19,6 +20,8 @@ public class CountryService extends SimpleTypeService<CountryDto, Country> {
 	@Autowired
 	private final CountryRepo countryRepo;
 	private final SimpleTypes simpleType = SimpleTypes.COUNTRY;
+	@Autowired
+	private final CurrencyService currencyService;
 
 	@Override
 	protected List<Country> findAll() {
@@ -51,6 +54,7 @@ public class CountryService extends SimpleTypeService<CountryDto, Country> {
 		CountryDto dto = new CountryDto();
 		dto.setId(entity.getId());
 		dto.setName(entity.getName());
+		dto.setCurrency(entity.getCurrency().getName());
 		return dto;
 	}
 
@@ -68,6 +72,7 @@ public class CountryService extends SimpleTypeService<CountryDto, Country> {
 		Country entity = new Country();
 		entity.setId(dto.getId());
 		entity.setName(dto.getName());
+		entity.setCurrency(currencyService.findCurrencyByName(dto.getCurrency()));
 		return entity;
 	}
 }

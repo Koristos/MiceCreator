@@ -7,5 +7,5 @@ import ru.geekbrains.micecreator.dto.basic.prototype.BasicDto;
 @Data
 @NoArgsConstructor
 public class CountryDto extends BasicDto {
-
+	private String currency;
 }
