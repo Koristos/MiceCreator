@@ -17,6 +17,8 @@ public class TourDto implements IdPositive {
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private BigDecimal totalPrice;
+	private BigDecimal totalPriceInBasicCurrency;
+	private String tourCurrency;
 	private ListItemDto country;
 
 }

@@ -3,6 +3,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Country} from "../../../service/basic/country/country";
 import {CountryService} from "../../../service/basic/country/country.service";
 import {AppComponent} from "../../../app.component";
+import {ShortForm} from "../../../service/basic/shortform";
+import {BasicSearchService} from "../../../service/basic/basic-search.service";
 
 @Component({
   selector: 'app-country',
@@ -13,13 +15,16 @@ export class CountryComponent implements OnInit {
 
   public editEnabled: boolean = true;
   public id: any;
-  public country: Country = new Country(null, "");
+  public country: Country = new Country(null, "", "");
   public title: string = "СОЗДАНИЕ НОВОЙ СТРАНЫ";
   public isDeleteOn: boolean = false;
+  public currencyList: ShortForm[] = [];
+
 
   constructor(private route: ActivatedRoute,
               private countryService: CountryService,
               private app: AppComponent,
+              private basicSearchService: BasicSearchService,
               private router: Router) {
   }
 
@@ -36,9 +41,12 @@ export class CountryComponent implements OnInit {
       this.editEnabled = false;
       this.countryService.findById(this.id).subscribe(result => {
         this.country = result;
+        this.currencyList.push(new ShortForm(1, this.country.currency));
       }, error => {
         console.log(`Error ${error}`);
       });
+    } else {
+      this.getCurrencies();
     }
   }
 
@@ -64,6 +72,19 @@ export class CountryComponent implements OnInit {
         console.log(`Error ${error}`);
       });
     }
+  }
+
+  getCurrencies() {
+    this.basicSearchService.findAll('currency').subscribe(result => {
+      this.currencyList = result;
+    }, error => {
+      console.log(`Error ${error}`);
+    });
+  }
+
+  enableEdit() {
+    this.getCurrencies();
+    this.editEnabled = true;
   }
 
 }

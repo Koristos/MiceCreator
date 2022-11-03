@@ -1,8 +1,9 @@
 package ru.geekbrains.micecreator.utils;
 
-import org.flywaydb.core.internal.util.StringUtils;
-
-import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -46,5 +47,18 @@ public final class AppUtils {
 
 	public static boolean isImageExist(String imageName){
 		return Files.exists(IMAGE_DIR.resolve(imageName));
+	}
+
+	public static Object parseStringToObject (Class outcomeClass, String incomeString) {
+		StringReader reader = new StringReader(incomeString);
+		Object result = null;
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(outcomeClass);
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			result = unmarshaller.unmarshal(reader);
+		} catch (JAXBException e) {
+			throw new RuntimeException("XML parsing error");
+		}
+		return result;
 	}
 }

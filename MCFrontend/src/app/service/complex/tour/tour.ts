@@ -7,6 +7,8 @@ export class Tour {
               public startDate: Date,
               public endDate: Date,
               public totalPrice: number,
+              public totalPriceInBasicCurrency: number,
+              public tourCurrency: string,
               public country: ShortForm
   ) {
   }

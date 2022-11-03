@@ -22,9 +22,9 @@ import {RegionEventService} from "../../service/complex/regionevent/region-event
 export class TourComponent implements OnInit {
 
   public id: any;
-  public fullTour: FullTour = new FullTour(new Tour(null, 0, new Date(), new Date(), 0, new ShortForm(0, "")),
+  public fullTour: FullTour = new FullTour(new Tour(null, 0, new Date(), new Date(), 0, 0, "", new ShortForm(0, "")),
     [], [], [], []);
-  public countryList: Country[] = [];
+  public countryList: ShortForm[] = [];
   public title: string = '';
   public isNew: boolean = false;
   public editEnabled: boolean = false;

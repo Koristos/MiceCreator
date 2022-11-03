@@ -1,6 +1,6 @@
 <div>
   <h1>{{title}}</h1>
-  <button type="submit" class="btn btn-warning" (click)="editEnabled=true" [disabled]="editEnabled">Редактировать данные</button>
+  <button type="submit" class="btn btn-warning" (click)="enableEdit()" [disabled]="editEnabled">Редактировать данные</button>
   <button type="submit" class="btn btn-danger side-button" (click)="deleteConfirm()" [hidden]="country.id == null || !isDeleteOn">Удалить страну</button>
   <div class="row py-2">
     <div class="col-12">
@@ -9,6 +9,12 @@
           <label>Название страны</label>
           <input [(ngModel)]="country.name" type="text" class="form-control" id="name" name="name" placeholder="Введите название страны"
                  [disabled]="!editEnabled">
+          <label>Валюта страны</label>
+          <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="country.currency" name="currency"
+                  [disabled]="!editEnabled">
+            <option selected value=0>Выберите валюту страны...</option>
+            <option *ngFor="let currency_option of currencyList" [value]="currency_option.name">{{currency_option.name}}</option>
+          </select>
         </div>
         <button type="submit" class="btn btn-primary" [disabled]="!editEnabled">Сохранить изменения</button>
       </form>
