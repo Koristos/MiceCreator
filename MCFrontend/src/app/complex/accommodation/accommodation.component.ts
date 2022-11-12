@@ -23,10 +23,12 @@ export class AccommodationComponent implements OnInit {
 
   public id: any;
   public isEditable: boolean = false;
-  public accommodation: Accommodation = new Accommodation(null, new Date(), new Date(), 0, 0, 0,
-    new ShortForm(0, ""), new ShortForm(0, ""), new ShortForm(0, ""), 0, 0, 0);
+  public accommodation: Accommodation = new Accommodation(null, new Date(), new Date(), 0, 0, 0, 0,
+    new ShortForm(0, ""), new ShortForm(0, ""), new ShortForm(0, ""), 0, 0, 0,
+    0, new Date());
   public in_date: string = "";
   public out_date: string = "";
+  public create_date: string = "";
   public title: string = "Редактирование размещения";
 
   ngOnInit(): void {
@@ -43,6 +45,7 @@ export class AccommodationComponent implements OnInit {
           this.accommodation = result;
           this.in_date = formatDate(result.checkInDate, 'yyyy-MM-dd', 'en-US');
           this.out_date = formatDate(result.checkOutDate, 'yyyy-MM-dd', 'en-US');
+          this.create_date = formatDate(result.creationDate, 'yyyy-MM-dd', 'en-US');
         }, error => {
           console.log(`Error ${error}`);
         });
@@ -58,6 +61,7 @@ export class AccommodationComponent implements OnInit {
   save() {
     this.accommodation.checkInDate = new Date(this.in_date);
     this.accommodation.checkOutDate = new Date(this.out_date);
+    this.accommodation.creationDate = new Date(this.create_date);
     this.accommodationService.save(this.accommodation).subscribe(result => {
       this.accommodation = result;
       this.title = `Редактирование размещения`;
@@ -86,6 +90,7 @@ export class AccommodationComponent implements OnInit {
       sessionStorage.removeItem("AE_PRESAVE");
       this.in_date = formatDate(this.accommodation.checkInDate, 'yyyy-MM-dd', 'en-US');
       this.out_date = formatDate(this.accommodation.checkOutDate, 'yyyy-MM-dd', 'en-US');
+      this.create_date = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
     }
   }
 
@@ -95,6 +100,9 @@ export class AccommodationComponent implements OnInit {
     }
     if (this.out_date != "") {
       this.accommodation.checkOutDate = new Date(this.out_date);
+    }
+    if (this.create_date != "") {
+      this.accommodation.creationDate = new Date(this.create_date);
     }
     sessionStorage.setItem(`AE_PRESAVE`, JSON.stringify(this.accommodation));
   }

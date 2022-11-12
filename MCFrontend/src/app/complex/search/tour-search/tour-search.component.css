@@ -4,11 +4,12 @@
 }
 
 .pick-item {
-  width: 50%
+  width: 48%
 }
 
 .pick-date {
-  width: 20%
+  width: 48%;
+  margin-bottom: 2%;
 }
 
 h1 {

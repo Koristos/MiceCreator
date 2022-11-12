@@ -32,12 +32,15 @@ public class HotelEventService extends ComplexTypeService<HotelEventDto, HotelEv
 	public List<HotelEventDto> findByParams(ComplexParams params) {
 		checkInput(params.getHotelServId(), params.getFirstDate(), params.getSecondDate());
 		checkDates(params.getFirstDate(), params.getSecondDate());
-		return findByServiceIdInDates(params.getHotelServId(), params.getFirstDate(), params.getSecondDate()).stream()
+		checkDates(params.getFirstDateOfCreation(), params.getSecondDateOfCreation());
+		return findByServiceIdInDates(params.getHotelServId(), params.getFirstDate(), params.getSecondDate(), params.getFirstDateOfCreation(),
+				params.getSecondDateOfCreation()).stream()
 				.map(this::mapToDto).collect(Collectors.toList());
 	}
 
-	protected List<HotelEvent> findByServiceIdInDates(Integer hotelServId, LocalDate firstDate, LocalDate secondDate) {
-		return hotelEventRepo.findByServiceIdAndDateBetween(hotelServId, firstDate, secondDate);
+	protected List<HotelEvent> findByServiceIdInDates(Integer hotelServId, LocalDate firstDate, LocalDate secondDate,
+	                                                  LocalDate firstCreationDate, LocalDate secondCreationDate) {
+		return hotelEventRepo.findByServiceIdAndDateBetweenAndCreationDateBetween(hotelServId, firstDate, secondDate, firstCreationDate, secondCreationDate);
 	}
 
 	public List<HotelEventEstimate> makeEstimate(Integer tourId) {
@@ -88,6 +91,9 @@ public class HotelEventService extends ComplexTypeService<HotelEventDto, HotelEv
 		dto.setTourId(entity.getTour().getId());
 		dto.setService(hotelServService.findListDtoById(entity.getService().getId()));
 		dto.setTotal(entity.getPrice().multiply(BigDecimal.valueOf(entity.getPax())));
+		dto.setNettoPrice(entity.getNettoPrice());
+		dto.setCreationDate(entity.getCreationDate());
+		dto.setNettoTotal(entity.getNettoPrice().multiply(BigDecimal.valueOf(entity.getPax())));
 		return dto;
 	}
 
@@ -100,6 +106,8 @@ public class HotelEventService extends ComplexTypeService<HotelEventDto, HotelEv
 		event.setPrice(dto.getPrice());
 		event.setTour(tourService.findById(dto.getTourId()));
 		event.setService(hotelServService.findById(dto.getService().getId()));
+		event.setNettoPrice(dto.getNettoPrice());
+		event.setCreationDate(dto.getCreationDate());
 		return event;
 	}
 

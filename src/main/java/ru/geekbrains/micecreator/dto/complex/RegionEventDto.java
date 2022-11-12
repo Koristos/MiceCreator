@@ -16,7 +16,10 @@ public class RegionEventDto implements IdPositive {
 	private LocalDate eventDate;
 	private Integer pax;
 	private BigDecimal price;
+	private BigDecimal nettoPrice;
 	private Integer tourId;
 	private ListItemDto service;
 	private BigDecimal total;
+	private BigDecimal nettoTotal;
+	private LocalDate creationDate;
 }

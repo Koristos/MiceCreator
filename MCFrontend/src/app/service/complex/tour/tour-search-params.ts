@@ -11,6 +11,7 @@ export class TourSearchParams {
   public lastDate: Date = new Date();
   private preparedParams: any = null;
   private datePattern: string = 'dd.MM.yyyy';
+  public userName: string = "";
 
   prepareForSending() {
     this.preparedParams = new HttpParams();
@@ -19,6 +20,7 @@ export class TourSearchParams {
     }
     this.preparedParams = this.preparedParams.append('first_date', formatDate(this.firstDate, this.datePattern, 'en-US'));
     this.preparedParams = this.preparedParams.append('second_date', formatDate(this.lastDate, this.datePattern, 'en-US'));
+    this.preparedParams = this.preparedParams.append('user_name', this.userName);
     return this.preparedParams;
   }
 

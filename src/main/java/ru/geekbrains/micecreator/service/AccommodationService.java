@@ -35,12 +35,16 @@ public class AccommodationService extends ComplexTypeService<AccommodationDto, A
 	public List<AccommodationDto> findByParams(ComplexParams params) {
 		checkDates(params.getFirstDate(), params.getSecondDate());
 		if (params.getRoomId() != null) {
-			checkInput(params.getRoomId(), params.getAccTypeId(), params.getFirstDate(), params.getSecondDate());
-			return findByRoomAccTypeIdsInDates(params.getRoomId(), params.getAccTypeId(), params.getFirstDate(), params.getSecondDate()).stream()
+			checkInput(params.getRoomId(), params.getAccTypeId(), params.getFirstDate(), params.getSecondDate(),
+					params.getFirstDateOfCreation(), params.getSecondDateOfCreation());
+			return findByRoomAccTypeIdsInDates(params.getRoomId(), params.getAccTypeId(), params.getFirstDate(), params.getSecondDate(),
+					params.getFirstDateOfCreation(), params.getSecondDateOfCreation()).stream()
 					.map(this::mapToDto).collect(Collectors.toList());
 		} else {
-			checkInput(params.getHotelId(), params.getAccTypeId(), params.getFirstDate(), params.getSecondDate());
-			return findByHotelAccTypeIdsInDates(params.getHotelId(), params.getAccTypeId(), params.getFirstDate(), params.getSecondDate()).stream()
+			checkInput(params.getHotelId(), params.getAccTypeId(), params.getFirstDate(), params.getSecondDate(),
+					params.getFirstDateOfCreation(), params.getSecondDateOfCreation());
+			return findByHotelAccTypeIdsInDates(params.getHotelId(), params.getAccTypeId(), params.getFirstDate(), params.getSecondDate(),
+					params.getFirstDateOfCreation(), params.getSecondDateOfCreation()).stream()
 					.map(this::mapToDto).collect(Collectors.toList());
 		}
 	}
@@ -50,12 +54,16 @@ public class AccommodationService extends ComplexTypeService<AccommodationDto, A
 
 	}
 
-	protected List<Accommodation> findByRoomAccTypeIdsInDates(Integer roomId, Integer accTypeId, LocalDate firstDate, LocalDate secondDate) {
-		return accommodationRepo.findByRoomIdAndAccTypeIdAndCheckInDateBetween(roomId, accTypeId, firstDate, secondDate);
+	protected List<Accommodation> findByRoomAccTypeIdsInDates(Integer roomId, Integer accTypeId, LocalDate firstDate, LocalDate secondDate,
+	                                                          LocalDate firstCreationDate, LocalDate secondCreationDate) {
+		return accommodationRepo.findByRoomIdAndAccTypeIdAndCheckInDateBetweenAndCreationDateBetween(roomId, accTypeId, firstDate, secondDate,
+				firstCreationDate, secondCreationDate);
 	}
 
-	protected List<Accommodation> findByHotelAccTypeIdsInDates(Integer hotelId, Integer accTypeId, LocalDate firstDate, LocalDate secondDate) {
-		return accommodationRepo.findByRoom_HotelIdAndAccTypeIdAndCheckInDateBetween(hotelId, accTypeId, firstDate, secondDate);
+	protected List<Accommodation> findByHotelAccTypeIdsInDates(Integer hotelId, Integer accTypeId, LocalDate firstDate, LocalDate secondDate,
+	                                                           LocalDate firstCreationDate, LocalDate secondCreationDate) {
+		return accommodationRepo.findByRoom_HotelIdAndAccTypeIdAndCheckInDateBetweenAndCreationDateBetween(hotelId, accTypeId, firstDate, secondDate,
+				firstCreationDate, secondCreationDate);
 	}
 
 	@Override
@@ -106,6 +114,9 @@ public class AccommodationService extends ComplexTypeService<AccommodationDto, A
 		dto.setNights(AppUtils.countDaysDifference(entity.getCheckInDate(), entity.getCheckOutDate()));
 		dto.setRoomCount((int) Math.ceil(((double)entity.getPax() / entity.getAccType().getPaxNumber())));
 		dto.setTotal(entity.getPrice().multiply(BigDecimal.valueOf(entity.getPax())).multiply(BigDecimal.valueOf(dto.getNights())));
+		dto.setCreationDate(entity.getCreationDate());
+		dto.setNettoPrice(entity.getNettoPrice());
+		dto.setNettoTotal(entity.getNettoPrice().multiply(BigDecimal.valueOf(entity.getPax())).multiply(BigDecimal.valueOf(dto.getNights())));
 		return dto;
 	}
 
@@ -120,6 +131,8 @@ public class AccommodationService extends ComplexTypeService<AccommodationDto, A
 		entity.setTour(tourService.findById(dto.getTourId()));
 		entity.setRoom(roomService.findById(dto.getRoom().getId()));
 		entity.setAccType(accommodationTypeService.findById(dto.getAccType().getId()));
+		entity.setNettoPrice(dto.getNettoPrice());
+		entity.setCreationDate(dto.getCreationDate());
 		return entity;
 	}
 

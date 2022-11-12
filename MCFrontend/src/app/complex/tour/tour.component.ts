@@ -5,7 +5,6 @@ import {BasicSearchService} from "../../service/basic/basic-search.service";
 import {ShortForm} from "../../service/basic/shortform";
 import {FullTour} from "../../service/complex/tour/full-tour";
 import {Tour} from "../../service/complex/tour/tour";
-import {Country} from "../../service/basic/country/country";
 import {formatDate} from "@angular/common";
 import {FileService} from "../../service/files/file.service";
 import {AppComponent} from "../../app.component";
@@ -13,6 +12,7 @@ import {AccommodationService} from "../../service/complex/accommodation/accommod
 import {FlightService} from "../../service/complex/flight/flight.service";
 import {HotelEventService} from "../../service/complex/hotelevent/hotel-event.service";
 import {RegionEventService} from "../../service/complex/regionevent/region-event.service";
+import {User} from "../../service/security/user";
 
 @Component({
   selector: 'app-tour',
@@ -22,14 +22,16 @@ import {RegionEventService} from "../../service/complex/regionevent/region-event
 export class TourComponent implements OnInit {
 
   public id: any;
-  public fullTour: FullTour = new FullTour(new Tour(null, 0, new Date(), new Date(), 0, 0, "", new ShortForm(0, "")),
+  public fullTour: FullTour = new FullTour(new Tour(null, 0, new Date(), new Date(), 0, 0, "",
+      new ShortForm(0, ""), 0, new Date(), this.app.user.name),
     [], [], [], []);
   public countryList: ShortForm[] = [];
-  public title: string = '';
+  public title: string = "";
   public isNew: boolean = false;
   public editEnabled: boolean = false;
   public startDate: string = "";
   public endDate: string = "";
+  public user: string = '';
 
 
   constructor(private route: ActivatedRoute,
@@ -41,7 +43,7 @@ export class TourComponent implements OnInit {
               private accommService: AccommodationService,
               private flightService: FlightService,
               private hotelEventService: HotelEventService,
-              private regionEventService: RegionEventService
+              private regionEventService: RegionEventService,
   ) {
   }
 
@@ -55,6 +57,7 @@ export class TourComponent implements OnInit {
     if (this.id != "new") {
       this.tourService.findById(this.id).subscribe(result => {
         this.fullTour = result;
+        this.user = this.fullTour.tour.userName;
         this.countryList.push(result.tour.country);
         this.startDate = formatDate(result.tour.startDate, 'yyyy-MM-dd', 'en-US');
         this.endDate = formatDate(result.tour.endDate, 'yyyy-MM-dd', 'en-US');
@@ -72,6 +75,8 @@ export class TourComponent implements OnInit {
       this.isNew = true;
       this.editEnabled = true;
     }
+    console.log(this.fullTour.tour.userName);
+    console.log(this.user);
   }
 
   deleteConfirm() {
@@ -83,6 +88,8 @@ export class TourComponent implements OnInit {
   save() {
     this.fullTour.tour.startDate = new Date(this.startDate);
     this.fullTour.tour.endDate = new Date(this.endDate);
+    console.log(this.user);
+    console.log(this.fullTour.tour);
     this.tourService.save(this.fullTour.tour).subscribe(result => {
       this.fullTour.tour = result;
       this.title = `ТУР №${result.id}`;

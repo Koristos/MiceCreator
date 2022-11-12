@@ -54,11 +54,13 @@ public class TourController {
 	@GetMapping("/by_params")
 	public List<TourDto> getByParams(@RequestParam(name = "country", required = false) Integer countryId,
 	                                 @RequestParam(name = "first_date") String first,
-	                                 @RequestParam(name = "second_date") String second) {
+	                                 @RequestParam(name = "second_date") String second,
+	                                 @RequestParam(name = "user_name") String name) {
 		ComplexParams params = new ComplexParams();
 		params.setCountryId(countryId);
 		params.setFirstDateFromString(first);
 		params.setSecondDateFromString(second);
+		params.setUserName(name);
 		return service.findByParams(params);
 	}
 

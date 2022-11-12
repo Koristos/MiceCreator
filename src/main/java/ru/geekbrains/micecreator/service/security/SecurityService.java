@@ -24,8 +24,16 @@ import java.util.stream.Collectors;
 public class SecurityService implements UserDetailsService {
 	private final UserRepo userRepository;
 
+	public List<String> getAllManagerNames() {
+		return userRepository.findAll().stream().map(User::getManager).collect(Collectors.toList());
+	}
+
 	public Optional<User> findByUsername(String userName) {
 		return userRepository.findByUsername(userName);
+	}
+
+	public Optional<User> findByManager(String managerName) {
+		return userRepository.findByManager(managerName);
 	}
 
 	@Override

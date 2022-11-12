@@ -21,6 +21,15 @@
             </div>
           </div>
         </div>
+        <div class="form-list pick-date">
+          <label>Дата создания</label>
+          <div class="input-group date" data-provide="datepicker">
+            <input type="date" class="form-control" required [(ngModel)]="create_date" [disabled]="true">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+            </div>
+          </div>
+        </div>
         <div class="form-list">
           <label>Региональная услуга</label>
           <input [(ngModel)]="regEvent.service.name" class="form-control form-control-lg but-inp" type="text" placeholder="Выберите региональную услугу"
@@ -32,6 +41,11 @@
                  [disabled]="!isEditable">
         </div>
         <div class="form-list">
+          <label>Цена за человека нетто</label>
+          <input [(ngModel)]="regEvent.nettoPrice" class="form-control form-control-lg" type="number" placeholder="Введите стоимость"
+                 [disabled]="!isEditable">
+        </div>
+        <div class="form-list">
           <label>Кол-во человек</label>
           <input [(ngModel)]="regEvent.pax" class="form-control form-control-lg" type="number" placeholder="Введите количество участников"
                  [disabled]="!isEditable">
@@ -39,6 +53,11 @@
         <div class="form-list">
           <label>Итоговая стоимость</label>
           <input [(ngModel)]="regEvent.total" class="form-control form-control-lg but-info" type="text" placeholder="Будет посчитано после сохранения"
+                 readonly>
+        </div>
+        <div class="form-list">
+          <label>Итого нетто</label>
+          <input [(ngModel)]="regEvent.nettoTotal" class="form-control form-control-lg but-info" type="text" placeholder="Будет посчитано после сохранения"
                  readonly>
         </div>
       </div>

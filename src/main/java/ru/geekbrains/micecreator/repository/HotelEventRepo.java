@@ -10,5 +10,6 @@ public interface HotelEventRepo extends JpaRepository<HotelEvent, Integer> {
 
 	List<HotelEvent> findByTourId(Integer tourId);
 
-	List<HotelEvent> findByServiceIdAndDateBetween(Integer serviceId, LocalDate firstDate, LocalDate secondDate);
+	List<HotelEvent> findByServiceIdAndDateBetweenAndCreationDateBetween(Integer serviceId, LocalDate firstDate, LocalDate secondDate,
+	                                                                     LocalDate firstCreationDate, LocalDate secondCreationDate);
 }

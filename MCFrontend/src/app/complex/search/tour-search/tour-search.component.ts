@@ -7,6 +7,7 @@ import {Tour} from "../../../service/complex/tour/tour";
 import {TourSearchParams} from "../../../service/complex/tour/tour-search-params";
 import {formatDate} from "@angular/common";
 import {AppComponent} from "../../../app.component";
+import {UsersService} from "../../../service/users/users.service";
 
 
 @Component({
@@ -21,11 +22,13 @@ export class TourSearchComponent implements OnInit {
   public isSearchCommitted: boolean = false;
   public tourSearchParams: TourSearchParams = new TourSearchParams();
   public isDeleteOn: boolean = false;
+  public userNames: string[] = [];
 
   constructor(private route: ActivatedRoute,
               private tourService: TourService,
               private basicSearchService: BasicSearchService,
-              private app: AppComponent) {
+              private app: AppComponent,
+              private userService: UsersService) {
   }
 
   ngOnInit(): void {
@@ -33,6 +36,11 @@ export class TourSearchComponent implements OnInit {
     this.isDeleteOn = (this.app.user.role.includes("ROLE_ADMIN") || this.app.user.role.includes("ROLE_LEADER"));
     this.basicSearchService.findAll('country').subscribe(result => {
       this.countryList = result;
+    }, error => {
+      console.log(`Error ${error}`);
+    });
+    this.userService.findAll().subscribe(result => {
+      this.userNames = result;
     }, error => {
       console.log(`Error ${error}`);
     });

@@ -10,6 +10,13 @@
             <option *ngFor="let country_option of countryList" [value]="country_option.id">{{country_option.name}}</option>
           </select>
         </div>
+        <div class="pick-elem pick-item">
+          <label>Менеджер</label>
+          <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required [(ngModel)]="tourSearchParams.userName">
+            <option selected value=0>Выберите менеджера...</option>
+            <option *ngFor="let manager_option of userNames" [value]="manager_option">{{manager_option}}</option>
+          </select>
+        </div>
         <div class="pick-elem pick-date">
           <label>С даты</label>
           <div class="input-group date" data-provide="datepicker">
@@ -41,8 +48,10 @@
         <th scope="col">Страна</th>
         <th scope="col">Дата начала</th>
         <th scope="col">Дата завершения</th>
-        <th scope="col">Количество человек</th>
+        <th scope="col">К-во человек</th>
         <th scope="col">Цена</th>
+        <th scope="col">Цена нетто</th>
+        <th scope="col">Менеджер</th>
         <th scope="col">Действия</th>
       </tr>
       </thead>
@@ -54,6 +63,8 @@
         <td>{{dateToPattern(tourElement.endDate)}}</td>
         <td>{{tourElement.pax}}</td>
         <td>{{tourElement.totalPrice}}</td>
+        <td>{{tourElement.nettoTotal}}</td>
+        <td>{{tourElement.userName}}</td>
         <td>
           <a class="btn but btn-info" routerLink="/tour/{{tourElement.id}}"><i class="fas fa-edit"> Просмотр</i></a>
           <a class="btn but btn-danger" (click)="deleteConfirm(tourElement.id)" [hidden]="!isDeleteOn"><i class="far fa-trash-alt"> Удалить</i></a>

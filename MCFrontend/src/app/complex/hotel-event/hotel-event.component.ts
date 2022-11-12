@@ -23,11 +23,12 @@ export class HotelEventComponent implements OnInit {
 
   public id: any;
   public isEditable: boolean = false;
-  public hotelEvent: HotelEvent = new HotelEvent(null, new Date(), 0, 0, 0,
-    new ShortForm(0, ""), 0);
+  public hotelEvent: HotelEvent = new HotelEvent(null, new Date(), 0, 0, 0, 0,
+    new ShortForm(0, ""), 0, 0, new Date());
   public event_date: string = "";
   public title: string = "Редактирование отельного эвента";
   public hotel: ShortForm = new ShortForm(0, "");
+  public create_date: string = "";
 
   ngOnInit(): void {
     this.app.loginCheck();
@@ -42,6 +43,7 @@ export class HotelEventComponent implements OnInit {
         this.hotelEventService.findById(this.id).subscribe(result => {
           this.hotelEvent = result;
           this.event_date = formatDate(result.eventDate, 'yyyy-MM-dd', 'en-US');
+          this.create_date = formatDate(result.creationDate, 'yyyy-MM-dd', 'en-US');
           this.basicSearchService.findParentById('hotel_service', this.hotelEvent.service.id).subscribe(result => {
             this.hotel = result;
           }, error => {
@@ -61,6 +63,7 @@ export class HotelEventComponent implements OnInit {
 
   save() {
     this.hotelEvent.eventDate = new Date(this.event_date);
+    this.hotelEvent.creationDate = new Date(this.create_date);
     this.hotelEventService.save(this.hotelEvent).subscribe(result => {
       this.hotelEvent = result;
       this.title = `Редактирование отельного эвента`;
@@ -88,12 +91,16 @@ export class HotelEventComponent implements OnInit {
       sessionStorage.removeItem("HE_PRESAVE_HOTEL");
       sessionStorage.removeItem("HE_PRESAVE");
       this.event_date = formatDate(this.hotelEvent.eventDate, 'yyyy-MM-dd', 'en-US');
+      this.create_date = formatDate(this.hotelEvent.creationDate, 'yyyy-MM-dd', 'en-US');
     }
   }
 
   makePresave() {
     if (this.event_date != "") {
       this.hotelEvent.eventDate = new Date(this.event_date);
+    }
+    if (this.create_date != "") {
+      this.hotelEvent.creationDate = new Date(this.create_date);
     }
     sessionStorage.setItem(`HE_PRESAVE_HOTEL`, JSON.stringify(this.hotel));
     sessionStorage.setItem(`HE_PRESAVE`, JSON.stringify(this.hotelEvent));

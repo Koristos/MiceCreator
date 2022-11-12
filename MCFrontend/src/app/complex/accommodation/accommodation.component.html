@@ -26,10 +26,14 @@
             </div>
           </div>
         </div>
-        <div class="form-list">
-          <label>Количество ночей</label>
-          <input [(ngModel)]="accommodation.nights" class="form-control form-control-lg but-info" type="text" placeholder="Будет посчитано после сохранения"
-                 readonly>
+        <div class="form-list pick-date">
+          <label>Дата создания</label>
+          <div class="input-group date" data-provide="datepicker">
+            <input type="date" class="form-control" required [(ngModel)]="create_date" [disabled]="true">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+            </div>
+          </div>
         </div>
         <div class="pick-elem pick-item">
           <div class="form-list">
@@ -47,8 +51,18 @@
                    (click)="findAccType()" readonly [disabled]="!isEditable">
           </div>
           <div class="form-list">
+            <label>Количество ночей</label>
+            <input [(ngModel)]="accommodation.nights" class="form-control form-control-lg but-info" type="text" placeholder="Будет посчитано после сохранения"
+                   readonly>
+          </div>
+          <div class="form-list">
             <label>Цена за человека в валюте страны</label>
             <input [(ngModel)]="accommodation.price" class="form-control form-control-lg" type="number" placeholder="Введите стоимость"
+                   [disabled]="!isEditable">
+          </div>
+          <div class="form-list">
+            <label>Цена за человека нетто</label>
+            <input [(ngModel)]="accommodation.nettoPrice" class="form-control form-control-lg" type="number" placeholder="Введите стоимость"
                    [disabled]="!isEditable">
           </div>
           <div class="form-list">
@@ -64,6 +78,11 @@
           <div class="form-list">
             <label>Итоговая стоимость</label>
             <input [(ngModel)]="accommodation.total" class="form-control form-control-lg but-info" type="text" placeholder="Будет посчитано после сохранения"
+                   readonly>
+          </div>
+          <div class="form-list">
+            <label>Итого нетто</label>
+            <input [(ngModel)]="accommodation.nettoTotal" class="form-control form-control-lg but-info" type="text" placeholder="Будет посчитано после сохранения"
                    readonly>
           </div>
         </div>

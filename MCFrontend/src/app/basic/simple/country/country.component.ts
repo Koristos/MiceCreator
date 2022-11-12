@@ -5,6 +5,7 @@ import {CountryService} from "../../../service/basic/country/country.service";
 import {AppComponent} from "../../../app.component";
 import {ShortForm} from "../../../service/basic/shortform";
 import {BasicSearchService} from "../../../service/basic/basic-search.service";
+import {CurrencyService} from "../../../service/currency/currency.service";
 
 @Component({
   selector: 'app-country',
@@ -24,7 +25,7 @@ export class CountryComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private countryService: CountryService,
               private app: AppComponent,
-              private basicSearchService: BasicSearchService,
+              private currencyService: CurrencyService,
               private router: Router) {
   }
 
@@ -75,7 +76,7 @@ export class CountryComponent implements OnInit {
   }
 
   getCurrencies() {
-    this.basicSearchService.findAll('currency').subscribe(result => {
+    this.currencyService.findAll().subscribe(result => {
       this.currencyList = result;
     }, error => {
       console.log(`Error ${error}`);

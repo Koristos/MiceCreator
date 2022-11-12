@@ -10,5 +10,9 @@ public interface TourRepo extends JpaRepository<Tour, Integer> {
 
 	List<Tour> findByStartDateBetween(LocalDate firstDate, LocalDate secondDate);
 
+	List<Tour> findByStartDateBetweenAndUserManager(LocalDate firstDate, LocalDate secondDate, String manager);
+
 	List<Tour> findByStartDateBetweenAndCountryId(LocalDate firstDate, LocalDate secondDate, Integer countryId);
+
+	List<Tour> findByStartDateBetweenAndCountryIdAndUserManager(LocalDate firstDate, LocalDate secondDate, Integer countryId, String manager);
 }

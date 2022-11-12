@@ -32,6 +32,24 @@
             </div>
           </div>
         </div>
+        <div class="form-list pick-date">
+          <label>Дата создания с</label>
+          <div class="input-group date" data-provide="datepicker">
+            <input type="date" class="form-control" required [(ngModel)]="accommodationSearchParams.firstDateOfCreation">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+            </div>
+          </div>
+        </div>
+        <div class="form-list pick-date">
+          <label>Дата создания по</label>
+          <div class="input-group date" data-provide="datepicker">
+            <input type="date" class="form-control" required [(ngModel)]="accommodationSearchParams.secondDateOfCreation">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <button type="submit" class="btn btn-primary" (click)="search()">Найти размещение</button>
@@ -48,7 +66,8 @@
         <th scope="col">Тип комнаты</th>
         <th scope="col">Тип размещения</th>
         <th scope="col">Кол-во человек</th>
-        <th scope="col">Цена размещения</th>
+        <th scope="col">Цена нетто</th>
+        <th scope="col">Дата создания</th>
       </tr>
       </thead>
       <tbody>
@@ -60,7 +79,8 @@
         <td>{{accomElement.room.name}}</td>
         <td>{{accomElement.accType.name}}</td>
         <td>{{accomElement.pax}}</td>
-        <td>{{accomElement.price}}</td>
+        <td>{{accomElement.nettoPrice}}</td>
+        <td>{{accomElement.creationDate}}</td>
       </tr>
       </tbody>
     </table>

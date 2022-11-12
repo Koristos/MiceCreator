@@ -32,6 +32,24 @@
             </div>
           </div>
         </div>
+        <div class="form-list pick-date">
+          <label>Дата создания с</label>
+          <div class="input-group date" data-provide="datepicker">
+            <input type="date" class="form-control" required [(ngModel)]="hotelEventSearchParams.firstDateOfCreation">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+            </div>
+          </div>
+        </div>
+        <div class="form-list pick-date">
+          <label>Дата создания по</label>
+          <div class="input-group date" data-provide="datepicker">
+            <input type="date" class="form-control" required [(ngModel)]="hotelEventSearchParams.secondDateOfCreation">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <button type="submit" class="btn btn-primary" (click)="search()">Найти отельные эвенты</button>
@@ -45,7 +63,8 @@
         <th scope="col">Отельная услуга</th>
         <th scope="col">Дата эвента</th>
         <th scope="col">Кол-во человек</th>
-        <th scope="col">Цена</th>
+        <th scope="col">Цена нетто</th>
+        <th scope="col">Дата создания</th>
       </tr>
       </thead>
       <tbody>
@@ -54,7 +73,8 @@
         <td>{{hotelEventElement.service.name}}</td>
         <td>{{dateToPattern(hotelEventElement.eventDate)}}</td>
         <td>{{hotelEventElement.pax}}</td>
-        <td>{{hotelEventElement.price}}</td>
+        <td>{{hotelEventElement.nettoPrice}}</td>
+        <td>{{hotelEventElement.creationDate}}</td>
       </tr>
       </tbody>
     </table>

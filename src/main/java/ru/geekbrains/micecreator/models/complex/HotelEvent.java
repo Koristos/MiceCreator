@@ -43,5 +43,11 @@ public class HotelEvent {
 	@JoinColumn(name = "hotel_service_id")
 	private HotelServ service;
 
+	@Column(name = "netto_price")
+	private BigDecimal nettoPrice;
+
+	@Column(name = "creation_date")
+	private LocalDate creationDate;
+
 }
 

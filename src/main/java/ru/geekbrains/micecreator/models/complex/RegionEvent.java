@@ -43,4 +43,10 @@ public class RegionEvent {
 	@JoinColumn(name = "region_service_id")
 	private RegionServ service;
 
+	@Column(name = "netto_price")
+	private BigDecimal nettoPrice;
+
+	@Column(name = "creation_date")
+	private LocalDate creationDate;
+
 }

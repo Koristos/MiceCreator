@@ -3,6 +3,7 @@ package ru.geekbrains.micecreator.models.complex;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.geekbrains.micecreator.models.basic.Country;
+import ru.geekbrains.micecreator.models.security.User;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,6 +42,12 @@ public class Tour {
 	@Column(name = "total_price")
 	private BigDecimal totalPrice;
 
+	@Column(name = "netto_total")
+	private BigDecimal nettoTotal;
+
+	@Column(name = "creation_date")
+	private LocalDate creationDate;
+
 	@ManyToOne
 	@JoinColumn(name = "country_id")
 	private Country country;
@@ -56,6 +63,10 @@ public class Tour {
 
 	@OneToMany(mappedBy = "tour", fetch = FetchType.LAZY)
 	private List<RegionEvent> regionEvents;
+
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
 
 }
 
