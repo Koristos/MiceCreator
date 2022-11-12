@@ -9,7 +9,10 @@ export class Tour {
               public totalPrice: number,
               public totalPriceInBasicCurrency: number,
               public tourCurrency: string,
-              public country: ShortForm
+              public country: ShortForm,
+              public nettoTotal: number,
+              public creationDate: Date,
+              public userName: string
   ) {
   }
 }

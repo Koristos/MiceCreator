@@ -26,6 +26,15 @@
             </div>
           </div>
         </div>
+        <div class="form-list pick-date">
+          <label>Дата создания</label>
+          <div class="input-group date" data-provide="datepicker">
+            <input type="date" class="form-control" required [(ngModel)]="create_date" [disabled]="true">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+            </div>
+          </div>
+        </div>
         <div class="form-list">
           <label>Кол-во человек</label>
           <input [(ngModel)]="flight.pax" class="form-control form-control-lg" type="number" placeholder="Введите количество пассажиров"
@@ -52,8 +61,17 @@
                  [disabled]="!isEditable">
         </div>
         <div class="form-list">
+          <label>Цена за человека нетто</label>
+          <input [(ngModel)]="flight.nettoPrice" class="form-control form-control-lg" type="number" placeholder="Введите стоимость"
+                 [disabled]="!isEditable">
+        </div>
+        <div class="form-list">
           <label>Итоговая стоимость</label>
           <input [(ngModel)]="flight.total" class="form-control form-control-lg but-info" type="text" placeholder="Отель не выбран" readonly>
+        </div>
+        <div class="form-list">
+          <label>Итого нетто</label>
+          <input [(ngModel)]="flight.nettoTotal" class="form-control form-control-lg but-info" type="text" placeholder="Отель не выбран" readonly>
         </div>
       </div>
     </div>

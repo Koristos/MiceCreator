@@ -6,6 +6,7 @@ import ru.geekbrains.micecreator.dto.basic.list.ListItemDto;
 import ru.geekbrains.micecreator.dto.complex.prototype.IdPositive;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -17,9 +18,12 @@ public class FlightDto implements IdPositive {
 	private LocalDateTime arrivalDate;
 	private Integer pax;
 	private BigDecimal price;
+	private BigDecimal nettoPrice;
 	private Integer tourId;
 	private ListItemDto airline;
 	private ListItemDto departureAirport;
 	private ListItemDto arrivalAirport;
 	private BigDecimal total;
+	private BigDecimal nettoTotal;
+	private LocalDate creationDate;
 }

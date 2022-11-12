@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -54,5 +55,11 @@ public class Flight {
 	@ManyToOne
 	@JoinColumn(name = "arrival_airport_id")
 	private Airport arrivalAirport;
+
+	@Column(name = "netto_price")
+	private BigDecimal nettoPrice;
+
+	@Column(name = "creation_date")
+	private LocalDate creationDate;
 
 }

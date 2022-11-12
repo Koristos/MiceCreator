@@ -23,11 +23,12 @@ export class RegionEventComponent implements OnInit {
 
   public id: any;
   public isEditable: boolean = false;
-  public regEvent: RegEvent = new RegEvent(null, new Date(), 0, 0, 0,
-    new ShortForm(0, ""), 0);
+  public regEvent: RegEvent = new RegEvent(null, new Date(), 0, 0, 0, 0,
+    new ShortForm(0, ""), 0, 0, new Date());
   public event_date: string = "";
   public title: string = "Редактирование регионального эвента";
   public region: ShortForm = new ShortForm(0, "");
+  public create_date: string = "";
 
   ngOnInit(): void {
     this.app.loginCheck();
@@ -42,6 +43,7 @@ export class RegionEventComponent implements OnInit {
         this.regionEventService.findById(this.id).subscribe(result => {
           this.regEvent = result;
           this.event_date = formatDate(result.eventDate, 'yyyy-MM-dd', 'en-US');
+          this.create_date = formatDate(result.creationDate, 'yyyy-MM-dd', 'en-US');
           this.basicSearchService.findParentById('region_service', this.regEvent.service.id).subscribe(result => {
             this.region = result;
           }, error => {
@@ -61,6 +63,7 @@ export class RegionEventComponent implements OnInit {
 
   save() {
     this.regEvent.eventDate = new Date(this.event_date);
+    this.regEvent.creationDate = new Date(this.create_date);
     this.regionEventService.save(this.regEvent).subscribe(result => {
       this.regEvent = result;
       this.title = `Редактирование регионального эвента`;
@@ -88,12 +91,16 @@ export class RegionEventComponent implements OnInit {
       sessionStorage.removeItem("RE_PRESAVE_REGION");
       sessionStorage.removeItem("RE_PRESAVE");
       this.event_date = formatDate(this.regEvent.eventDate, 'yyyy-MM-dd', 'en-US');
+      this.create_date = formatDate(this.regEvent.creationDate, 'yyyy-MM-dd', 'en-US');
     }
   }
 
   makePresave() {
     if (this.event_date != "") {
       this.regEvent.eventDate = new Date(this.event_date);
+    }
+    if (this.create_date != "") {
+      this.regEvent.creationDate = new Date(this.create_date);
     }
     sessionStorage.setItem(`RE_PRESAVE_REGION`, JSON.stringify(this.region));
     sessionStorage.setItem(`RE_PRESAVE`, JSON.stringify(this.regEvent));

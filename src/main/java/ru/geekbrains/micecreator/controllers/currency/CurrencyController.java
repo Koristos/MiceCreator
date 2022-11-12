@@ -10,7 +10,7 @@ import ru.geekbrains.micecreator.service.currency.CurrencyService;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/basic/currency")
+@RequestMapping("api/v1/currency")
 @AllArgsConstructor
 public class CurrencyController {
 

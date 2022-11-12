@@ -41,7 +41,9 @@ public class AccommodationController {
 	                                          @RequestParam(name = "hotel", required = false) Integer hotelId,
 	                                          @RequestParam(name = "acc_type") Integer accTypeId,
 	                                          @RequestParam(name = "first_date") String first,
-	                                          @RequestParam(name = "second_date") String second) {
+	                                          @RequestParam(name = "second_date") String second,
+	                                          @RequestParam(name = "first_date_creation") String firstCreation,
+	                                          @RequestParam(name = "second_date_creation") String secondCreation) {
 
 		ComplexParams params = new ComplexParams();
 		params.setRoomId(roomId);
@@ -49,6 +51,8 @@ public class AccommodationController {
 		params.setAccTypeId(accTypeId);
 		params.setFirstDateFromString(first);
 		params.setSecondDateFromString(second);
+		params.setFirstDateOfCreationFromString(firstCreation);
+		params.setSecondDateOfCreationFromString(secondCreation);
 		return service.findByParams(params);
 	}
 

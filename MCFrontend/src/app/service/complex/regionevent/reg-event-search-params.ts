@@ -11,6 +11,8 @@ export class RegEventSearchParams {
   public lastDate: Date = new Date();
   private preparedParams: any = null;
   private datePattern: string = 'dd.MM.yyyy';
+  public firstDateOfCreation: Date = new Date('01.01.2020');
+  public secondDateOfCreation: Date = new Date();
 
   prepareForSending() {
     this.preparedParams = new HttpParams();
@@ -19,6 +21,8 @@ export class RegEventSearchParams {
     }
     this.preparedParams = this.preparedParams.append('first_date', formatDate(this.firstDate, this.datePattern, 'en-US'));
     this.preparedParams = this.preparedParams.append('second_date', formatDate(this.lastDate, this.datePattern, 'en-US'));
+    this.preparedParams = this.preparedParams.append('first_date_creation', formatDate(this.firstDateOfCreation, this.datePattern, 'en-US'));
+    this.preparedParams = this.preparedParams.append('second_date_creation', formatDate(this.secondDateOfCreation, this.datePattern, 'en-US'));
     return this.preparedParams;
   }
 

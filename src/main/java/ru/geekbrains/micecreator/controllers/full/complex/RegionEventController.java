@@ -39,11 +39,15 @@ public class RegionEventController {
 	@GetMapping("/by_params")
 	public List<RegionEventDto> getByParams(@RequestParam(name = "region_service") Integer regionServId,
 	                                        @RequestParam(name = "first_date") String first,
-	                                        @RequestParam(name = "second_date") String second) {
+	                                        @RequestParam(name = "second_date") String second,
+	                                        @RequestParam(name = "first_date_creation") String firstCreation,
+	                                        @RequestParam(name = "second_date_creation") String secondCreation) {
 		ComplexParams params = new ComplexParams();
 		params.setRegionServId(regionServId);
 		params.setFirstDateFromString(first);
 		params.setSecondDateFromString(second);
+		params.setFirstDateOfCreationFromString(firstCreation);
+		params.setSecondDateOfCreationFromString(secondCreation);
 		return service.findByParams(params);
 	}
 

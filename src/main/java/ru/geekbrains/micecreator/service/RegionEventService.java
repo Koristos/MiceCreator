@@ -32,13 +32,16 @@ public class RegionEventService extends ComplexTypeService<RegionEventDto, Regio
 	public List<RegionEventDto> findByParams(ComplexParams params) {
 		checkInput(params.getRegionServId(), params.getFirstDate(), params.getSecondDate());
 		checkDates(params.getFirstDate(), params.getSecondDate());
-		return findByServiceIdInDates(params.getRegionServId(), params.getFirstDate(), params.getSecondDate()).stream()
+		checkDates(params.getFirstDateOfCreation(), params.getSecondDateOfCreation());
+		return findByServiceIdInDates(params.getRegionServId(), params.getFirstDate(), params.getSecondDate(), params.getFirstDateOfCreation(),
+				params.getSecondDateOfCreation()).stream()
 				.map(this::mapToDto).collect(Collectors.toList());
 	}
 
 
-	public List<RegionEvent> findByServiceIdInDates(Integer regionServId, LocalDate firstDate, LocalDate secondDate) {
-		return regionEventRepo.findByServiceIdAndDateBetween(regionServId, firstDate, secondDate);
+	public List<RegionEvent> findByServiceIdInDates(Integer regionServId, LocalDate firstDate, LocalDate secondDate,
+	                                                LocalDate firstCreationDate, LocalDate secondCreationDate) {
+		return regionEventRepo.findByServiceIdAndDateBetweenAndCreationDateBetween(regionServId, firstDate, secondDate, firstCreationDate, secondCreationDate);
 	}
 
 	public List<RegionEventEstimate> makeEstimate(Integer tourId) {
@@ -89,6 +92,9 @@ public class RegionEventService extends ComplexTypeService<RegionEventDto, Regio
 		dto.setTourId(entity.getTour().getId());
 		dto.setService(regionServService.findListDtoById(entity.getService().getId()));
 		dto.setTotal(entity.getPrice().multiply(BigDecimal.valueOf(entity.getPax())));
+		dto.setNettoPrice(entity.getNettoPrice());
+		dto.setCreationDate(entity.getCreationDate());
+		dto.setNettoTotal(entity.getNettoPrice().multiply(BigDecimal.valueOf(entity.getPax())));
 		return dto;
 	}
 
@@ -101,6 +107,8 @@ public class RegionEventService extends ComplexTypeService<RegionEventDto, Regio
 		event.setPrice(dto.getPrice());
 		event.setTour(tourService.findById(dto.getTourId()));
 		event.setService(regionServService.findById(dto.getService().getId()));
+		event.setNettoPrice(dto.getNettoPrice());
+		event.setCreationDate(dto.getCreationDate());
 		return event;
 	}
 

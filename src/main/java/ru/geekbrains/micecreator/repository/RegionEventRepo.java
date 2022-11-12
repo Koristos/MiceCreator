@@ -10,5 +10,6 @@ public interface RegionEventRepo extends JpaRepository<RegionEvent, Integer> {
 
 	List<RegionEvent> findByTourId(Integer tourId);
 
-	List<RegionEvent> findByServiceIdAndDateBetween(Integer serviceId, LocalDate firstDate, LocalDate secondDate);
+	List<RegionEvent> findByServiceIdAndDateBetweenAndCreationDateBetween(Integer serviceId, LocalDate firstDate, LocalDate secondDate,
+	                                                LocalDate firstCreationDate, LocalDate secondCreationDate);
 }

@@ -30,24 +30,29 @@ public class FlightService extends ComplexTypeService<FlightDto, Flight> {
 
 	public List<FlightDto> findByParams(ComplexParams params) {
 		if (params.getAirlineId() == null){
-			return findDtoByPointsAndDates(params.getDepartureAirportId(), params.getArrivalAirportId(), params.getFirstDate(), params.getSecondDate());
+			return findDtoByPointsAndDates(params.getDepartureAirportId(), params.getArrivalAirportId(), params.getFirstDate(), params.getSecondDate(),
+					params.getFirstDateOfCreation(), params.getSecondDateOfCreation());
 		}else {
 			return findDtoByPointsAndAirlineAndDates(params.getDepartureAirportId(), params.getArrivalAirportId(), params.getAirlineId(),
-					params.getFirstDate(), params.getSecondDate());
+					params.getFirstDate(), params.getSecondDate(), params.getFirstDateOfCreation(), params.getSecondDateOfCreation());
 		}
 	}
 
-	public List<FlightDto> findDtoByPointsAndDates(Integer departureAirportId, Integer arrivalAirportId, LocalDate firstDate, LocalDate secondDate) {
+	public List<FlightDto> findDtoByPointsAndDates(Integer departureAirportId, Integer arrivalAirportId, LocalDate firstDate, LocalDate secondDate,
+	                                               LocalDate firstCreationDate, LocalDate secondCreationDate) {
 		checkInput(departureAirportId, arrivalAirportId, firstDate, secondDate);
+		checkDates(firstCreationDate, secondCreationDate);
 		checkDates(firstDate, secondDate);
-		return findByAirportsIdsAndDates(departureAirportId, arrivalAirportId, firstDate, secondDate).stream()
+		return findByAirportsIdsAndDates(departureAirportId, arrivalAirportId, firstDate, secondDate, firstCreationDate, secondCreationDate).stream()
 				.map(this::mapToDto).collect(Collectors.toList());
 	}
 
-	public List<FlightDto> findDtoByPointsAndAirlineAndDates(Integer departureAirportId, Integer arrivalAirportId, Integer airlineId, LocalDate firstDate, LocalDate secondDate) {
+	public List<FlightDto> findDtoByPointsAndAirlineAndDates(Integer departureAirportId, Integer arrivalAirportId, Integer airlineId, LocalDate firstDate,
+	                                                         LocalDate secondDate, LocalDate firstCreationDate, LocalDate secondCreationDate) {
 		checkInput(departureAirportId, arrivalAirportId, airlineId, firstDate, secondDate);
+		checkDates(firstCreationDate, secondCreationDate);
 		checkDates(firstDate, secondDate);
-		return findByAirportsAirlineIdsAndDates(departureAirportId, arrivalAirportId, airlineId, firstDate, secondDate).stream()
+		return findByAirportsAirlineIdsAndDates(departureAirportId, arrivalAirportId, airlineId, firstDate, secondDate, firstCreationDate, secondCreationDate).stream()
 				.map(this::mapToDto).collect(Collectors.toList());
 	}
 
@@ -57,12 +62,16 @@ public class FlightService extends ComplexTypeService<FlightDto, Flight> {
 	}
 
 
-	protected List<Flight> findByAirportsIdsAndDates(Integer departureAirportId, Integer arrivalAirportId, LocalDate firstDate, LocalDate secondDate) {
-		return flightRepo.findByDepartureAirportIdAndArrivalAirportIdAndDepartureDateBetween(departureAirportId, arrivalAirportId, firstDate.atStartOfDay(), secondDate.atStartOfDay());
+	protected List<Flight> findByAirportsIdsAndDates(Integer departureAirportId, Integer arrivalAirportId, LocalDate firstDate, LocalDate secondDate,
+	                                                 LocalDate firstCreationDate, LocalDate secondCreationDate) {
+		return flightRepo.findByDepartureAirportIdAndArrivalAirportIdAndDepartureDateBetweenAndCreationDateBetween(departureAirportId, arrivalAirportId, firstDate.atStartOfDay(),
+				secondDate.atStartOfDay(), firstCreationDate, secondCreationDate);
 	}
 
-	protected List<Flight> findByAirportsAirlineIdsAndDates(Integer departureAirportId, Integer arrivalAirportId, Integer airlineId, LocalDate firstDate, LocalDate secondDate) {
-		return flightRepo.findByDepartureAirportIdAndArrivalAirportIdAndAirlineIdAndDepartureDateBetween(departureAirportId, arrivalAirportId, airlineId, firstDate.atStartOfDay(), secondDate.atStartOfDay());
+	protected List<Flight> findByAirportsAirlineIdsAndDates(Integer departureAirportId, Integer arrivalAirportId, Integer airlineId, LocalDate firstDate, LocalDate secondDate,
+	                                                        LocalDate firstCreationDate, LocalDate secondCreationDate) {
+		return flightRepo.findByDepartureAirportIdAndArrivalAirportIdAndAirlineIdAndDepartureDateBetweenAndCreationDateBetween(departureAirportId, arrivalAirportId, airlineId,
+				firstDate.atStartOfDay(), secondDate.atStartOfDay(), firstCreationDate, secondCreationDate);
 	}
 
 	@Override
@@ -111,6 +120,9 @@ public class FlightService extends ComplexTypeService<FlightDto, Flight> {
 		dto.setDepartureAirport(airportService.findListDtoById(entity.getDepartureAirport().getId()));
 		dto.setArrivalAirport(airportService.findListDtoById(entity.getArrivalAirport().getId()));
 		dto.setTotal(entity.getPrice().multiply(BigDecimal.valueOf(entity.getPax())));
+		dto.setCreationDate(entity.getCreationDate());
+		dto.setNettoPrice(entity.getNettoPrice());
+		dto.setNettoTotal(entity.getNettoPrice().multiply(BigDecimal.valueOf(entity.getPax())));
 		return dto;
 	}
 
@@ -126,6 +138,8 @@ public class FlightService extends ComplexTypeService<FlightDto, Flight> {
 		flight.setAirline(airlineService.findById(dto.getAirline().getId()));
 		flight.setDepartureAirport(airportService.findById(dto.getDepartureAirport().getId()));
 		flight.setArrivalAirport(airportService.findById(dto.getArrivalAirport().getId()));
+		flight.setNettoPrice(dto.getNettoPrice());
+		flight.setCreationDate(dto.getCreationDate());
 		return flight;
 	}
 

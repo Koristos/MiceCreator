@@ -23,11 +23,13 @@ export class FlightComponent implements OnInit {
 
   public id: any;
   public isEditable: boolean = false;
-  public flight: Flight = new Flight(null, new Date(), new Date(), 0, 0, 0,
-    new ShortForm(0, ""), new ShortForm(0, ""), new ShortForm(0, ""), 0);
+  public flight: Flight = new Flight(null, new Date(), new Date(), 0, 0, 0,0,
+    new ShortForm(0, ""), new ShortForm(0, ""), new ShortForm(0, ""), 0,
+    0, new Date());
   public dep_date: string = "";
   public arr_date: string = "";
   public title: string = "Редактирование перелета";
+  public create_date: string = "";
 
   ngOnInit(): void {
     this.app.loginCheck();
@@ -43,6 +45,7 @@ export class FlightComponent implements OnInit {
           this.flight = result;
           this.dep_date = formatDate(result.departureDate, 'yyyy-MM-ddThh:mm', 'en-US');
           this.arr_date = formatDate(result.arrivalDate, 'yyyy-MM-ddThh:mm', 'en-US');
+          this.create_date = formatDate(result.creationDate, 'yyyy-MM-dd', 'en-US');
         }, error => {
           console.log(`Error ${error}`);
         });
@@ -57,8 +60,8 @@ export class FlightComponent implements OnInit {
 
   save() {
     this.flight.departureDate = new Date(this.dep_date);
-    console.log(this.flight.departureDate);
     this.flight.arrivalDate = new Date(this.arr_date);
+    this.flight.creationDate = new Date(this.create_date);
     this.flightService.save(this.flight).subscribe(result => {
       this.flight = result;
       this.title = `Редактирование перелета`;
@@ -88,6 +91,7 @@ export class FlightComponent implements OnInit {
       sessionStorage.removeItem("FE_PRESAVE");
       this.dep_date = formatDate(this.flight.departureDate, 'yyyy-MM-ddThh:mm', 'en-US');
       this.arr_date = formatDate(this.flight.arrivalDate, 'yyyy-MM-ddThh:mm', 'en-US');
+      this.create_date = formatDate(this.flight.creationDate, 'yyyy-MM-dd', 'en-US');
     }
   }
 
@@ -97,6 +101,9 @@ export class FlightComponent implements OnInit {
     }
     if (this.arr_date != "") {
       this.flight.arrivalDate = new Date(this.arr_date);
+    }
+    if (this.create_date != "") {
+      this.flight.creationDate = new Date(this.create_date);
     }
     sessionStorage.setItem(`FE_PRESAVE`, JSON.stringify(this.flight));
   }

@@ -17,6 +17,7 @@ public class AccommodationDto implements IdPositive {
 	private LocalDate checkOutDate;
 	private Integer pax;
 	private BigDecimal price;
+	private BigDecimal nettoPrice;
 	private Integer tourId;
 	private ListItemDto room;
 	private ListItemDto accType;
@@ -24,5 +25,7 @@ public class AccommodationDto implements IdPositive {
 	private Long nights;
 	private Integer roomCount;
 	private BigDecimal total;
+	private BigDecimal nettoTotal;
+	private LocalDate creationDate;
 
 }

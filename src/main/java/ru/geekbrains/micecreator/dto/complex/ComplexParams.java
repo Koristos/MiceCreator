@@ -27,6 +27,9 @@ public class ComplexParams {
 	private Integer regionServId;
 	private Integer countryId;
 	private Integer hotelId;
+	private LocalDate firstDateOfCreation;
+	private LocalDate secondDateOfCreation;
+	private String userName;
 
 	public void setFirstDateFromString(String firstDate) {
 		this.firstDate = convertRangeDate(firstDate);
@@ -34,6 +37,14 @@ public class ComplexParams {
 
 	public void setSecondDateFromString(String secondDate){
 		this.secondDate = convertRangeDate(secondDate);
+	}
+
+	public void setFirstDateOfCreationFromString(String firstDateOfCreation) {
+		this.firstDateOfCreation = convertRangeDate(firstDateOfCreation);
+	}
+
+	public void setSecondDateOfCreationFromString(String secondDateOfCreation){
+		this.secondDateOfCreation = convertRangeDate(secondDateOfCreation);
 	}
 
 	private LocalDate convertRangeDate (String string) {

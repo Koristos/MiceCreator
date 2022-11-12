@@ -57,9 +57,19 @@
                    placeholder="Валюта тура соответствует валюте страны" readonly/>
           </div>
           <div class="form-group pick-elem">
+            <label>Итоговая нетто</label>
+            <input [(ngModel)]="fullTour.tour.nettoTotal" type="number" class="form-control" id="totalPriceNetto"
+                   name="totalPriceNetto" placeholder="0.00" readonly/>
+          </div>
+          <div class="form-group pick-elem">
             <label>Итоговая стоимость в рублях (по курсу на текущий день)</label>
             <input [(ngModel)]="fullTour.tour.totalPriceInBasicCurrency" type="number" class="form-control" id="totalPriceInBasicCurrency"
                    name="totalPriceInBasicCurrency" placeholder="0.00" readonly/>
+          </div>
+          <div class="form-group pick-elem">
+            <label>Менеджер</label>
+            <input [(ngModel)]="fullTour.tour.userName" class="form-control" id="managerName"
+                   name="managerName" readonly/>
           </div>
         </div>
       </div>

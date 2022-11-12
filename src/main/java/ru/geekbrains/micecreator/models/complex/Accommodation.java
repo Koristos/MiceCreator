@@ -51,4 +51,10 @@ public class Accommodation {
 	@JoinColumn(name = "acc_type_id")
 	private AccommodationType accType;
 
+	@Column(name = "netto_price")
+	private BigDecimal nettoPrice;
+
+	@Column(name = "creation_date")
+	private LocalDate creationDate;
+
 }

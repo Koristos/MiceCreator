@@ -32,6 +32,24 @@
             </div>
           </div>
         </div>
+        <div class="form-list pick-date">
+          <label>Дата создания с</label>
+          <div class="input-group date" data-provide="datepicker">
+            <input type="date" class="form-control" required [(ngModel)]="regEventSearchParams.firstDateOfCreation">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+            </div>
+          </div>
+        </div>
+        <div class="form-list pick-date">
+          <label>Дата создания по</label>
+          <div class="input-group date" data-provide="datepicker">
+            <input type="date" class="form-control" required [(ngModel)]="regEventSearchParams.secondDateOfCreation">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <button type="submit" class="btn btn-primary" (click)="search()">Найти региональные эвенты</button>
@@ -45,16 +63,18 @@
         <th scope="col">Региональная услуга</th>
         <th scope="col">Дата эвента</th>
         <th scope="col">Кол-во человек</th>
-        <th scope="col">Цена</th>
+        <th scope="col">Цена нетто</th>
+        <th scope="col">Дата создания</th>
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let hotelEventElement of regionEventList">
-        <th scope="row">{{regionEventList.indexOf(hotelEventElement) + 1}}</th>
-        <td>{{hotelEventElement.service.name}}</td>
-        <td>{{dateToPattern(hotelEventElement.eventDate)}}</td>
-        <td>{{hotelEventElement.pax}}</td>
-        <td>{{hotelEventElement.price}}</td>
+      <tr *ngFor="let regionEventElement of regionEventList">
+        <th scope="row">{{regionEventList.indexOf(regionEventElement) + 1}}</th>
+        <td>{{regionEventElement.service.name}}</td>
+        <td>{{dateToPattern(regionEventElement.eventDate)}}</td>
+        <td>{{regionEventElement.pax}}</td>
+        <td>{{regionEventElement.nettoPrice}}</td>
+        <td>{{regionEventElement.creationDate}}</td>
       </tr>
       </tbody>
     </table>

@@ -1,20 +1,24 @@
 package ru.geekbrains.micecreator.service;
 
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.geekbrains.micecreator.dto.complex.ComplexParams;
 import ru.geekbrains.micecreator.dto.complex.TourDto;
+import ru.geekbrains.micecreator.exceptions.BadInputException;
 import ru.geekbrains.micecreator.models.complex.Accommodation;
 import ru.geekbrains.micecreator.models.complex.Flight;
 import ru.geekbrains.micecreator.models.complex.HotelEvent;
 import ru.geekbrains.micecreator.models.complex.RegionEvent;
 import ru.geekbrains.micecreator.models.complex.Tour;
 import ru.geekbrains.micecreator.models.currency.Course;
+import ru.geekbrains.micecreator.models.security.User;
 import ru.geekbrains.micecreator.repository.TourRepo;
 import ru.geekbrains.micecreator.service.currency.CbCurrencyService;
 import ru.geekbrains.micecreator.service.currency.CourseService;
 import ru.geekbrains.micecreator.service.prototypes.ComplexTypeService;
+import ru.geekbrains.micecreator.service.security.SecurityService;
 import ru.geekbrains.micecreator.utils.AppUtils;
 
 import java.math.BigDecimal;
@@ -36,33 +40,51 @@ public class TourService extends ComplexTypeService<TourDto, Tour> {
 	private final CourseService courseService;
 	@Autowired
 	private final CbCurrencyService cbCurrencyService;
+	@Autowired
+	private final SecurityService securityService;
 
 	public List<TourDto> findByParams(ComplexParams params) {
 		if (params.getCountryId() == null) {
-			return findDtoToursByDates(params.getFirstDate(), params.getSecondDate());
+			return findDtoToursByDates(params.getFirstDate(), params.getSecondDate(), params.getUserName());
 		} else {
-			return findDtoToursByDatesAndCountry(params.getFirstDate(), params.getSecondDate(), params.getCountryId());
+			return findDtoToursByDatesAndCountry(params.getFirstDate(), params.getSecondDate(), params.getCountryId(), params.getUserName());
 		}
 	}
 
-	public List<TourDto> findDtoToursByDatesAndCountry(LocalDate firstDate, LocalDate secondDate, Integer countryId) {
+	public List<TourDto> findDtoToursByDatesAndCountry(LocalDate firstDate, LocalDate secondDate, Integer countryId, String username) {
 		checkInput(firstDate, secondDate, countryId);
 		checkDates(firstDate, secondDate);
-		return findByDatesAndCountry(firstDate, secondDate, countryId).stream().map(this::mapToDto).collect(Collectors.toList());
+		if (StringUtils.isBlank(username)) {
+			return findByDatesAndCountry(firstDate, secondDate, countryId).stream().map(this::mapToDto).collect(Collectors.toList());
+		} else {
+			return findByDatesAndCountryAndManager(firstDate, secondDate, countryId, username).stream().map(this::mapToDto).collect(Collectors.toList());
+		}
 	}
 
-	public List<TourDto> findDtoToursByDates(LocalDate firstDate, LocalDate secondDate) {
+	public List<TourDto> findDtoToursByDates(LocalDate firstDate, LocalDate secondDate, String username) {
 		checkInput(firstDate, secondDate);
 		checkDates(firstDate, secondDate);
-		return findByDates(firstDate, secondDate).stream().map(this::mapToDto).collect(Collectors.toList());
+		if (StringUtils.isBlank(username)) {
+			return findByDates(firstDate, secondDate).stream().map(this::mapToDto).collect(Collectors.toList());
+		} else {
+			return findByDatesAndManager(firstDate, secondDate, username).stream().map(this::mapToDto).collect(Collectors.toList());
+		}
 	}
 
 	protected List<Tour> findByDatesAndCountry(LocalDate firstDate, LocalDate secondDate, Integer countryId) {
 		return tourRepo.findByStartDateBetweenAndCountryId(firstDate, secondDate, countryId);
 	}
 
+	protected List<Tour> findByDatesAndCountryAndManager(LocalDate firstDate, LocalDate secondDate, Integer countryId, String userName) {
+		return tourRepo.findByStartDateBetweenAndCountryIdAndUserManager(firstDate, secondDate, countryId, userName);
+	}
+
 	protected List<Tour> findByDates(LocalDate firstDate, LocalDate secondDate) {
 		return tourRepo.findByStartDateBetween(firstDate, secondDate);
+	}
+
+	protected List<Tour> findByDatesAndManager(LocalDate firstDate, LocalDate secondDate, String userName) {
+		return tourRepo.findByStartDateBetweenAndUserManager(firstDate, secondDate, userName);
 	}
 
 
@@ -112,6 +134,9 @@ public class TourService extends ComplexTypeService<TourDto, Tour> {
 		}
 		dto.setTotalPriceInBasicCurrency(course.getRate().multiply(entity.getTotalPrice())
 				.setScale(2, RoundingMode.HALF_UP));
+		dto.setNettoTotal(entity.getNettoTotal());
+		dto.setCreationDate(entity.getCreationDate());
+		dto.setUserName(entity.getUser().getManager());
 		return dto;
 	}
 
@@ -124,6 +149,13 @@ public class TourService extends ComplexTypeService<TourDto, Tour> {
 		entity.setEndDate(dto.getEndDate());
 		entity.setTotalPrice(dto.getTotalPrice());
 		entity.setCountry(countryService.findById(dto.getCountry().getId()));
+		entity.setNettoTotal(dto.getNettoTotal());
+		User user = securityService.findByManager(dto.getUserName()).orElse(null);
+		if (user == null) {
+			throw new BadInputException("Менеджер с указанным именем не найден");
+		}
+		entity.setUser(user);
+		entity.setCreationDate(dto.getCreationDate());
 		return entity;
 	}
 
@@ -131,25 +163,31 @@ public class TourService extends ComplexTypeService<TourDto, Tour> {
 	protected Tour calculate(Integer tourId) {
 		Tour tour = findById(tourId);
 		BigDecimal total = BigDecimal.ZERO;
+		BigDecimal nettoTotal = BigDecimal.ZERO;
 
 		for (Accommodation item : tour.getAccommodations()) {
-			Long nights = AppUtils.countDaysDifference(item.getCheckInDate(), item.getCheckOutDate());
+			long nights = AppUtils.countDaysDifference(item.getCheckInDate(), item.getCheckOutDate());
 			total = total.add(BigDecimal.valueOf(item.getPax()).multiply(item.getPrice()).multiply(BigDecimal.valueOf(nights)));
+			nettoTotal = nettoTotal.add(BigDecimal.valueOf(item.getPax()).multiply(item.getNettoPrice()).multiply(BigDecimal.valueOf(nights)));
 		}
 
 		for (Flight item : tour.getFlights()) {
 			total = total.add(BigDecimal.valueOf(item.getPax()).multiply(item.getPrice()));
+			nettoTotal = nettoTotal.add(BigDecimal.valueOf(item.getPax()).multiply(item.getNettoPrice()));
 		}
 
 		for (RegionEvent item : tour.getRegionEvents()) {
 			total = total.add(BigDecimal.valueOf(item.getPax()).multiply(item.getPrice()));
+			nettoTotal = nettoTotal.add(BigDecimal.valueOf(item.getPax()).multiply(item.getNettoPrice()));
 		}
 
 		for (HotelEvent item : tour.getHotelEvents()) {
 			total = total.add(BigDecimal.valueOf(item.getPax()).multiply(item.getPrice()));
+			nettoTotal = nettoTotal.add(BigDecimal.valueOf(item.getPax()).multiply(item.getNettoPrice()));
 		}
 
 		tour.setTotalPrice(total);
+		tour.setNettoTotal(nettoTotal);
 		return save(tour);
 	}
 
