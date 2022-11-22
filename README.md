@@ -26,3 +26,4 @@ This app is desined to make rutine work of MICE managers faster and easear:
 - Angular 6
 - Jquery
 - Bootstrap
+- Log4j
