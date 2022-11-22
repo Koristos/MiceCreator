@@ -2,6 +2,8 @@ package ru.geekbrains.micecreator.controllers.full.complex;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,6 +31,8 @@ import java.util.List;
 @AllArgsConstructor
 public class TourController {
 
+	private static final Logger logger = LogManager.getLogger(TourController.class);
+
 	@Autowired
 	private TourService service;
 	@Autowired
@@ -42,6 +46,7 @@ public class TourController {
 
 	@GetMapping("/{id}")
 	public TourDtoFull getById(@PathVariable("id") Integer id) {
+		logger.info(String.format("Tour by id %s requested", id));
 		TourDtoFull fullDto = new TourDtoFull();
 		fullDto.setTour(service.findDtoById(id));
 		fullDto.setFlights(flightService.findDtoByTourId(id));
@@ -56,6 +61,8 @@ public class TourController {
 	                                 @RequestParam(name = "first_date") String first,
 	                                 @RequestParam(name = "second_date") String second,
 	                                 @RequestParam(name = "user_name") String name) {
+		logger.info(String.format("Tours with params country [ %s ] first_date [ %s ] second_date [ %s ] user_name [ %s ] requested",
+				countryId, first, second, name));
 		ComplexParams params = new ComplexParams();
 		params.setCountryId(countryId);
 		params.setFirstDateFromString(first);
@@ -66,17 +73,20 @@ public class TourController {
 
 	@PostMapping
 	public TourDto addNew(@NonNull @RequestBody TourDto dto) {
+		logger.info(String.format("New tour added %s", dto));
 		return service.createEntity(dto);
 	}
 
 	@PutMapping
 	public TourDto edit(@NonNull @RequestBody TourDto dto) {
+		logger.info(String.format("Tour edit %s", dto));
 		return service.editEntity(dto);
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_LEADER')")
 	@DeleteMapping("/{id}")
 	public boolean deleteById(@PathVariable("id") Integer id) {
+		logger.info(String.format("Tour with id %s deleted", id));
 		return service.deleteEntity(id);
 	}
 

@@ -7,6 +7,8 @@ import ru.geekbrains.micecreator.service.files.FileService;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.PropertyConfigurator;
+
 @SpringBootApplication
 public class MiceCreatorApplication implements CommandLineRunner {
 
@@ -14,6 +16,8 @@ public class MiceCreatorApplication implements CommandLineRunner {
 	FileService fileService;
 
 	public static void main(String[] args) {
+		String log4jConfPath = "log4j.properties";
+		PropertyConfigurator.configure(log4jConfPath);
 		SpringApplication.run(MiceCreatorApplication.class, args);
 	}
 

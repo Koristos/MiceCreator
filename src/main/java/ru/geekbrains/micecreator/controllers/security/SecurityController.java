@@ -1,6 +1,8 @@
 package ru.geekbrains.micecreator.controllers.security;
 
 import lombok.AllArgsConstructor;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.flywaydb.core.internal.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,8 @@ import javax.servlet.http.HttpServletRequest;
 @AllArgsConstructor
 public class SecurityController {
 
+	private static final Logger logger = LogManager.getLogger(SecurityController.class);
+
 	@Autowired
 	AuthenticationManager authenticationManager;
 	@Autowired
@@ -40,6 +44,7 @@ public class SecurityController {
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+		logger.info(String.format("Login attempt %s", loginRequest.getLogin()));
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getLogin(), loginRequest.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -53,6 +58,7 @@ public class SecurityController {
 
 	@PostMapping("/logout")
 	public ResponseEntity<?> logout(HttpServletRequest request) {
+		logger.info(String.format("User %s logged out", SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()));
 		String token = parseJwt(request);
 		tokenService.deleteToken(token);
 		SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);

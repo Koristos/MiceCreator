@@ -2,6 +2,8 @@ package ru.geekbrains.micecreator.transformers.pdf;
 
 import lombok.NoArgsConstructor;
 import org.apache.commons.text.WordUtils;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -27,6 +29,8 @@ import java.util.List;
 @Component
 @NoArgsConstructor
 public class PresentationCreator {
+
+	private static final Logger logger = LogManager.getLogger(PresentationCreator.class);
 
 	private PDFont MAIN_FONT;
 	private final String MAIN_FONT_URL = "classpath:pdf_creator/timesnewromanpsmt.ttf";
@@ -82,7 +86,7 @@ public class PresentationCreator {
 			addEventInfo(presentation.getEventHotels(), doc);
 			doc.save(path);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Error occurred while preparing presentation file: {}", e);
 			throw new PresentationException(e.getMessage());
 		}
 	}

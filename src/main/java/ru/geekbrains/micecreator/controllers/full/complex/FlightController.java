@@ -2,6 +2,8 @@ package ru.geekbrains.micecreator.controllers.full.complex;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,11 +25,14 @@ import java.util.List;
 @AllArgsConstructor
 public class FlightController {
 
+	private static final Logger logger = LogManager.getLogger(FlightController.class);
+
 	@Autowired
 	private FlightService service;
 
 	@GetMapping("/{id}")
 	public FlightDto getById(@PathVariable("id") Integer id) {
+		logger.info(String.format("Flight Event by id %s requested", id));
 		return service.findDtoById(id);
 	}
 
@@ -44,6 +49,8 @@ public class FlightController {
 	                                   @RequestParam(name = "second_date") String second,
 	                                   @RequestParam(name = "first_date_creation") String firstCreation,
 	                                   @RequestParam(name = "second_date_creation") String secondCreation) {
+		logger.info(String.format("Flights with params airline [ %s ] dep_port [ %s ] arr_port [ %s ] first_date [ %s ] second_date [ %s ] first_date_creation [ %s ] second_date_creation [ %s ] requested",
+				airlineId, departureAirportId, arrivalAirportId, first, second, firstCreation, secondCreation));
 		ComplexParams params = new ComplexParams();
 		params.setAirlineId(airlineId);
 		params.setDepartureAirportId(departureAirportId);
@@ -57,16 +64,19 @@ public class FlightController {
 
 	@PostMapping
 	public FlightDto addNew(@NonNull @RequestBody FlightDto dto) {
+		logger.info(String.format("New Flight added %s", dto));
 		return service.createEntity(dto);
 	}
 
 	@PutMapping
 	public FlightDto edit(@NonNull @RequestBody FlightDto dto) {
+		logger.info(String.format("Flight edit %s", dto));
 		return service.editEntity(dto);
 	}
 
 	@DeleteMapping("/{id}")
 	public boolean deleteById(@PathVariable("id") Integer id) {
+		logger.info(String.format("Flight with id %s deleted", id));
 		return service.deleteEntity(id);
 	}
 

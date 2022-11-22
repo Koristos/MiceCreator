@@ -40,9 +40,9 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
+    this.authorizationService.logout();
     localStorage.removeItem("MC_TOKEN");
     localStorage.removeItem("MC_USER");
-    this.authorizationService.logout();
     this.loginCheck();
   }
 
