@@ -1,17 +1,20 @@
 package ru.geekbrains.micecreator.service.prototypes;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import ru.geekbrains.micecreator.dto.complex.prototype.IdPositive;
 import ru.geekbrains.micecreator.exceptions.BadInputException;
 import ru.geekbrains.micecreator.exceptions.DataNotFoundException;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public abstract class ComplexTypeService<D extends IdPositive, E> {
+
+	private static final Logger logger = LogManager.getLogger(ComplexTypeService.class);
 
 	public List<D> findAllDto() {
 		return findAll().stream().map(this::mapToDto).collect(Collectors.toList());
@@ -34,40 +37,54 @@ public abstract class ComplexTypeService<D extends IdPositive, E> {
 
 	public D createEntity(D dto) {
 		if (dto == null || dto.getId() != null) {
-			throw new BadInputException("Invalid input for entity creation: Dto must be not null and have no id.");
+			String message = "Invalid input for entity creation: Dto must be not null and have no id.";
+			logger.error(message);
+			throw new BadInputException(message);
 		}
 		return mapToDto(save(mapToEntity(dto)));
 	}
 
 	public D editEntity(D dto) {
 		if (dto == null || dto.getId() == null) {
-			throw new BadInputException("Invalid input for entity change: Dto must be not null and dto.id must be not null.");
+			String message = "Invalid input for entity change: Dto must be not null and dto.id must be not null.";
+			logger.error(message);
+			throw new BadInputException(message);
 		}
 		if (findById(dto.getId()) == null) {
-			throw new DataNotFoundException(String.format("Can't make changes: no entity with id %s found.", dto.getId()));
+			String message = String.format("Can't make changes: no entity with id %s found.", dto.getId());
+			logger.error(message);
+			throw new DataNotFoundException(message);
 		}
 		return mapToDto(save(mapToEntity(dto)));
 	}
 
 	public boolean deleteEntity(Integer id) {
 		if (id == null) {
-			throw new BadInputException("Invalid input for entity delete operation: id must be not null.");
+			String message ="Invalid input for entity delete operation: id must be not null.";
+			logger.error(message);
+			throw new BadInputException(message);
 		}
 		if (findById(id) == null) {
-			throw new DataNotFoundException(String.format("Can't delete entity: no entity with id %s found.", id));
+			String message = String.format("Can't delete entity: no entity with id %s found.", id);
+			logger.error(message);
+			throw new DataNotFoundException(message);
 		}
 		return deleteById(id);
 	}
 
 	protected void checkInput(Object... input) {
 		if (Arrays.stream(input).anyMatch(Objects::isNull)) {
-			throw new BadInputException("Invalid input operation: one of necessary params is null.");
+			String message = "Invalid input operation: one of necessary params is null.";
+			logger.error(message);
+			throw new BadInputException(message);
 		}
 	}
 
 	protected void checkDates(LocalDate firstDate, LocalDate secondDate) {
 		if (firstDate.compareTo(secondDate) > 0) {
-			throw new BadInputException(String.format("Wrong date range: firstDate %s must be earlier than secondDate %s.", firstDate, secondDate));
+			String message = String.format("Wrong date range: firstDate %s must be earlier than secondDate %s.", firstDate, secondDate);
+			logger.error(message);
+			throw new BadInputException(message);
 		}
 	}
 

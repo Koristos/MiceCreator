@@ -1,6 +1,8 @@
 package ru.geekbrains.micecreator.transformers.xls;
 
 import lombok.NoArgsConstructor;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -31,6 +33,8 @@ import java.util.List;
 @Component
 @NoArgsConstructor
 public class EstimateCreator {
+
+	private static final Logger logger = LogManager.getLogger(EstimateCreator.class);
 
 	private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 	private final DateTimeFormatter withTimeFormatter = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy");
@@ -250,7 +254,7 @@ public class EstimateCreator {
 		try (FileOutputStream out = new FileOutputStream(new File(path))) {
 			estimate.write(out);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Error occurred while preparing estimate file: {}", e);
 			throw new EstimateException(e.getMessage());
 		}
 	}

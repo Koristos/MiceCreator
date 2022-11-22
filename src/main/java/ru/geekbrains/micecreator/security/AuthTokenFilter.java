@@ -1,5 +1,7 @@
 package ru.geekbrains.micecreator.security;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.flywaydb.core.internal.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
+
+	private static final Logger logger = LogManager.getLogger(AuthTokenFilter.class);
+
 	@Autowired
 	private JwtUtils jwtUtils;
 	@Autowired

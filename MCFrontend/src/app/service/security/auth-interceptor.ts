@@ -25,7 +25,6 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(authReq).pipe(
       catchError((error: HttpErrorResponse) => {
         console.log(error);
-        console.log("error");
         if (error.status == 401) {
           localStorage.removeItem("MC_TOKEN");
           localStorage.removeItem("MC_USER");

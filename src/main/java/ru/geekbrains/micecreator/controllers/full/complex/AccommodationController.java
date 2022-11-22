@@ -2,6 +2,8 @@ package ru.geekbrains.micecreator.controllers.full.complex;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,11 +25,14 @@ import java.util.List;
 @AllArgsConstructor
 public class AccommodationController {
 
+	private static final Logger logger = LogManager.getLogger(AccommodationController.class);
+
 	@Autowired
 	private AccommodationService service;
 
 	@GetMapping("/{id}")
 	public AccommodationDto getById(@PathVariable("id") Integer id) {
+		logger.info(String.format("Accommodation Event by id %s requested", id));
 		return service.findDtoById(id);
 	}
 
@@ -44,7 +49,8 @@ public class AccommodationController {
 	                                          @RequestParam(name = "second_date") String second,
 	                                          @RequestParam(name = "first_date_creation") String firstCreation,
 	                                          @RequestParam(name = "second_date_creation") String secondCreation) {
-
+		logger.info(String.format("Accommodations with params room [ %s ] hotel [ %s ] acc_type [ %s ] first_date [ %s ] second_date [ %s ] first_date_creation [ %s ] second_date_creation [ %s ] requested",
+				roomId, hotelId, accTypeId, first, second, firstCreation, secondCreation));
 		ComplexParams params = new ComplexParams();
 		params.setRoomId(roomId);
 		params.setHotelId(hotelId);
@@ -58,16 +64,19 @@ public class AccommodationController {
 
 	@PostMapping
 	public AccommodationDto addNew(@NonNull @RequestBody AccommodationDto dto) {
+		logger.info(String.format("New Accommodation added %s", dto));
 		return service.createEntity(dto);
 	}
 
 	@PutMapping
 	public AccommodationDto edit(@NonNull @RequestBody AccommodationDto dto) {
+		logger.info(String.format("Accommodation edit %s", dto));
 		return service.editEntity(dto);
 	}
 
 	@DeleteMapping("/{id}")
 	public boolean deleteById(@PathVariable("id") Integer id) {
+		logger.info(String.format("Accommodation with id %s deleted", id));
 		return service.deleteEntity(id);
 	}
 
