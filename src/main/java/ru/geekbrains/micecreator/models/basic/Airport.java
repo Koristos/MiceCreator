@@ -1,5 +1,6 @@
 package ru.geekbrains.micecreator.models.basic;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "airports")
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class Airport {
 

@@ -1,5 +1,6 @@
 package ru.geekbrains.micecreator.models.basic;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.geekbrains.micecreator.models.currency.Currency;
@@ -19,6 +20,7 @@ import java.util.List;
 @Entity
 @Table(name = "countries")
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class Country {
 

@@ -1,5 +1,6 @@
 package ru.geekbrains.micecreator.models.currency;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "currency")
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class Currency {
 	@Id

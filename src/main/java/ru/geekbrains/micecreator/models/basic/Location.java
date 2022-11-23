@@ -1,5 +1,6 @@
 package ru.geekbrains.micecreator.models.basic;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ import java.util.List;
 @Entity
 @Table(name = "locations")
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class Location {
 
