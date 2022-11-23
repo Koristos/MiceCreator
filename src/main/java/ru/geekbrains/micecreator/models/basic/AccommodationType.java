@@ -1,5 +1,6 @@
 package ru.geekbrains.micecreator.models.basic;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "acc_types")
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class AccommodationType {
 
