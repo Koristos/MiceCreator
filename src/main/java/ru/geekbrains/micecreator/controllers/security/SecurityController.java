@@ -1,5 +1,7 @@
 package ru.geekbrains.micecreator.controllers.security;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -29,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("api/auth")
 @AllArgsConstructor
+@Tag(name = "Авторизация", description = "Контроллер для авторизации")
 public class SecurityController {
 
 	private static final Logger logger = LogManager.getLogger(SecurityController.class);
@@ -43,6 +46,7 @@ public class SecurityController {
 	TokenService tokenService;
 
 	@PostMapping("/login")
+	@Operation(summary = "Авторизация")
 	public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
 		logger.info(String.format("Login attempt %s", loginRequest.getLogin()));
 		Authentication authentication = authenticationManager.authenticate(
@@ -57,6 +61,7 @@ public class SecurityController {
 	}
 
 	@PostMapping("/logout")
+	@Operation(summary = "отказ от авторизации")
 	public ResponseEntity<?> logout(HttpServletRequest request) {
 		logger.info(String.format("User %s logged out", SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()));
 		String token = parseJwt(request);

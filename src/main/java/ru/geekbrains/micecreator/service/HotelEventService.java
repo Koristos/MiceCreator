@@ -28,7 +28,14 @@ public class HotelEventService extends ComplexTypeService<HotelEventDto, HotelEv
 	@Autowired
 	private final HotelService hotelService;
 
-
+	/**
+	 * Метод ищет Отельные события по параметрам:
+	 * - по ID Отельной услуги
+	 * - в диапазоне между датами по дате начала события
+	 * - в диапазоне между датами создания по дате создания
+	 * @param params параметры для поиска
+	 * @return список отельных событий в виде DTO
+	 */
 	public List<HotelEventDto> findByParams(ComplexParams params) {
 		checkInput(params.getHotelServId(), params.getFirstDate(), params.getSecondDate());
 		checkDates(params.getFirstDate(), params.getSecondDate());

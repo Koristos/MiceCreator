@@ -3,6 +3,7 @@ package ru.geekbrains.micecreator.service.files;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -41,12 +42,12 @@ import ru.geekbrains.micecreator.service.TourService;
 import ru.geekbrains.micecreator.transformers.pdf.PresentationCreator;
 import ru.geekbrains.micecreator.transformers.xls.EstimateCreator;
 import ru.geekbrains.micecreator.utils.AppUtils;
+import ru.geekbrains.micecreator.utils.PathUtils;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -56,11 +57,11 @@ import java.util.List;
 public class FileService {
 
 	private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-	private final Path root = Paths.get("C:/MiceCreator");
-	private final Path uploads = Paths.get(root.toString(), "/uploads");
-	private final Path images = Paths.get(root.toString(), "/images");
 	public final static String ESTIMATE_TEMP = "estimate.xls";
 	public final static String PRESENTATION_TEMP = "presentation.pdf";
+
+	@Autowired
+	private final PathUtils pathUtils;
 	@Autowired
 	private final EstimateCreator estimateCreator;
 	@Autowired
@@ -93,22 +94,28 @@ public class FileService {
 
 	public void init() {
 		try {
-			if (!Files.exists(root)) {
-				Files.createDirectory(root);
+			if (!Files.exists(pathUtils.getRootPath())) {
+				Files.createDirectory(pathUtils.getRootPath());
 			}
-			if (!Files.exists(images)) {
-				Files.createDirectory(images);
+			if (!Files.exists(pathUtils.getImagesPath())) {
+				Files.createDirectory(pathUtils.getImagesPath());
 			}
-			if (!Files.exists(uploads)) {
-				Files.createDirectory(uploads);
+			if (!Files.exists(pathUtils.getUploadsPath())) {
+				Files.createDirectory(pathUtils.getUploadsPath());
 			}
 		} catch (IOException e) {
 			throw new FileProcessException("Could not initialize folder for upload!");
 		}
 	}
 
+	/**
+	 * Сохраняет изображение в папке для хранения изображений
+	 * @param file изображение
+	 * @param imageId имя изображения
+	 * @return true, если все прошло хорошо
+	 */
 	public boolean saveImage(MultipartFile file, String imageId) {
-		Path path = this.images.resolve(imageId);
+		Path path = this.pathUtils.getImagesPath().resolve(imageId);
 		if (Files.exists(path)) {
 			FileSystemUtils.deleteRecursively(path.toFile());
 		}
@@ -120,29 +127,52 @@ public class FileService {
 		return true;
 	}
 
+	/**
+	 * Возвращает имеющиееся в наличии изображение
+	 * @param imageId имя файла
+	 * @return файл с картинкой, если есть в наличии
+	 */
 	public Resource getImage(String imageId) {
-		Path file = images.resolve(imageId);
+		Path file = pathUtils.getImagesPath().resolve(imageId);
 		return getFile(file);
 	}
 
+	/**
+	 * Создает смету в формате XLS по параметрам тура
+	 * @param tourId id тура, для которого создается смета
+	 * @return файл со сметой
+	 */
 	public Resource loadEstimate(Integer tourId) {
-		Path file = uploads.resolve(ESTIMATE_TEMP);
+		Path file = pathUtils.getUploadsPath().resolve(ESTIMATE_TEMP);
 		estimateCreator.createEstimate(makeEstimate(tourId), file.toString());
 		return getFile(file);
 	}
 
+	/**
+	 * Создает презентацию в формате PDF по параметрам тура
+	 * @param tourId id тура, для которого создается презентация
+	 * @return файл со презентацией
+	 */
 	public Resource loadPresentation(Integer tourId) {
-		Path file = uploads.resolve(PRESENTATION_TEMP);
+		Path file = pathUtils.getUploadsPath().resolve(PRESENTATION_TEMP);
 		presentationCreator.createPresentation(makePresentation(tourId), file.toString());
 		return getFile(file);
 	}
 
+	/**
+	 * Метод очищает папку, содержащую сформированные файлалы
+	 */
 	public void clearUploads() {
-		FileSystemUtils.deleteRecursively(uploads.toFile());
+		FileSystemUtils.deleteRecursively(pathUtils.getUploadsPath().toFile());
 	}
 
+	/**
+	 * Метод удаляет изображение по названию файла
+	 * @param imageName название файла
+	 * @return true, если все прошло хорошо
+	 */
 	public boolean deleteImage(String imageName) {
-		Path path = this.images.resolve(imageName);
+		Path path = this.pathUtils.getImagesPath().resolve(imageName);
 		if (Files.exists(path)) {
 			FileSystemUtils.deleteRecursively(path.toFile());
 		}
@@ -272,7 +302,7 @@ public class FileService {
 
 	private Path convertImageIdToLink(String imageId) {
 		if (!AppUtils.isBlank(imageId)) {
-			return this.images.resolve(imageId);
+			return this.pathUtils.getImagesPath().resolve(imageId);
 		}
 		return null;
 	}

@@ -11,6 +11,7 @@ import ru.geekbrains.micecreator.models.basic.Region;
 import ru.geekbrains.micecreator.repository.RegionRepo;
 import ru.geekbrains.micecreator.service.prototypes.SimpleTypeService;
 import ru.geekbrains.micecreator.utils.AppUtils;
+import ru.geekbrains.micecreator.utils.PathUtils;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -25,9 +26,18 @@ public class RegionService extends SimpleTypeService<RegionDto, Region> {
 	private final RegionRepo regionRepo;
 	@Autowired
 	private final CountryService countryService;
+	@Autowired
+	private final PathUtils pathUtils;
 	private final SimpleTypes simpleType = SimpleTypes.REGION;
 
-
+	/**
+	 * Метод ищет регионы по параметрам:
+	 * - по id Локации, если указан
+	 * - по части имени, если указано
+	 * - если параметры пустые, ищет без ограничений
+	 * @param params параметры для поиска
+	 * @return список Регионов в виде DTO
+	 */
 	@Override
 	public List<ListItemDto> findBySearchParams(SearchParams params) {
 		if (params.getCountryId() != null && !AppUtils.isBlank(params.getNamePart())){
@@ -39,12 +49,12 @@ public class RegionService extends SimpleTypeService<RegionDto, Region> {
 		}
 	}
 
-	public List<ListItemDto> findRegionByCountryId(Integer countryId) {
+	protected List<ListItemDto> findRegionByCountryId(Integer countryId) {
 		checkInputId(countryId);
 		return findByCountry(countryId).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
-	public List<ListItemDto> findRegionByCountryIdAndNamePart(Integer countryId, String namePart) {
+	protected List<ListItemDto> findRegionByCountryIdAndNamePart(Integer countryId, String namePart) {
 		return findByCountryAndNamePart(countryId, namePart).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
@@ -121,7 +131,7 @@ public class RegionService extends SimpleTypeService<RegionDto, Region> {
 	}
 
 	private boolean isImageExist(Integer entityId, Integer imageNum) {
-		return AppUtils.isImageExist(AppUtils.createImageName("region", entityId, imageNum));
+		return pathUtils.isImageExist(AppUtils.createImageName("region", entityId, imageNum));
 	}
 
 }

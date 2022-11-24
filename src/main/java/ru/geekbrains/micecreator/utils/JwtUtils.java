@@ -23,6 +23,11 @@ public class JwtUtils {
 	@Value("${micecreator.security.jwtExpirationMs}")
 	private int jwtExpirationMs;
 
+	/**
+	 * Генерация JWT-токена
+	 * @param authentication текущие данные авторизации
+	 * @return JWT-токен
+	 */
 	public String generateJwtToken(Authentication authentication) {
 		UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
 		return Jwts.builder()
@@ -33,10 +38,21 @@ public class JwtUtils {
 				.compact();
 	}
 
+	/**
+	 * Извлекает логин пользователя из JWT-токена
+	 * @param token JWT-токен
+	 * @return логин пользователя
+	 */
 	public String getUserNameFromJwtToken(String token) {
 		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
 	}
 
+	/**
+	 * Валидация JWT-токена
+	 * @param authToken JWT-токен
+	 * @return true, если прошел валидацию
+	 * @exception AuthorizationException если валидация не пройдена
+	 */
 	public boolean validateJwtToken(String authToken) {
 		try {
 			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);

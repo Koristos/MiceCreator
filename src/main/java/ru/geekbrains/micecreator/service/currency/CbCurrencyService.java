@@ -28,6 +28,9 @@ public class CbCurrencyService {
 		this.restTemplate = restTemplateBuilder.build();
 	}
 
+	/**
+	 * Запрашивает курсы валют ЦБ и обновляет данные
+	 */
 	public void updateCurrencyInfo() {
 		String result = this.restTemplate.getForObject(CB_URL, String.class);
 		ValCurs cursList = (ValCurs) AppUtils.parseStringToObject(ValCurs.class, result);

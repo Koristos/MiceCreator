@@ -11,6 +11,7 @@ import ru.geekbrains.micecreator.models.basic.Hotel;
 import ru.geekbrains.micecreator.repository.HotelRepo;
 import ru.geekbrains.micecreator.service.prototypes.SimpleTypeService;
 import ru.geekbrains.micecreator.utils.AppUtils;
+import ru.geekbrains.micecreator.utils.PathUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,9 +24,20 @@ public class HotelService extends SimpleTypeService<HotelDto, Hotel> {
 	private final HotelRepo hotelRepo;
 	@Autowired
 	private final LocationService locationService;
+	@Autowired
+	private final PathUtils pathUtils;
 	private final SimpleTypes simpleType = SimpleTypes.HOTEL;
 
-
+	/**
+	 * Метод ищет Отели по параметрам:
+	 * - по id Локации, если указан
+	 * - по части имени, если указано
+	 * - по id Региона, если указан
+	 * - по id Страны, если указан
+	 * - если параметры пустые, ищет без ограничений
+	 * @param params параметры для поиска
+	 * @return список отелей в виде DTO
+	 */
 	@Override
 	public List<ListItemDto> findBySearchParams(SearchParams params) {
 		if (params.getLocationId() != null && !AppUtils.isBlank(params.getNamePart())) {
@@ -45,32 +57,32 @@ public class HotelService extends SimpleTypeService<HotelDto, Hotel> {
 		}
 	}
 
-	public List<ListItemDto> findHotelByCountry(Integer countryId) {
+	protected List<ListItemDto> findHotelByCountry(Integer countryId) {
 		checkInputId(countryId);
 		return findByCountry(countryId).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
-	public List<ListItemDto> findHotelByRegion(Integer regionId) {
+	protected List<ListItemDto> findHotelByRegion(Integer regionId) {
 		checkInputId(regionId);
 		return findByRegion(regionId).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
-	public List<ListItemDto> findHotelByLocation(Integer locationId) {
+	protected List<ListItemDto> findHotelByLocation(Integer locationId) {
 		checkInputId(locationId);
 		return findByLocation(locationId).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
-	public List<ListItemDto> findHotelByCountryAndNamePart(Integer countryId, String namePart) {
+	protected List<ListItemDto> findHotelByCountryAndNamePart(Integer countryId, String namePart) {
 		checkInputId(countryId);
 		return findByCountryAndNamePart(countryId, namePart).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
-	public List<ListItemDto> findHotelByRegionAndNamePart(Integer regionId, String namePart) {
+	protected List<ListItemDto> findHotelByRegionAndNamePart(Integer regionId, String namePart) {
 		checkInputId(regionId);
 		return findByRegionAndNamePart(regionId, namePart).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
-	public List<ListItemDto> findHotelByLocationAndNamePart(Integer locationId, String namePart) {
+	protected List<ListItemDto> findHotelByLocationAndNamePart(Integer locationId, String namePart) {
 		checkInputId(locationId);
 		return findByLocationAndNamePart(locationId, namePart).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
@@ -172,7 +184,7 @@ public class HotelService extends SimpleTypeService<HotelDto, Hotel> {
 	}
 
 	private boolean isImageExist(Integer entityId, Integer imageNum) {
-		return AppUtils.isImageExist(AppUtils.createImageName("hotel", entityId, imageNum));
+		return pathUtils.isImageExist(AppUtils.createImageName("hotel", entityId, imageNum));
 	}
 
 }

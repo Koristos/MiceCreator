@@ -32,6 +32,15 @@ public class AccommodationService extends ComplexTypeService<AccommodationDto, A
 	@Autowired
 	private final HotelService hotelService;
 
+	/**
+	 * Метод ищет Размещение по параметрам:
+	 * - по id Номера, если указан
+	 * - по ID отеля, если id номера не указан
+	 * - в диапазоне между датами по дате начала размещения
+	 * - в диапазоне между датами создания по дате создания
+	 * @param params параметры для поиска
+	 * @return список размещений в виде DTO
+	 */
 	public List<AccommodationDto> findByParams(ComplexParams params) {
 		checkDates(params.getFirstDate(), params.getSecondDate());
 		if (params.getRoomId() != null) {
@@ -49,6 +58,11 @@ public class AccommodationService extends ComplexTypeService<AccommodationDto, A
 		}
 	}
 
+	/**
+	 * Метод подгатавливает данные для создания сметы тура
+	 * @param tourId id тура
+	 * @return данные для сметы по всем размещениям тура
+	 */
 	public List<AccommodationEstimate> makeEstimate(Integer tourId) {
 		return findByTour (tourId).stream().map(this::mapToEstimate).collect(Collectors.toList());
 

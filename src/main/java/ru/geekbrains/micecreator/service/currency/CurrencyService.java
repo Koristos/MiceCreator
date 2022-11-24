@@ -18,6 +18,11 @@ public class CurrencyService {
 	@Autowired
 	private CurrencyRepo currencyRepo;
 
+	/**
+	 * Добавление новой валюты
+	 * @param currency название новой валюты
+	 * @return добавленая валюта
+	 */
 	public Currency addCurrency (String currency) {
 		List<Currency> currencies = currencyRepo.findByName(currency);
 		if (currencies == null || currencies.isEmpty()) {
@@ -28,6 +33,12 @@ public class CurrencyService {
 		return findCurrencyByName(currency);
 	}
 
+	/**
+	 * Поиск валюты по названию
+	 * @param name название валюты
+	 * @return валюта, если есть
+	 * @exception RuntimeException если валюта с указанным названием не найдена или найдено более 1 записи
+	 */
 	public Currency findCurrencyByName (String name) {
 		List<Currency> currencies = currencyRepo.findByName(name);
 		if (currencies == null || currencies.size() != 1) {
@@ -36,15 +47,21 @@ public class CurrencyService {
 		return currencies.get(0);
 	}
 
+	/**
+	 * Запрос всех хранящихся валют для использования в рамках приложения
+	 * @return все хранящиеся валюты
+	 */
 	public List<Currency> findAllCurrencies (){
 		return currencyRepo.findAll();
 	}
 
+	/**
+	 * Запрос всех хранящихся валют в форме DTO для работы с клиентами приложения
+	 * @return все хранящиеся валюты в виде DTO
+	 */
 	public List<ListItemDto> getAllCurrencyDto () {
 		return findAllCurrencies().stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
-
-
 
 	private ListItemDto mapToListItemDto(Currency entity) {
 		ListItemDto dto = new ListItemDto();

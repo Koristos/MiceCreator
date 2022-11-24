@@ -4,9 +4,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.StringReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
@@ -17,8 +14,12 @@ public final class AppUtils {
 
 	private static final List<String> IMAGE_ENTITIES = List.of("hotel", "hotel_service", "region_service", "room", "region", "location");
 	private static final StringBuilder sb = new StringBuilder();
-	private static final Path IMAGE_DIR = Paths.get("C:/MiceCreator/images");
 
+	/**
+	 * Проверяет строку на пустоту. Null также соответствует пустой строке и не вызывает ошибку
+	 * @param string строка для проверки
+	 * @return true, если строка пустая, false, если нет
+	 */
 	public static boolean isBlank(String string){
 		if (string == null){
 			return true;
@@ -26,11 +27,25 @@ public final class AppUtils {
 		return string.isBlank();
 	}
 
+	/**
+	 * Метод вычисляет разницу в днях между двумя датами
+	 * @param first первая дата
+	 * @param second вторая дата
+	 * @return long разница между датами
+	 */
 	public static Long countDaysDifference(LocalDate first, LocalDate second) {
 		Duration duration = Duration.between(first.atStartOfDay(), second.atStartOfDay());
 		return duration.toDays();
 	}
 
+	/**
+	 * Формирует имя(id) для изображения, прикрепляемого к сущности
+	 * @param entityType тип сущности
+	 * @param entityId id сущности
+	 * @param imageId слот картинки
+	 * @return стандартизированное имя
+	 * @exception RuntimeException если переданная сущность не поддерживает хранение фотографий
+	 */
 	public static String createImageName (String entityType, Integer entityId, Integer imageId) {
 		if (!IMAGE_ENTITIES.contains(entityType)){
 			throw new RuntimeException("This entity has no images!");
@@ -45,10 +60,12 @@ public final class AppUtils {
 		return sb.toString();
 	}
 
-	public static boolean isImageExist(String imageName){
-		return Files.exists(IMAGE_DIR.resolve(imageName));
-	}
-
+	/**
+	 * Метод для парсинга XML в объект
+	 * @param outcomeClass Класс, который должен получиться на выходе
+	 * @param incomeString входящий XML в виде строки
+	 * @return распаршенный в класс XML
+	 */
 	public static Object parseStringToObject (Class outcomeClass, String incomeString) {
 		StringReader reader = new StringReader(incomeString);
 		Object result = null;

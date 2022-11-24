@@ -14,6 +14,9 @@ public class ScheduleList {
 	CbCurrencyService cbCurrencyService;
 
 
+	/**
+	 * Инициирует запрос курсов валют ЦБ ежедневно в 08-00
+	 */
 	@Scheduled(cron="0 0 8 * * *")
 	public void updateCBCourses() {
 		cbCurrencyService.updateCurrencyInfo();

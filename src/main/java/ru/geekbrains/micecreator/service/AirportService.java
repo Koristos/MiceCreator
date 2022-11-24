@@ -26,7 +26,15 @@ public class AirportService extends SimpleTypeService<AirportDto, Airport> {
 	private final RegionService regionService;
 	private final SimpleTypes simpleType = SimpleTypes.AIRPORT;
 
-
+	/**
+	 * Метод ищет Аэропорты по параметрам:
+	 * - по id региона, если указан
+	 * - по части имени, если указана
+	 * - по коду или названию, в зависимости от параметра isUsingAlterNames
+	 * - если все параметры пустые, ищет все Аэропорты без ограничений
+	 * @param params параметры для поиска
+	 * @return список Аэропортов в виде DTO
+	 */
 	@Override
 	public List<ListItemDto> findBySearchParams(SearchParams params) {
 		if (params.getRegionId() != null && !AppUtils.isBlank(params.getNamePart()) && params.isUsingAlterNames()) {
@@ -42,7 +50,7 @@ public class AirportService extends SimpleTypeService<AirportDto, Airport> {
 		}
 	}
 
-	public List<ListItemDto> findAirportByNameOrCodePartAndRegionId(String namePart,Integer regionId) {
+	protected List<ListItemDto> findAirportByNameOrCodePartAndRegionId(String namePart,Integer regionId) {
 		List<Airport> result = airportRepo.findByRegionIdAndNameStartingWith(regionId, nameToStandard(namePart));
 		if (namePart.length()<=3) {
 			result.addAll(airportRepo.findByRegionIdAndCodeStartingWith(regionId, nameToStandard(namePart)));
@@ -50,18 +58,18 @@ public class AirportService extends SimpleTypeService<AirportDto, Airport> {
 		return result.stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
-	public List<ListItemDto> findAirportByNamePartAndRegionId(String namePart,Integer regionId) {
+	protected List<ListItemDto> findAirportByNamePartAndRegionId(String namePart,Integer regionId) {
 		List<Airport> result = airportRepo.findByRegionIdAndNameStartingWith(regionId, nameToStandard(namePart));
 		return result.stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
-	public List<ListItemDto> findAirportByNameOrCodePart(String namePart) {
+	protected List<ListItemDto> findAirportByNameOrCodePart(String namePart) {
 		List<ListItemDto> result = new ArrayList<>(findListDtoByNamePart(namePart));
 		result.addAll(findByCodePart(namePart).stream().map(this::mapToListItemDto).collect(Collectors.toList()));
 		return result;
 	}
 
-	public List<ListItemDto> findAirportByRegionId(Integer regionId) {
+	protected List<ListItemDto> findAirportByRegionId(Integer regionId) {
 		checkInputId(regionId);
 		return findByRegion(regionId).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}

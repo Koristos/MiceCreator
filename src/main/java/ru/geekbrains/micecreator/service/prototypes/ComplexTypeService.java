@@ -16,15 +16,29 @@ public abstract class ComplexTypeService<D extends IdPositive, E> {
 
 	private static final Logger logger = LogManager.getLogger(ComplexTypeService.class);
 
+	/**
+	 * Метод для получения всех сущностей определенного типа в виде DTO
+	 * @return список DTO всех сущностей
+	 */
 	public List<D> findAllDto() {
 		return findAll().stream().map(this::mapToDto).collect(Collectors.toList());
 	}
 
+	/**
+	 * Метод ищет все сущности определенного типа по id тура, в рамках которого они созданы
+	 * @param tourId id тура
+	 * @return список DTO сущностей
+	 */
 	public List<D> findDtoByTourId(Integer tourId) {
 		checkInput(tourId);
 		return findByTour(tourId).stream().map(this::mapToDto).collect(Collectors.toList());
 	}
 
+	/**
+	 * Метод возвращает сущность в виде DTO по id
+	 * @param id id сущности
+	 * @return сущность  в виде DTO
+	 */
 	public D findDtoById(Integer id) {
 		checkInput(id);
 		E entity = findById(id);
@@ -35,6 +49,12 @@ public abstract class ComplexTypeService<D extends IdPositive, E> {
 		return mapToDto(entity);
 	}
 
+	/**
+	 * Метод создает новую сущность определенного типа
+	 * ID в этом случае не должно передаваться
+	 * @param dto DTO создаваемой сущности
+	 * @return DTO созданной сущности
+	 */
 	public D createEntity(D dto) {
 		if (dto == null || dto.getId() != null) {
 			String message = "Invalid input for entity creation: Dto must be not null and have no id.";
@@ -44,6 +64,12 @@ public abstract class ComplexTypeService<D extends IdPositive, E> {
 		return mapToDto(save(mapToEntity(dto)));
 	}
 
+	/**
+	 * Метод редактирует уже имеющуюся сущность
+	 * ID обязателен
+	 * @param dto DTO редактируемой сущности
+	 * @return DTO отредактированной сущности
+	 */
 	public D editEntity(D dto) {
 		if (dto == null || dto.getId() == null) {
 			String message = "Invalid input for entity change: Dto must be not null and dto.id must be not null.";
@@ -58,6 +84,11 @@ public abstract class ComplexTypeService<D extends IdPositive, E> {
 		return mapToDto(save(mapToEntity(dto)));
 	}
 
+	/**
+	 * Метод удаляет сущность по ID
+	 * @param id id сущности
+	 * @return true, если все прошло хорошо
+	 */
 	public boolean deleteEntity(Integer id) {
 		if (id == null) {
 			String message ="Invalid input for entity delete operation: id must be not null.";

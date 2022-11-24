@@ -1,5 +1,7 @@
 package ru.geekbrains.micecreator.controllers.full.basic;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,27 +19,32 @@ import ru.geekbrains.micecreator.service.AirportService;
 @RestController
 @RequestMapping("api/v1/airport")
 @AllArgsConstructor
+@Tag(name = "Аэропорты", description = "Контроллер для работы с аэропортами")
 public class AirportController {
 
 	private AirportService service;
 
 	@GetMapping("/{id}")
+	@Operation(summary = "Поиск аэропорта по id")
 	public AirportDto getById(@PathVariable("id") Integer id) {
 		return service.findDtoById(id);
 	}
 
 	@PostMapping
+	@Operation(summary = "Добавление нового аэропорта")
 	public AirportDto addNew(@NonNull @RequestBody AirportDto dto) {
 		return service.createEntity(dto);
 	}
 
 	@PutMapping
+	@Operation(summary = "Редактирование аэропорта")
 	public AirportDto edit(@NonNull @RequestBody AirportDto dto) {
 		return service.editEntity(dto);
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping("/{id}")
+	@Operation(summary = "Удаление аэропорта")
 	public boolean deleteById(@PathVariable("id") Integer id) {
 		return service.deleteEntity(id);
 	}

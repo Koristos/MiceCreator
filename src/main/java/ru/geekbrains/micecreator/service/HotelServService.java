@@ -11,6 +11,7 @@ import ru.geekbrains.micecreator.models.basic.HotelServ;
 import ru.geekbrains.micecreator.repository.HotelServRepo;
 import ru.geekbrains.micecreator.service.prototypes.SimpleTypeService;
 import ru.geekbrains.micecreator.utils.AppUtils;
+import ru.geekbrains.micecreator.utils.PathUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,9 +24,18 @@ public class HotelServService extends SimpleTypeService<HotelServiceDto, HotelSe
 	private final HotelServRepo hotelServRepo;
 	@Autowired
 	private final HotelService hotelService;
+	@Autowired
+	private final PathUtils pathUtils;
 	private final SimpleTypes simpleType = SimpleTypes.HOTEL_SERVICE;
 
-
+	/**
+	 * Метод ищет Отельные услуги по параметрам:
+	 * - по id Отеля, если указан
+	 * - по части имени, если указано
+	 * - если параметры пустые, ищет без ограничений
+	 * @param params параметры для поиска
+	 * @return список отельных услуг в виде DTO
+	 */
 	@Override
 	public List<ListItemDto> findBySearchParams(SearchParams params) {
 		if (params.getHotelId() != null && !AppUtils.isBlank(params.getNamePart())){
@@ -37,12 +47,12 @@ public class HotelServService extends SimpleTypeService<HotelServiceDto, HotelSe
 		}
 	}
 
-	public List<ListItemDto> findServiceByHotel(Integer hotelId) {
+	protected List<ListItemDto> findServiceByHotel(Integer hotelId) {
 		checkInputId(hotelId);
 		return findByHotel(hotelId).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
-	public List<ListItemDto> findServiceByHotelAndNamePart(Integer hotelId, String namePart) {
+	protected List<ListItemDto> findServiceByHotelAndNamePart(Integer hotelId, String namePart) {
 		checkInputId(hotelId);
 		return findByHotelAndNamePart(hotelId, namePart).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
@@ -127,7 +137,7 @@ public class HotelServService extends SimpleTypeService<HotelServiceDto, HotelSe
 		return entity;
 	}
 	private boolean isImageExist(Integer entityId, Integer imageNum) {
-		return AppUtils.isImageExist(AppUtils.createImageName("hotel_service", entityId, imageNum));
+		return pathUtils.isImageExist(AppUtils.createImageName("hotel_service", entityId, imageNum));
 	}
 
 
