@@ -27,3 +27,5 @@ This app is desined to make rutine work of MICE managers faster and easear:
 - Jquery
 - Bootstrap
 - Log4j
+- Swagger
+- JAXB
