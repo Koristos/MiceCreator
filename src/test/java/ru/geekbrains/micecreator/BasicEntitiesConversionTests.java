@@ -54,6 +54,7 @@ import ru.geekbrains.micecreator.service.RegionService;
 import ru.geekbrains.micecreator.service.RoomService;
 import ru.geekbrains.micecreator.service.currency.CurrencyService;
 import ru.geekbrains.micecreator.service.prototypes.SimpleTypeService;
+import ru.geekbrains.micecreator.utils.PathUtils;
 
 
 import java.util.ArrayList;
@@ -80,17 +81,18 @@ class BasicEntitiesConversionTests {
 	private static final AirportRepo airportRepo = mock(AirportRepo.class);
 	private static final AccommodationTypeRepo accommodationTypeRepo = mock(AccommodationTypeRepo.class);
 	private static final CurrencyRepo currencyRepo = mock(CurrencyRepo.class);
+	private static final PathUtils pathUtils = mock(PathUtils.class);
 
 	private static final AccommodationTypeService accommodationTypeService = new AccommodationTypeService(accommodationTypeRepo);
 	private static final AirlineService airlineService = new AirlineService(airlineRepo);
 	private static final CurrencyService currencyService = new CurrencyService(currencyRepo);
 	private static final CountryService countryService = new CountryService(countryRepo, currencyService);
-	private static final RegionService regionService = new RegionService(regionRepo, countryService);
-	private static final LocationService locationService = new LocationService(locationRepo, regionService);
-	private static final HotelService hotelService = new HotelService(hotelRepo, locationService);
-	private static final RoomService roomService = new RoomService(roomRepo, hotelService);
-	private static final RegionServService regionServService = new RegionServService(regionServRepo, regionService);
-	private static final HotelServService hotelServService = new HotelServService(hotelServRepo, hotelService);
+	private static final RegionService regionService = new RegionService(regionRepo, countryService, pathUtils);
+	private static final LocationService locationService = new LocationService(locationRepo, regionService, pathUtils);
+	private static final HotelService hotelService = new HotelService(hotelRepo, locationService, pathUtils);
+	private static final RoomService roomService = new RoomService(roomRepo, hotelService, pathUtils);
+	private static final RegionServService regionServService = new RegionServService(regionServRepo, regionService, pathUtils);
+	private static final HotelServService hotelServService = new HotelServService(hotelServRepo, hotelService, pathUtils);
 	private static final AirportService airportService = new AirportService(airportRepo, regionService);
 
 	private static final AccommodationType storedAccommodationType = new AccommodationType(0, "DBL", 2);
@@ -128,6 +130,7 @@ class BasicEntitiesConversionTests {
 		when(airportRepo.findById(0)).thenReturn(java.util.Optional.of(storedAirport));
 		when(accommodationTypeRepo.findById(0)).thenReturn(java.util.Optional.of(storedAccommodationType));
 		when(currencyRepo.findByName("USD")).thenReturn(List.of(storedCurrency));
+		when(pathUtils.isImageExist(any(String.class))).thenReturn(false);
 	}
 
 	@Test

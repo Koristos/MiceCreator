@@ -1,5 +1,8 @@
 package ru.geekbrains.micecreator.controllers.full.complex;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.apache.log4j.LogManager;
@@ -23,6 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/accommodation")
 @AllArgsConstructor
+@Tag(name = "Размещение", description = "Контроллер для работы с размещением в отелях")
 public class AccommodationController {
 
 	private static final Logger logger = LogManager.getLogger(AccommodationController.class);
@@ -31,24 +35,27 @@ public class AccommodationController {
 	private AccommodationService service;
 
 	@GetMapping("/{id}")
+	@Operation(summary = "Поиск размещения по id")
 	public AccommodationDto getById(@PathVariable("id") Integer id) {
 		logger.info(String.format("Accommodation Event by id %s requested", id));
 		return service.findDtoById(id);
 	}
 
 	@GetMapping("/by_tour/{id}")
+	@Operation(summary = "Поиск размещения по id тура")
 	public List<AccommodationDto> getByTour(@PathVariable("id") Integer id) {
 		return service.findDtoByTourId(id);
 	}
 
 	@GetMapping("/by_params")
-	public List<AccommodationDto> getByParams(@RequestParam(name = "room", required = false) Integer roomId,
-	                                          @RequestParam(name = "hotel", required = false) Integer hotelId,
-	                                          @RequestParam(name = "acc_type") Integer accTypeId,
-	                                          @RequestParam(name = "first_date") String first,
-	                                          @RequestParam(name = "second_date") String second,
-	                                          @RequestParam(name = "first_date_creation") String firstCreation,
-	                                          @RequestParam(name = "second_date_creation") String secondCreation) {
+	@Operation(summary = "Поиск размещения по параметрам")
+	public List<AccommodationDto> getByParams(@RequestParam(name = "room", required = false) @Parameter(description = "Id номера") Integer roomId,
+	                                          @RequestParam(name = "hotel", required = false) @Parameter(description = "Id отеля") Integer hotelId,
+	                                          @RequestParam(name = "acc_type") @Parameter(description = "Id типа размещения") Integer accTypeId,
+	                                          @RequestParam(name = "first_date") @Parameter(description = "Первая дата диапазона поиска dd.MM.yyyy") String first,
+	                                          @RequestParam(name = "second_date") @Parameter(description = "Вторая дата диапазона поиска dd.MM.yyyy") String second,
+	                                          @RequestParam(name = "first_date_creation") @Parameter(description = "Первая дата диапазона поиска (дата создания) dd.MM.yyyy") String firstCreation,
+	                                          @RequestParam(name = "second_date_creation") @Parameter(description = "Вторая дата диапазона поиска (дата создания) dd.MM.yyyy") String secondCreation) {
 		logger.info(String.format("Accommodations with params room [ %s ] hotel [ %s ] acc_type [ %s ] first_date [ %s ] second_date [ %s ] first_date_creation [ %s ] second_date_creation [ %s ] requested",
 				roomId, hotelId, accTypeId, first, second, firstCreation, secondCreation));
 		ComplexParams params = new ComplexParams();
@@ -63,18 +70,21 @@ public class AccommodationController {
 	}
 
 	@PostMapping
+	@Operation(summary = "Добавление нового размещения")
 	public AccommodationDto addNew(@NonNull @RequestBody AccommodationDto dto) {
 		logger.info(String.format("New Accommodation added %s", dto));
 		return service.createEntity(dto);
 	}
 
 	@PutMapping
+	@Operation(summary = "Редактирование размещения")
 	public AccommodationDto edit(@NonNull @RequestBody AccommodationDto dto) {
 		logger.info(String.format("Accommodation edit %s", dto));
 		return service.editEntity(dto);
 	}
 
 	@DeleteMapping("/{id}")
+	@Operation(summary = "Удаление размещения")
 	public boolean deleteById(@PathVariable("id") Integer id) {
 		logger.info(String.format("Accommodation with id %s deleted", id));
 		return service.deleteEntity(id);

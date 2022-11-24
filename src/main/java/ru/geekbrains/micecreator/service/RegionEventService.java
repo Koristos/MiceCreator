@@ -28,7 +28,14 @@ public class RegionEventService extends ComplexTypeService<RegionEventDto, Regio
 	@Autowired
 	private final RegionService regionService;
 
-
+	/**
+	 * Метод ищет Региональные события по параметрам:
+	 * - по ID Региональной услуги
+	 * - в диапазоне между датами по дате начала события
+	 * - в диапазоне между датами создания по дате создания
+	 * @param params параметры для поиска
+	 * @return список региональных событий в виде DTO
+	 */
 	public List<RegionEventDto> findByParams(ComplexParams params) {
 		checkInput(params.getRegionServId(), params.getFirstDate(), params.getSecondDate());
 		checkDates(params.getFirstDate(), params.getSecondDate());

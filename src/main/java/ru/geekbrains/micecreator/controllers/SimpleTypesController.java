@@ -1,10 +1,14 @@
 package ru.geekbrains.micecreator.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +37,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/basic")
 @AllArgsConstructor
+@Tag(name = "Базовые типы", description = "Контроллер для работы с компонентами туров в их базовом представлении. Включает типы размещения, авиакомпании, аэропорты, страны, локации, регионы, отели, номера, отельные и региональные услуги")
 public class SimpleTypesController {
 
 	private static final Logger logger = LogManager.getLogger(SimpleTypesController.class);
@@ -60,37 +65,42 @@ public class SimpleTypesController {
 
 
 	@GetMapping("/{type}")
+	@Operation(summary = "Запрос всех сущностей переданного типа")
 	public List<ListItemDto> findAll(@PathVariable("type") String type) {
 		logger.info(String.format("%s type requested", type));
 		return findServiceByType(type.toUpperCase()).findAllListDto();
 	}
 
 	@GetMapping("/by_name/{type}/{name}")
+	@Operation(summary = "Запрос всех сущностей переданного типа с именем, начинающимся на")
 	public List<ListItemDto> findById(@PathVariable("type") String type, @NonNull @PathVariable("name") String name) {
 		logger.info(String.format("%s type requested with name like %s", type, name));
 		return findServiceByType(type.toUpperCase()).findListDtoByNamePart(name);
 	}
 
 	@GetMapping("/by_params/{type}")
+	@Operation(summary = "Запрос всех сущностей переданного типа по параметрам", description = "Параметры передаются в зависимости от того, какая сущность ищется")
 	public List<ListItemDto> findById(@PathVariable("type") String type,
-	                                  @RequestParam(name = "name", required = false) String namePart,
-	                                  @RequestParam(name = "country", required = false) Integer countryId,
-	                                  @RequestParam(name = "region", required = false) Integer regionId,
-	                                  @RequestParam(name = "location", required = false) Integer locationId,
-	                                  @RequestParam(name = "hotel", required = false) Integer hotelId,
-	                                  @RequestParam(name = "alter_name", required = false) boolean isUsingAlterNames) {
+	                                  @RequestParam(name = "name", required = false) @Parameter(description = "Имя") String namePart,
+	                                  @RequestParam(name = "country", required = false) @Parameter(description = "Id страны") Integer countryId,
+	                                  @RequestParam(name = "region", required = false) @Parameter(description = "Id региона") Integer regionId,
+	                                  @RequestParam(name = "location", required = false) @Parameter(description = "Id локации") Integer locationId,
+	                                  @RequestParam(name = "hotel", required = false) @Parameter(description = "Id отеля") Integer hotelId,
+	                                  @RequestParam(name = "alter_name", required = false) @Parameter(description = "Используется ли альтернативное имя") boolean isUsingAlterNames) {
 		SearchParams params = new SearchParams(namePart, countryId, regionId, locationId, hotelId, isUsingAlterNames);
 		logger.info(String.format("%s type with params %s requested", type, params));
 		return findServiceByType(type.toUpperCase()).findBySearchParams(params);
 	}
 
 	@GetMapping("/by_id/{type}/{id}")
+	@Operation(summary = "Запрос сущности переданного типа с указанием id")
 	public ListItemDto findById(@PathVariable("type") String type, @NonNull @PathVariable("id") Integer id) {
 		logger.info(String.format("%s type requested with id %s", type, id));
 		return findServiceByType(type.toUpperCase()).findListDtoById(id);
 	}
 
 	@GetMapping("/get_parent/{type}/{id}")
+	@Operation(summary = "Запрос родительской сущности по ID текущей", description = "Работает для: аэропортов, отельных и региональных услуг, отелей, локаций, регионов, номеров")
 	public ListItemDto findParentById(@PathVariable("type") String type, @NonNull @PathVariable("id") Integer id) {
 		logger.info(String.format("Parent of %s type with id %s requested", type, id));
 		try {
@@ -119,6 +129,7 @@ public class SimpleTypesController {
 	}
 
 	@DeleteMapping("/{type}/{id}")
+	@Operation(summary = "Удаление сущности по типу с указанием ID")
 	public boolean deleteEntity(@PathVariable("type") String type, @NonNull @PathVariable("id") Integer id) {
 		logger.info(String.format("%s type with id %s deleted", type, id));
 		return findServiceByType(type.toUpperCase()).deleteEntity(id);

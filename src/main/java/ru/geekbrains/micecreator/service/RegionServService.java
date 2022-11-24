@@ -11,6 +11,7 @@ import ru.geekbrains.micecreator.models.basic.RegionServ;
 import ru.geekbrains.micecreator.repository.RegionServRepo;
 import ru.geekbrains.micecreator.service.prototypes.SimpleTypeService;
 import ru.geekbrains.micecreator.utils.AppUtils;
+import ru.geekbrains.micecreator.utils.PathUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,8 +24,18 @@ public class RegionServService extends SimpleTypeService<RegionServiceDto, Regio
 	private RegionServRepo regionServRepo;
 	@Autowired
 	private final RegionService regionService;
+	@Autowired
+	private final PathUtils pathUtils;
 	private final SimpleTypes simpleType = SimpleTypes.REGION_SERVICE;
 
+	/**
+	 * Метод ищет региональные услуги по параметрам:
+	 * - по id региона, если указан
+	 * - по части имени, если указано
+	 * - если параметры пустые, ищет без ограничений
+	 * @param params параметры для поиска
+	 * @return список региональных услуг в виде DTO
+	 */
 	@Override
 	public List<ListItemDto> findBySearchParams(SearchParams params) {
 		if (params.getRegionId() != null && !AppUtils.isBlank(params.getNamePart())){
@@ -36,11 +47,11 @@ public class RegionServService extends SimpleTypeService<RegionServiceDto, Regio
 		}
 	}
 
-	public List<ListItemDto> findRegServByRegionId(Integer regionId) {
+	protected List<ListItemDto> findRegServByRegionId(Integer regionId) {
 		return findByRegion(regionId).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
-	public List<ListItemDto> findRegServByRegionIdAndNamePart(Integer regionId, String namePart) {
+	protected List<ListItemDto> findRegServByRegionIdAndNamePart(Integer regionId, String namePart) {
 		return findByRegionAndNamePart(regionId, namePart).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
@@ -126,6 +137,6 @@ public class RegionServService extends SimpleTypeService<RegionServiceDto, Regio
 	}
 
 	private boolean isImageExist(Integer entityId, Integer imageNum) {
-		return AppUtils.isImageExist(AppUtils.createImageName("region_service", entityId, imageNum));
+		return pathUtils.isImageExist(AppUtils.createImageName("region_service", entityId, imageNum));
 	}
 }

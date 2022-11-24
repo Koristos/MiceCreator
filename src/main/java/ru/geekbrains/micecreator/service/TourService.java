@@ -43,6 +43,13 @@ public class TourService extends ComplexTypeService<TourDto, Tour> {
 	@Autowired
 	private final SecurityService securityService;
 
+	/**
+	 * Метод ищет Туры по параметрам:
+	 * - по имени менеджера-создателя, если указан
+	 * - в диапазоне между датами по дате начала тура
+	 * @param params параметры для поиска
+	 * @return список туров в виде DTO
+	 */
 	public List<TourDto> findByParams(ComplexParams params) {
 		if (params.getCountryId() == null) {
 			return findDtoToursByDates(params.getFirstDate(), params.getSecondDate(), params.getUserName());

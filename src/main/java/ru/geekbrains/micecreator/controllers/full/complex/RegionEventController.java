@@ -1,5 +1,8 @@
 package ru.geekbrains.micecreator.controllers.full.complex;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.apache.log4j.LogManager;
@@ -23,6 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/region_event")
 @AllArgsConstructor
+@Tag(name = "Региональные события", description = "Контроллер для работы с региональными событиями")
 public class RegionEventController {
 
 	private static final Logger logger = LogManager.getLogger(RegionEventController.class);
@@ -31,22 +35,25 @@ public class RegionEventController {
 	private RegionEventService service;
 
 	@GetMapping("/{id}")
+	@Operation(summary = "Поиск Регионального события по id")
 	public RegionEventDto getById(@PathVariable("id") Integer id) {
 		logger.info(String.format("Region Event by id %s requested", id));
 		return service.findDtoById(id);
 	}
 
 	@GetMapping("/by_tour/{id}")
+	@Operation(summary = "Поиск Регионального события по id тура")
 	public List<RegionEventDto> getByTour(@PathVariable("id") Integer id) {
 		return service.findDtoByTourId(id);
 	}
 
 	@GetMapping("/by_params")
-	public List<RegionEventDto> getByParams(@RequestParam(name = "region_service") Integer regionServId,
-	                                        @RequestParam(name = "first_date") String first,
-	                                        @RequestParam(name = "second_date") String second,
-	                                        @RequestParam(name = "first_date_creation") String firstCreation,
-	                                        @RequestParam(name = "second_date_creation") String secondCreation) {
+	@Operation(summary = "Поиск Регионального события по параметрам")
+	public List<RegionEventDto> getByParams(@RequestParam(name = "region_service") @Parameter(description = "Id региональной услуги") Integer regionServId,
+	                                        @RequestParam(name = "first_date") @Parameter(description = "Первая дата диапазона поиска dd.MM.yyyy") String first,
+	                                        @RequestParam(name = "second_date") @Parameter(description = "Вторая дата диапазона поиска dd.MM.yyyy") String second,
+	                                        @RequestParam(name = "first_date_creation") @Parameter(description = "Первая дата диапазона поиска (дата создания) dd.MM.yyyy") String firstCreation,
+	                                        @RequestParam(name = "second_date_creation") @Parameter(description = "Вторая дата диапазона поиска (дата создания) dd.MM.yyyy") String secondCreation) {
 		logger.info(String.format("Region Events with params region_service [ %s ] first_date [ %s ] second_date [ %s ] first_date_creation [ %s ] second_date_creation [ %s ] requested",
 				regionServId, first, second, firstCreation, secondCreation));
 		ComplexParams params = new ComplexParams();
@@ -59,18 +66,21 @@ public class RegionEventController {
 	}
 
 	@PostMapping
+	@Operation(summary = "Добавление нового Регионального события")
 	public RegionEventDto addNew(@NonNull @RequestBody RegionEventDto dto) {
 		logger.info(String.format("New Region Event added %s", dto));
 		return service.createEntity(dto);
 	}
 
 	@PutMapping
+	@Operation(summary = "Редактирование Регионального события")
 	public RegionEventDto edit(@NonNull @RequestBody RegionEventDto dto) {
 		logger.info(String.format("Region Event edit %s", dto));
 		return service.editEntity(dto);
 	}
 
 	@DeleteMapping("/{id}")
+	@Operation(summary = "Удаление Регионального события")
 	public boolean deleteById(@PathVariable("id") Integer id) {
 		logger.info(String.format("Region Event with id %s deleted", id));
 		return service.deleteEntity(id);

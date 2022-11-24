@@ -1,6 +1,8 @@
 package ru.geekbrains.micecreator.controllers.full.basic;
 
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,27 +20,32 @@ import ru.geekbrains.micecreator.service.AccommodationTypeService;
 @RestController
 @RequestMapping("api/v1/accomm_type")
 @AllArgsConstructor
+@Tag(name = "Типы размещения", description = "Контроллер для работы с типами размещения")
 public class AccommodationTypeController {
 
 	private AccommodationTypeService service;
 
 	@GetMapping("/{id}")
+	@Operation(summary = "Поиск типа размещения по id")
 	public AccommTypeDto getById(@PathVariable("id") Integer id) {
 		return service.findDtoById(id);
 	}
 
 	@PostMapping
+	@Operation(summary = "Добавление нового типа размещения")
 	public AccommTypeDto addNew(@NonNull @RequestBody AccommTypeDto dto) {
 		return service.createEntity(dto);
 	}
 
 	@PutMapping
+	@Operation(summary = "Редактирование типа размещения")
 	public AccommTypeDto edit(@NonNull @RequestBody AccommTypeDto dto) {
 		return service.editEntity(dto);
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping("/{id}")
+	@Operation(summary = "Удаление типа размещения")
 	public boolean deleteById(@PathVariable("id") Integer id) {
 		return service.deleteEntity(id);
 	}

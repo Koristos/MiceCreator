@@ -11,6 +11,7 @@ import ru.geekbrains.micecreator.models.basic.Location;
 import ru.geekbrains.micecreator.repository.LocationRepo;
 import ru.geekbrains.micecreator.service.prototypes.SimpleTypeService;
 import ru.geekbrains.micecreator.utils.AppUtils;
+import ru.geekbrains.micecreator.utils.PathUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,8 +24,18 @@ public class LocationService extends SimpleTypeService<LocationDto, Location> {
 	private final LocationRepo locationRepo;
 	@Autowired
 	private final RegionService regionService;
+	@Autowired
+	private final PathUtils pathUtils;
 	private final SimpleTypes simpleType = SimpleTypes.LOCATION;
 
+	/**
+	 * Метод ищет локации по параметрам:
+	 * - по id Региона, если указан
+	 * - по части имени, если указано
+	 * - если параметры пустые, ищет без ограничений
+	 * @param params параметры для поиска
+	 * @return список Локаций в виде DTO
+	 */
 	@Override
 	public List<ListItemDto> findBySearchParams(SearchParams params) {
 		if (params.getRegionId() != null && !AppUtils.isBlank(params.getNamePart())){
@@ -36,12 +47,12 @@ public class LocationService extends SimpleTypeService<LocationDto, Location> {
 		}
 	}
 
-	public List<ListItemDto> findLocationByRegionId(Integer regionId) {
+	protected List<ListItemDto> findLocationByRegionId(Integer regionId) {
 		checkInputId(regionId);
 		return findByRegion(regionId).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
-	public List<ListItemDto> findLocationByRegionIdAndNamePart(Integer regionId, String namePart) {
+	protected List<ListItemDto> findLocationByRegionIdAndNamePart(Integer regionId, String namePart) {
 		checkInputId(regionId);
 		return findByRegionAndNamePart(regionId, namePart).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
@@ -120,7 +131,7 @@ public class LocationService extends SimpleTypeService<LocationDto, Location> {
 	}
 
 	private boolean isImageExist(Integer entityId, Integer imageNum) {
-		return AppUtils.isImageExist(AppUtils.createImageName("location", entityId, imageNum));
+		return pathUtils.isImageExist(AppUtils.createImageName("location", entityId, imageNum));
 	}
 
 }

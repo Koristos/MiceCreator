@@ -1,5 +1,7 @@
 package ru.geekbrains.micecreator.controllers.full.basic;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,27 +19,32 @@ import ru.geekbrains.micecreator.service.LocationService;
 @RestController
 @RequestMapping("api/v1/location")
 @AllArgsConstructor
+@Tag(name = "Локации", description = "Контроллер для работы с локациями")
 public class LocationController {
 
 	private LocationService service;
 
 	@GetMapping("/{id}")
+	@Operation(summary = "Поиск локации по id")
 	public LocationDto getById(@PathVariable("id") Integer id) {
 		return service.findDtoById(id);
 	}
 
 	@PostMapping
+	@Operation(summary = "Добавление новой локации")
 	public LocationDto addNew(@NonNull @RequestBody LocationDto dto) {
 		return service.createEntity(dto);
 	}
 
 	@PutMapping
+	@Operation(summary = "Редактирование локации")
 	public LocationDto edit(@NonNull @RequestBody LocationDto dto) {
 		return service.editEntity(dto);
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping("/{id}")
+	@Operation(summary = "Удаление локации")
 	public boolean deleteById(@PathVariable("id") Integer id) {
 		return service.deleteEntity(id);
 	}

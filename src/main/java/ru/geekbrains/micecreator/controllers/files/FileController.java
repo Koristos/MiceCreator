@@ -1,5 +1,8 @@
 package ru.geekbrains.micecreator.controllers.files;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -22,6 +25,7 @@ import ru.geekbrains.micecreator.utils.AppUtils;
 @RestController
 @RequestMapping("api/v1/files")
 @AllArgsConstructor
+@Tag(name = "Файлы", description = "Контроллер для работы с файлами - презентациями, сметами, изображениями")
 public class FileController {
 
 	private static final Logger logger = LogManager.getLogger(FileController.class);
@@ -31,7 +35,9 @@ public class FileController {
 
 
 	@GetMapping("/{type}/{id}")
-	public ResponseEntity<Resource> findAll(@PathVariable("type") String type, @PathVariable("id") String entityId) {
+	@Operation(summary = "Запрос файла по типу и id")
+	public ResponseEntity<Resource> findAll(@Parameter(description = "Тип: estimate / image / presentation")@PathVariable("type") String type,
+	                                        @Parameter(description = "Для estimate и presentation - ID тура, для image - id картинки") @PathVariable("id") String entityId) {
 		logger.info(String.format("File with type %s requested", type));
 		Resource file;
 		switch (type) {
@@ -53,6 +59,7 @@ public class FileController {
 	}
 
 	@PostMapping("/image")
+	@Operation(summary = "Загрузка картинки")
 	public boolean postImage(@ModelAttribute ImageFormData formDataWithFile) {
 		logger.info("Image uploaded");
 		return fileService.saveImage(formDataWithFile.getImage(), AppUtils.createImageName(formDataWithFile.getEntityType(),
@@ -60,6 +67,7 @@ public class FileController {
 	}
 
 	@DeleteMapping("/image/{entityType}/{entityId}/{imageNum}")
+	@Operation(summary = "Удаление картинки")
 	public boolean deleteImage(@PathVariable("entityType") String entityType, @PathVariable("entityId") Integer entityId,
 	                           @PathVariable("imageNum") Integer imageNum) {
 		logger.info("Image deleted");

@@ -19,3 +19,7 @@ micecreator:
   security:
     jwtSecret: micecreator
     jwtExpirationMs: 86400000
+  pathconst:
+    root: C:/MiceCreator
+    uploads: /uploads
+    images: /images

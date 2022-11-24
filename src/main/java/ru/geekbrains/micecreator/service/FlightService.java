@@ -28,6 +28,16 @@ public class FlightService extends ComplexTypeService<FlightDto, Flight> {
 	@Autowired
 	private final TourService tourService;
 
+	/**
+	 * Метод ищет Перелеты по параметрам:
+	 * - по id Авиакомпании, если указан
+	 * - по id Аэропорта вылета
+	 * - по id Аэропорта прилета
+	 * - в диапазоне между датами по дате начала события
+	 * - в диапазоне между датами создания по дате создания
+	 * @param params параметры для поиска
+	 * @return список перелетов в виде DTO
+	 */
 	public List<FlightDto> findByParams(ComplexParams params) {
 		if (params.getAirlineId() == null){
 			return findDtoByPointsAndDates(params.getDepartureAirportId(), params.getArrivalAirportId(), params.getFirstDate(), params.getSecondDate(),

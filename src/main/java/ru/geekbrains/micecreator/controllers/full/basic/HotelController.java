@@ -1,5 +1,7 @@
 package ru.geekbrains.micecreator.controllers.full.basic;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,27 +19,32 @@ import ru.geekbrains.micecreator.service.HotelService;
 @RestController
 @RequestMapping("api/v1/hotel")
 @AllArgsConstructor
+@Tag(name = "Отели", description = "Контроллер для работы с отелями")
 public class HotelController {
 
 	private HotelService service;
 
 	@GetMapping("/{id}")
+	@Operation(summary = "Поиск отеля по id")
 	public HotelDto getById(@PathVariable("id") Integer id) {
 		return service.findDtoById(id);
 	}
 
 	@PostMapping
+	@Operation(summary = "Добавление нового отеля")
 	public HotelDto addNew(@NonNull @RequestBody HotelDto dto) {
 		return service.createEntity(dto);
 	}
 
 	@PutMapping
+	@Operation(summary = "Редактирование отеля")
 	public HotelDto edit(@NonNull @RequestBody HotelDto dto) {
 		return service.editEntity(dto);
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping("/{id}")
+	@Operation(summary = "Удаление отеля")
 	public boolean deleteById(@PathVariable("id") Integer id) {
 		return service.deleteEntity(id);
 	}

@@ -11,6 +11,7 @@ import ru.geekbrains.micecreator.models.basic.Room;
 import ru.geekbrains.micecreator.repository.RoomRepo;
 import ru.geekbrains.micecreator.service.prototypes.SimpleTypeService;
 import ru.geekbrains.micecreator.utils.AppUtils;
+import ru.geekbrains.micecreator.utils.PathUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,8 +24,18 @@ public class RoomService extends SimpleTypeService<RoomDto, Room> {
 	private RoomRepo roomRepo;
 	@Autowired
 	private final HotelService hotelService;
+	@Autowired
+	private final PathUtils pathUtils;
 	private final SimpleTypes simpleType = SimpleTypes.ROOM;
 
+	/**
+	 * Метод ищет Номера по параметрам:
+	 * - по id Отеля, если указан
+	 * - по части имени, если указано
+	 * - если параметры пустые, ищет без ограничений
+	 * @param params параметры для поиска
+	 * @return список номеров в виде DTO
+	 */
 	@Override
 	public List<ListItemDto> findBySearchParams(SearchParams params) {
 		if (params.getHotelId() != null && !AppUtils.isBlank(params.getNamePart())){
@@ -36,11 +47,11 @@ public class RoomService extends SimpleTypeService<RoomDto, Room> {
 		}
 	}
 
-	public List<ListItemDto> findServiceByHotel(Integer hotelId) {
+	protected List<ListItemDto> findServiceByHotel(Integer hotelId) {
 		return findByHotel(hotelId).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
-	public List<ListItemDto> findServiceByHotelAndNamePart(Integer hotelId, String namePart) {
+	protected List<ListItemDto> findServiceByHotelAndNamePart(Integer hotelId, String namePart) {
 		return findByHotelAndNamePart(hotelId, namePart).stream().map(this::mapToListItemDto).collect(Collectors.toList());
 	}
 
@@ -127,7 +138,7 @@ public class RoomService extends SimpleTypeService<RoomDto, Room> {
 	}
 
 	private boolean isImageExist(Integer entityId, Integer imageNum) {
-		return AppUtils.isImageExist(AppUtils.createImageName("room", entityId, imageNum));
+		return pathUtils.isImageExist(AppUtils.createImageName("room", entityId, imageNum));
 	}
 
 }
